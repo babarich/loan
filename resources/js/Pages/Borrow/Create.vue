@@ -6,7 +6,7 @@
         <div class="flex border-b border-dashed border-border-base pb-5 md:pb-7">
             <h1 class="text-lg font-semibold text-heading">Create Borrower </h1>
         </div>
-        <form novalidate="">
+        <form @submit.prevent="submit">
             <div class="flex flex-wrap pb-8 my-5 border-b border-dashed border-border-base sm:my-8">
                 <div class="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5">
                     <h4 class="text-base font-semibold text-body-dark mb-2">Basic Info</h4>
@@ -16,25 +16,30 @@
                     <div class="mb-5">
                         <label class="flex text-body-dark font-semibold text-sm leading-none mb-3" for="name">First Name<span
                             class="ml-0.5 text-red-500">*</span></label>
-                              <CustomInput type="text" />
+                              <CustomInput type="text" v-model="form.firstname"/>
                                  </div>
                     <div class="mb-5"><label class="flex text-body-dark font-semibold text-sm leading-none mb-3"
                                              for="slug">Last Name</label>
-                    <CustomInput type="text" />
+                        <CustomInput type="text"  v-model="form.lastname" />
                     </div>
                     <div class="mb-5"><label class="flex text-body-dark font-semibold text-sm leading-none mb-3"
                                              for="slug">Gender</label>
-                        <CustomInput type="select">
+                        <select class="px-4 h-12 flex items-center w-full rounded appearance-none transition
+                        duration-300 ease-in-out text-heading text-sm focus:outline-none focus:ring-0
+                        border border-border-base focus:border-accent h-12" v-model="form.gender">
                             <option value="">select..</option>
                             <option value="male">Male</option>
                             <option value="female">Female</option>
-                        </CustomInput>
+                        </select>
 
                     </div>
 
                     <div class="mb-5"><label class="flex text-body-dark font-semibold text-sm leading-none mb-3"
-                                             for="slug">Title</label><select id="slug" name="slug" type="text"
-                                                                                    class="px-4 h-12 flex items-center w-full rounded appearance-none transition duration-300 ease-in-out text-heading text-sm focus:outline-none focus:ring-0 border border-border-base focus:border-accent h-12">
+                                             for="slug">Title</label>
+                        <select id="slug" name="slug" type="text"
+                    class="px-4 h-12 flex items-center w-full rounded appearance-none transition duration-300
+                    ease-in-out text-heading text-sm focus:outline-none focus:ring-0 border border-border-base
+                     focus:border-accent h-12" v-model="form.title">
                         <option value="">select..</option>
                         <option value="mr">Mr</option>
                         <option value="mrs">Mrs.</option>
@@ -47,34 +52,22 @@
                     </div>
 
                     <div class="mb-5"><label class="flex text-body-dark font-semibold text-sm leading-none mb-3"
-                                             for="slug">Mobile</label><input id="slug" name="slug" type="number"
-                                                                                    class="px-4 h-12 flex items-center w-full rounded appearance-none transition duration-300 ease-in-out text-heading text-sm focus:outline-none focus:ring-0 border border-border-base focus:border-accent h-12"
-                                                                                    autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"  aria-invalid="false"
-                                                                                    value=""></div>
+                                             for="slug">Mobile</label>
+                        <CustomInput type="number"  v-model="form.mobile"/></div>
 
                     <div class="mb-5"><label class="flex text-body-dark font-semibold text-sm leading-none mb-3"
-                                             for="slug">Email</label><input id="slug" name="slug" type="email"
-                                                                                    class="px-4 h-12 flex items-center w-full rounded appearance-none transition duration-300 ease-in-out text-heading text-sm focus:outline-none focus:ring-0 border border-border-base focus:border-accent h-12"
-                                                                                    autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"  aria-invalid="false"
-                                                                                    value=""></div>
+                                             for="slug">Email</label><CustomInput type="email" v-model="form.email"/></div>
                     <div class="mb-5"><label class="flex text-body-dark font-semibold text-sm leading-none mb-3"
                                              for="slug">Date of birth</label>
-                        <input id="slug" name="slug" type="date"
-                                                                                    class="px-4 h-12 flex justify-between w-full rounded appearance-none transition duration-300 ease-in-out text-heading text-sm focus:outline-none focus:ring-0 border border-border-base focus:border-accent h-12"
-                                                                                    autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"  aria-invalid="false"
-                                                                                    value=""></div>
+                        <CustomInput type="date" v-model="form.birth"/></div>
                     <div class="mb-5"><label class="flex text-body-dark font-semibold text-sm leading-none mb-3"
-                                             for="slug">Address</label><input id="slug" name="slug" type="text"
-                                                                                    class="px-4 h-12 flex items-center w-full rounded appearance-none transition duration-300 ease-in-out text-heading text-sm focus:outline-none focus:ring-0 border border-border-base focus:border-accent h-12"
-                                                                                    autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"  aria-invalid="false"
-                                                                                    value=""></div>
+                                             for="slug">Address</label><CustomInput v-model="form.address"/></div>
                     <div class="mb-5"><label class="flex text-body-dark font-semibold text-sm leading-none mb-3"
-                                             for="slug">City</label><input id="slug" name="slug" type="text"
-                                                                                    class="px-4 h-12 flex items-center w-full rounded appearance-none transition duration-300 ease-in-out text-heading text-sm focus:outline-none focus:ring-0 border border-border-base focus:border-accent h-12"
-                                                                                    autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"  aria-invalid="false"
-                                                                                    value=""></div>
+                                             for="slug">City</label><CustomInput v-model="form.city"/></div>
                     <div class="mb-5"><label class="flex text-body-dark font-semibold text-sm leading-none mb-3"
-                                             for="slug">Working Status</label><select class="px-4 h-12 flex items-center w-full rounded appearance-none transition duration-300 ease-in-out text-heading text-sm focus:outline-none focus:ring-0 border border-border-base focus:border-accent h-12">
+                                             for="slug">Working Status</label><select class="px-4 h-12 flex items-center w-full rounded appearance-none transition duration-300 ease-in-out text-heading text-sm focus:outline-none focus:ring-0 border
+                                             border-border-base focus:border-accent h-12"
+                       v-model="form.working">
                                                  <option value="" selected=""></option>
                                                 <option value="Employee">Employee</option>
                                                <option value="Government Employee">Government Employee</option>
@@ -89,10 +82,7 @@
                     </div>
 
                     <div class="mb-5"><label class="flex text-body-dark font-semibold text-sm leading-none mb-3"
-                                             for="slug">Business Name</label><input id="slug" name="slug" type="text"
-                                                                                class="px-4 h-12 flex items-center w-full rounded appearance-none transition duration-300 ease-in-out text-heading text-sm focus:outline-none focus:ring-0 border border-border-base focus:border-accent h-12"
-                                                                                autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"  aria-invalid="false"
-                                                                                value=""></div>
+                                             for="slug">Business Name</label><CustomInput type="text" v-model="form.business"/></div>
 
 
                 </div>
@@ -109,9 +99,9 @@
                                for="description">Upload Borrowers Photo</label>
                         <div class="mt-1 flex items-center">
                             <img
-                                v-if="model.image_url"
-                                :src="model.image_url"
-                                :alt="model.title"
+                                v-if="form.image_url"
+                                :src="form.image_url"
+                                :alt="form.title"
                                 class="w-64 h-48 object-cover"
                             />
                             <span
@@ -145,9 +135,7 @@
                     <!--/ Image -->
                     <div class="relative mt-4">
                         <div class=""><label class="flex text-body-dark font-semibold text-sm leading-none mb-3"
-                                             for="description">Description</label><textarea id="description" name="description"
-                                                                                            class="py-3 px-4 w-full rounded appearance-none transition duration-300 ease-in-out text-heading text-sm focus:outline-none focus:ring-0 border border-border-base focus:border-accent"
-                                                                                            autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" rows="4"></textarea></div>
+                                             for="description">Description</label><CustomInput type="textarea"  rows="4" v-model="form.description"/> </div>
                     </div>
                 </div>
             </div>
@@ -186,11 +174,7 @@ import {ref} from 'vue';
 import {useForm} from "@inertiajs/vue3";
 import CustomInput from "@/Shared/CustomInput.vue";
 
-let model = ref({
-    image: null,
-    image_url: null,
 
-});
 
 
 function onImageChoose(ev) {
@@ -199,10 +183,10 @@ function onImageChoose(ev) {
     const reader = new FileReader();
     reader.onload = () => {
         // The field to send on backend and apply validations
-        model.value.image = reader.result;
+        form.image = reader.result;
 
         // The field to display here
-        model.value.image_url = reader.result;
+        form.image_url = reader.result;
         ev.target.value = "";
     };
     reader.readAsDataURL(file);
@@ -222,12 +206,17 @@ const form = useForm({
     email:null,
     working:null,
     business:null,
-    photo:model.value.image
+    image: null,
+    image_url: null,
 });
 
 const onSelect = (event) => {
-    form.file= event.files[0];
+    form.file= event.files;
 };
+
+function submit(){
+   form.post(route('borrow.store'))
+}
 </script>
 
 <style scoped>

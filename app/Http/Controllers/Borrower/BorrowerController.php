@@ -17,4 +17,12 @@ class BorrowerController extends Controller
     {
        return Inertia::render('Borrow/Create');
     }
+
+
+
+    public function store(Request $request)
+    {
+
+        dd($request);
+    }
 }
