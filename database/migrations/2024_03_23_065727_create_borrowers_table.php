@@ -31,6 +31,10 @@ return new class extends Migration
             $table->integer('uploaded_by')->nullable();
             $table->string('status')->nullable();
             $table->text('description')->nullable();
+            $table->string('stage')->nullable();
+            $table->integer('approver_id')->nullable();
+            $table->integer('approver_second_id')->nullable();
+            $table->timestamp('approved_date')->nullable();
             $table->timestamps();
         });
     }

@@ -34,6 +34,7 @@ Route::group(['middleware' => 'auth:sanctum'], function (){
 
         Route::name('borrow.')->group(function (){
             Route::controller(BorrowerController::class)->group(function (){
+                Route::get('index', 'index')->name('index');
                 Route::get('create', 'create')->name('create');
                 Route::post('store', 'store')->name('store');
             });

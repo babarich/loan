@@ -9,6 +9,7 @@ import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import MainMenu from '@/Shared/MainMenu.vue';
 import {BellIcon} from '@heroicons/vue/24/outline'
+import FlashMessages from "@/Shared/FlashMessages.vue";
 
 
 
@@ -102,14 +103,17 @@ const logout = () => {
 
 
                 </div>
+
                 <div class="md:flex md:flex-grow md:overflow-hidden">
                     <main-menu class="hidden flex-shrink-0 p-4 w-72 bg-secondary border border-r overflow-y-auto md:block" />
                     <div class="px-4 py-8 md:flex-1 md:p-12 md:overflow-y-auto" scroll-region>
-
                         <slot />
+
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
+    <FlashMessages/>
 </template>

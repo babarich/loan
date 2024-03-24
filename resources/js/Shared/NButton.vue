@@ -2,16 +2,13 @@
   <a v-if="href" :href="href" :class="classes">
     <slot></slot>
   </a>
-  <router-link v-else-if="props.to" :to="props.to" :class="classes">
-    <slot></slot>
-  </router-link>
   <button v-else :class="classes">
     <slot></slot>
   </button>
 </template>
 
 <script setup>
-import { ref } from "@vue/reactivity";
+import { ref } from "vue";
 
 const props = defineProps({
 

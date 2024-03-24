@@ -19,15 +19,16 @@
         "vue": "^3.2.31"
     },
     "dependencies": {
-        "@inertiajs/inertia": "^0.11.1",
-        "@inertiajs/inertia-vue3": "^0.6.0",
-        "@inertiajs/vue3": "^1.0.15",
         "@fortawesome/fontawesome-free": "^6.3.0",
         "@headlessui/vue": "^1.7.14",
         "@heroicons/vue": "^2.0.18",
+        "@inertiajs/inertia": "^0.11.1",
+        "@inertiajs/inertia-vue3": "^0.6.0",
         "@inertiajs/progress": "^0.2.7",
+        "@inertiajs/vue3": "^1.0.15",
         "chart.js": "^4.3.0",
         "heroicons": "^2.0.18",
+        "primeicons": "^6.0.1",
         "primevue": "^3.45.0"
     }
 }

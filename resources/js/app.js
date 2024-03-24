@@ -5,6 +5,7 @@ import { createApp, h } from 'vue';
 import { createInertiaApp } from '@inertiajs/vue3';
 import PrimeVue from "primevue/config";
 import "primevue/resources/primevue.min.css"
+import "primeicons/primeicons.css"
 import "primevue/resources/themes/lara-light-indigo/theme.css"
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
