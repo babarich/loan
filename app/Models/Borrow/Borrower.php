@@ -12,7 +12,8 @@ class Borrower extends Model
 
     protected $table = 'borrowers';
     protected $fillable = ['reference', 'first_name', 'last_name', 'gender', 'title', 'mobile', 'email', 'date_birth', 'address', 'city',
-        'working_status','business_name','filename', 'attachment_size', 'attachment', 'uploaded_by', 'status','description','balance', 'total_paid', 'last-pay_date','approval_status'];
+        'working_status','business_name','filename', 'attachment_size', 'attachment', 'uploaded_by', 'status','description','balance', 'total_paid',
+        'last-pay_date','approval_status','group_id'];
 
 
 
@@ -21,6 +22,11 @@ class Borrower extends Model
         return $this->belongsTo(User::class,'uploaded_by', 'id');
     }
 
+
+    public function attachments()
+    {
+        return $this->hasMany(BorrowerAttachment::class, 'borrower_id', 'id');
+    }
 
 
     public function scopeFilter($query , array $filters){

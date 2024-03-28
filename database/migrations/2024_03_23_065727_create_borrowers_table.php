@@ -33,6 +33,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->string('stage')->nullable();
             $table->integer('approver_id')->nullable();
+            $table->integer('group_id')->nullable();
             $table->integer('approver_second_id')->nullable();
             $table->timestamp('approved_date')->nullable();
             $table->timestamps();

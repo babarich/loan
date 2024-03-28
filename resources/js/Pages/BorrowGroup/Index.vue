@@ -5,8 +5,8 @@
                 <h3 class="text-xl text-primary text-semibold">Borrowers</h3>
             </div>
             <div>
-                <NButton :href="route('borrow.create')" class="text-white">
-                    <PlusCircleIcon class="w-4 h-4  text-white mr-2"/>  Add Borrower
+                <NButton :href="route('group.create')" class="text-white">
+                    <PlusCircleIcon class="w-4 h-4  text-white mr-2"/>  Add Borrower Group
                 </NButton>
 
             </div>
@@ -33,7 +33,7 @@
                 </div>
             </div>
             <Toast />
-            <ConfirmPopup group="positionDialog"></ConfirmPopup>
+            <ConfirmPopup></ConfirmPopup>
         <div class="bg-white overflow-x-auto">
             <table class="w-full text-sm whitespace-nowrap">
                 <thead class="sticky top-0">
@@ -44,21 +44,13 @@
                          S/N
                      </th>
                      <TableHeaderCell field="name" :sort-field="sortField" :sort-direction="sortDirection"
-                                      @click="sortTransaction('name')"> Full Name</TableHeaderCell>
-                     <TableHeaderCell field="reference" :sort-field="sortField" :sort-direction="sortDirection"
-                                      @click="sortTransaction('reference')"> Reference</TableHeaderCell>
-                     <TableHeaderCell field="email" :sort-field="sortField" :sort-direction="sortDirection"
-                                      @click="sortTransaction('email')"> Email</TableHeaderCell>
-                     <TableHeaderCell field="mobile" :sort-field="sortField" :sort-direction="sortDirection"
-                                      @click="sortTransaction('mobile')"> Mobile</TableHeaderCell>
-                     <TableHeaderCell field="business" :sort-field="sortField" :sort-direction="sortDirection"
-                                      @click="sortTransaction('business')"> Business</TableHeaderCell>
-                     <TableHeaderCell field="balance" :sort-field="sortField" :sort-direction="sortDirection"
-                                      @click="sortTransaction('balance')">Open Loan Balance</TableHeaderCell>
-                     <TableHeaderCell field="total_paid" :sort-field="sortField" :sort-direction="sortDirection"
-                                      @click="sortTransaction('total_paid')"> Total Paid</TableHeaderCell>
-                     <TableHeaderCell field="status" :sort-field="sortField" :sort-direction="sortDirection"
-                                      @click="sortTransaction('status')"> Status</TableHeaderCell>
+                                      @click="sortTransaction('name')">  Name</TableHeaderCell>
+                     <TableHeaderCell field="description" :sort-field="sortField" :sort-direction="sortDirection"
+                                      @click="sortTransaction('description')"> Description</TableHeaderCell>
+                     <TableHeaderCell field="created_at" :sort-field="sortField" :sort-direction="sortDirection"
+                                      @click="sortTransaction('created_at')"> Created At</TableHeaderCell>
+                     <TableHeaderCell field="name" :sort-field="sortField" :sort-direction="sortDirection"
+                                      @click="sortTransaction('name')"> Members</TableHeaderCell>
                      <th
                          scope="col"
                          class="py-4 px-4 border text-xs text-left whitespace nowrap font-semibold">
@@ -67,36 +59,29 @@
                  </tr>
                 </thead>
                 <tbody>
-                <tr v-for="(customer,index) in customers.data" :key="index" class="odd:bg-gray-100 focus-within:bg-gray-100">
+                <tr v-for="(group,index) in groups.data" :key="index" class="odd:bg-gray-100 focus-within:bg-gray-100">
                     <td class="py-4 px-4 text-sm text-left border">
                         {{index + 1}}
                     </td>
-                    <td class="py-4 px-4 text-sm text-left border">{{customer.name}}</td>
-                    <td class="py-4 px-4 text-sm text-left border">{{customer.reference}}</td>
-                    <td class="py-4 px-4 text-sm text-left border">{{customer.email}}</td>
-                    <td class="py-4 px-4 text-sm text-left border">{{customer.mobile}}</td>
-                    <td class="py-4 px-4 text-sm text-left border text-wrap">{{customer.business}}</td>
-                    <td class="py-4 px-4 text-sm text-left border">{{customer.balance}}</td>
-                    <td class="py-4 px-4 text-sm text-left border">{{customer.total_paid}}</td>
-                    <td class="py-4 px-4 text-sm text-left border">
-                        <span class="bg-yellow-500 text-white p-2 rounded-md text-xs" v-if="customer.status === 'pending'">
-                            Pending
-                        </span>
-                        <span class="bg-emerald-500 text-white p-2 rounded-md text-xs" v-else>
-                            Approved
-                        </span>
-                    </td>
+                    <td class="py-4 px-4 text-sm text-left border">{{group.name}}</td>
+                    <td class="py-4 px-4 text-sm text-left border"> {{
+                            group.description.length > 50
+                                ? splice(group.description) + '...'
+                                : group.description
+                        }}</td>
+                    <td class="py-4 px-4 text-sm text-left border">{{group.date}}</td>
+                    <td class="py-4 px-4 text-sm text-left border">{{group.member}}</td>
                     <td class="py-4 px-4 text-sm text-left border">
                      <div class="flex justify-between flex-col md:flex-row items-center">
                          <div class="flex items-center space-x-2 divide-x">
-                             <a :href="route('borrow.show', customer.id)" class="px-4 text-sm flex text-gray-100 bg-emerald-600 p-2 rounded">
+                             <a :href="route('group.show', group.id)" class="px-4 text-sm flex text-gray-100 bg-emerald-600 p-2 rounded">
                                  <i class="pi pi-eye text-white"></i>
                              </a>
-                             <a :href="route('borrow.edit', customer.id)" class="px-4 text-sm flex text-gray-100 bg-primary p-2 rounded">
+                             <a :href="route('group.edit', group.id)" class="px-4 text-sm flex text-gray-100 bg-primary p-2 rounded">
                                  <i class="pi pi-pencil text-white"></i>
                              </a>
 
-                             <button @click.prevent="confirmDelete(customer.id)"  class="px-4 text-sm flex text-gray-100 bg-red-500 p-2 rounded">
+                             <button @click.prevent="confirm2()"  class="px-4 text-sm flex text-gray-100 bg-red-500 p-2 rounded">
                                  <i class="pi pi-trash text-white"></i>
                              </button>
                          </div>
@@ -106,7 +91,7 @@
                      </div>
                     </td>
                 </tr>
-                <tr v-if="customers.data.length === 0">
+                <tr v-if="groups.data.length === 0">
                     <td colspan="10" class="py-4 px-4 text-sm text-left border">
                             <div class="flex flex-col items-center py-7">
                                 <img  src="/images/empty.svg" class="w-32 h-32"/>
@@ -119,7 +104,7 @@
 
             </table>
         </div>
-            <pagination class="mt-6" :data="customers" :links="customers.links" @getPage="getChanges"/>
+            <pagination class="mt-6" :data="groups" :links="groups.links" @getPage="getChanges"/>
     </div>
     </AppLayout>
 </template>
@@ -139,7 +124,7 @@ import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
 
 const props = defineProps({
-   customers:Object, errors:Object
+   groups:Object, errors:Object
 });
 const confirm = useConfirm();
 const toast = useToast();
@@ -152,7 +137,7 @@ const sortDirection = ref('desc');
 
 function getChanges(page){
     Inertia.get(
-        route('borrow.index'),
+        route('group.index'),
         {per_page:page},
         {
             preserveState:true,
@@ -162,12 +147,15 @@ function getChanges(page){
 }
 
 
-function confirmDelete(id){
+function confirm2(){
     confirm.require({
-        group:'positionDialog',
+        target: event.currentTarget,
         message: 'Do you want to delete this record?',
-        icon: 'pi pi-exclamation-triangle',
-        position:'top',
+        icon: 'pi pi-info-circle',
+        rejectClass: 'p-button-secondary p-button-outlined p-button-sm',
+        acceptClass: 'p-button-danger p-button-sm',
+        rejectLabel: 'Cancel',
+        acceptLabel: 'Delete',
         accept: () => {
             toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Record deleted', life: 3000 });
         },
@@ -175,7 +163,7 @@ function confirmDelete(id){
             toast.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
         }
     });
-}
+};
 
 function sortTransactions(field){
     if (field === sortField.value){
@@ -190,7 +178,7 @@ function sortTransactions(field){
     }
 
     Inertia.get(
-        route("borrow.index"),
+        route("group.index"),
         {sort_field:sortField.value,sort_direction:sortDirection.value},{
             preserveState:true,
             replace:true

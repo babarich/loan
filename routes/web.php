@@ -37,6 +37,24 @@ Route::group(['middleware' => 'auth:sanctum'], function (){
                 Route::get('index', 'index')->name('index');
                 Route::get('create', 'create')->name('create');
                 Route::post('store', 'store')->name('store');
+                Route::get('view/{id?}', 'show')->name('show');
+                Route::post('update/{id?}', 'update')->name('update');
+                Route::get('export/{id?}', 'downloadAttachment')->name('download');
+                Route::get('edit/{id?}', 'edit')->name('edit');
+            });
+        });
+    });
+
+    Route::group(['prefix' => 'groups'], function (){
+
+        Route::name('group.')->group(function (){
+            Route::controller(\App\Http\Controllers\Borrower\BorrowerGroup::class)->group(function (){
+                Route::get('index', 'index')->name('index');
+                Route::get('create', 'create')->name('create');
+                Route::post('store', 'store')->name('store');
+                Route::get('view/{id?}', 'show')->name('show');
+                Route::post('update/{id?}', 'update')->name('update');
+                Route::get('edit/{id?}', 'edit')->name('edit');
             });
         });
     });

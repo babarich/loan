@@ -99,6 +99,19 @@
                         <p v-if="errors.working">{{errors.working}}</p>
                     </div>
 
+                    <div class="mb-5">
+                        <label class="flex text-body-dark font-semibold text-sm leading-none mb-3"
+                               for="slug">Select Group </label>
+                        <CustomInput
+                            required
+                            type="select"
+                            :select-options="groupOptions"
+                            v-model="form.groupId"
+
+                        />
+                        <p v-if="errors.groupId">{{errors.groupId}}</p>
+                    </div>
+
                     <div class="mb-5"><label class="flex text-body-dark font-semibold text-sm leading-none mb-3"
                                              for="slug">Business Name</label>
                         <CustomInput type="text" v-model="form.business" :class="{'border-red-500' : errors.business}"/>
@@ -199,7 +212,7 @@
 
 import AppLayout from "@/Layouts/AppLayout.vue";
 import FileUpload from "primevue/fileupload";
-import {ref} from 'vue';
+import {ref,computed} from 'vue';
 import {useForm} from "@inertiajs/vue3";
 import CustomInput from "@/Shared/CustomInput.vue";
 import NButtonLoading from "@/Shared/NButtonLoading.vue";
@@ -222,6 +235,9 @@ function onImageChoose(ev) {
     reader.readAsDataURL(file);
 }
 
+
+
+
 const form = useForm({
     firstname: null,
     lastname: null,
@@ -238,12 +254,22 @@ const form = useForm({
     business:null,
     image: null,
     image_url: null,
+    groupId:null,
 });
 
 
 const props = defineProps({
-   errors:Object
+   errors:Object, group:Object
 });
+
+const groupOptions = computed(() =>
+    props.group.map((c) => ({
+        key: c.id,
+        text: `${c.name}`,
+        value: c.id,
+    }))
+);
+
 const onSelect = (event) => {
     form.file= event.files;
 };

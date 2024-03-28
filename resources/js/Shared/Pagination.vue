@@ -62,7 +62,6 @@ export default {
     },
     computed: {
         shouldDisplayLinks() {
-            console.log(this.links.length)
             return this.links.length > 3;
         },
     },
