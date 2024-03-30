@@ -1,17 +1,18 @@
 <?php
 
-namespace App\Models\Borrow;
+namespace App\Models\Loan;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class BorrowerGroup extends Model
+class Product extends Model
 {
     use HasFactory;
 
-    protected $table = 'borrower_groups';
-    protected $fillable = [ 'name','collector_name', 'user_id', 'description', 'status'];
+    protected $table = 'products';
+
+    protected $fillable = ['name', 'user_id', 'description', 'status'];
 
 
 
@@ -21,10 +22,6 @@ class BorrowerGroup extends Model
     }
 
 
-    public function borrowers()
-    {
-        return $this->hasMany(Borrower::class, 'group_id');
-    }
 
 
     public function scopeFilter($query , array $filters){

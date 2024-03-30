@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-import { Head, Link, router } from '@inertiajs/vue3';
+import { Head, Link, router} from '@inertiajs/vue3';
 import ApplicationMark from '@/Components/ApplicationMark.vue';
 import Banner from '@/Components/Banner.vue';
 import Dropdown from '@/Components/Dropdown.vue';
@@ -8,8 +8,11 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import MainMenu from '@/Shared/MainMenu.vue';
-import {BellIcon} from '@heroicons/vue/24/outline'
+import {BellIcon,Bars3Icon} from '@heroicons/vue/24/outline'
 import FlashMessages from "@/Shared/FlashMessages.vue";
+
+
+
 
 
 
@@ -26,7 +29,10 @@ const switchToTeam = (team) => {
     }, {
         preserveState: false,
     });
-};
+};[]
+
+
+const emit = defineEmits(['toggle-sidebar'])
 
 const logout = () => {
     router.post(route('logout'));
@@ -57,12 +63,19 @@ const logout = () => {
                         </dropdown>
                     </div>
                     <div class="md:text-md flex items-center justify-between p-4 w-full text-sm bg-white border-b md:px-12 md:py-0">
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        <div class="flex">
+                            <button @click="emit('toggle-sidebar')"
+                                    class="flex items-center justify-center rounded transition-colors w-8 h-8 text-gray-700 hover:bg-black/10 mr-5">
+                                <Bars3Icon class="w-6"/>
+                            </button>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                    <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                                </div>
+                                <input type="text"  class="w-80 text-sm border-gray-200 pl-10 rounded-full" placeholder="Search..."/>
                             </div>
-                            <input type="text"  class="w-80 text-sm border-gray-200 pl-10 rounded-full" placeholder="Search..."/>
                         </div>
+
                         <div class="hidden sm:flex sm:items-center sm:ml-6">
                             <div class="rounded-full bg-gray-100 p-2">
                                 <BellIcon class="w-5 h-5 text-primary"/>

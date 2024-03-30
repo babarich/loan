@@ -1,8 +1,11 @@
 <?php
 
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Redirect;
 use App\Http\Controllers\Borrower\BorrowerController;
+use App\Http\Controllers\Borrower\BorrowerGroup;
+use App\Http\Controllers\Borrower\GuarantorController;
+use App\Http\Controllers\Loan\ProductController;
+use App\Http\Controllers\Loan\LoanController;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 
 
@@ -45,10 +48,56 @@ Route::group(['middleware' => 'auth:sanctum'], function (){
         });
     });
 
+
+    Route::group(['prefix' => 'loans'], function (){
+
+        Route::name('loan.')->group(function (){
+            Route::controller(LoanController::class)->group(function (){
+                Route::get('index', 'index')->name('index');
+                Route::get('create', 'create')->name('create');
+                Route::post('store', 'store')->name('store');
+                Route::get('view/{id?}', 'show')->name('show');
+                Route::post('update/{id?}', 'update')->name('update');
+                Route::get('export/{id?}', 'downloadAttachment')->name('download');
+                Route::get('edit/{id?}', 'edit')->name('edit');
+            });
+        });
+    });
+
+    Route::group(['prefix' => 'guarantors'], function (){
+
+        Route::name('guarantor.')->group(function (){
+            Route::controller(GuarantorController::class)->group(function (){
+                Route::get('index', 'index')->name('index');
+                Route::get('create', 'create')->name('create');
+                Route::post('store', 'store')->name('store');
+                Route::get('view/{id?}', 'show')->name('show');
+                Route::post('update/{id?}', 'update')->name('update');
+                Route::get('export/{id?}', 'downloadAttachment')->name('download');
+                Route::get('edit/{id?}', 'edit')->name('edit');
+            });
+        });
+    });
+
     Route::group(['prefix' => 'groups'], function (){
 
         Route::name('group.')->group(function (){
-            Route::controller(\App\Http\Controllers\Borrower\BorrowerGroup::class)->group(function (){
+            Route::controller(BorrowerGroup::class)->group(function (){
+                Route::get('index', 'index')->name('index');
+                Route::get('create', 'create')->name('create');
+                Route::post('store', 'store')->name('store');
+                Route::get('view/{id?}', 'show')->name('show');
+                Route::post('update/{id?}', 'update')->name('update');
+                Route::get('edit/{id?}', 'edit')->name('edit');
+            });
+        });
+    });
+
+
+    Route::group(['prefix' => 'products'], function (){
+
+        Route::name('product.')->group(function (){
+            Route::controller(ProductController::class)->group(function (){
                 Route::get('index', 'index')->name('index');
                 Route::get('create', 'create')->name('create');
                 Route::post('store', 'store')->name('store');

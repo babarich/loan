@@ -92,17 +92,37 @@
                         <th
                             scope="col"
                             class="py-4 px-4 border text-xs text-left whitespace nowrap font-semibold">
-                            File Name
+                            Reference
                         </th>
                         <th
                             scope="col"
                             class="py-4 px-4 border text-xs text-left whitespace nowrap font-semibold">
-                            Attachment Size
+                            Full Name
                         </th>
                         <th
                             scope="col"
                             class="py-4 px-4 border text-xs text-left whitespace nowrap font-semibold">
-                            Uploaded By
+                          Email
+                        </th>
+                        <th
+                            scope="col"
+                            class="py-4 px-4 border text-xs text-left whitespace nowrap font-semibold">
+                            Mobile
+                        </th>
+                        <th
+                            scope="col"
+                            class="py-4 px-4 border text-xs text-left whitespace nowrap font-semibold">
+                            Business
+                        </th>
+                        <th
+                            scope="col"
+                            class="py-4 px-4 border text-xs text-left whitespace nowrap font-semibold">
+                            Open Balance
+                        </th>
+                        <th
+                            scope="col"
+                            class="py-4 px-4 border text-xs text-left whitespace nowrap font-semibold">
+                            Total Paid
                         </th>
                         <th
                             scope="col"
@@ -114,19 +134,46 @@
 
                     </thead>
                     <tbody>
-                    <tr class="odd:bg-gray-100 focus-within:bg-gray-100">
-                    <td colspan="10" class="py-4 px-4 text-sm text-left border">
-                        <div class="flex flex-col items-center py-7">
-                            <img  src="/images/empty.svg" class="w-32 h-32"/>
-                            <div class="mb-1 pt-6 text-base font-semibold text-heading">No data found</div>
-                            <p class="text-[13px]">Sorry we couldn’t found any data</p>
-                        </div>
-                    </td>
+                    <tr v-for="(customer,index) in borrowers.data" :key="index" class="odd:bg-gray-100 focus-within:bg-gray-100">
+                        <td class="py-4 px-4 text-sm text-left border">
+                            {{index + 1}}
+                        </td>
+                        <td class="py-4 px-4 text-sm text-left border">{{customer.reference}}</td>
+                        <td class="py-4 px-4 text-sm text-left border">{{customer.name}}</td>
+                        <td class="py-4 px-4 text-sm text-left border">{{customer.email}}</td>
+                        <td class="py-4 px-4 text-sm text-left border">{{customer.mobile}}</td>
+                        <td class="py-4 px-4 text-sm text-left border text-wrap">{{customer.business}}</td>
+                        <td class="py-4 px-4 text-sm text-left border">{{customer.balance}}</td>
+                        <td class="py-4 px-4 text-sm text-left border">{{customer.total_paid}}</td>
 
+                        <td class="py-4 px-4 text-sm text-left border">
+                            <div class="flex justify-between flex-col md:flex-row items-center">
+                                <div class="flex items-center space-x-2 divide-x">
+                                    <a :href="route('borrow.show', customer.id)" class="px-4 text-sm flex text-gray-100 bg-emerald-600 p-2 rounded">
+                                        <i class="pi pi-eye text-white"></i>
+                                    </a>
+
+                                </div>
+
+
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr v-if="borrowers.data.length === 0">
+                        <td colspan="10" class="py-4 px-4 text-sm text-left border">
+                            <div class="flex flex-col items-center py-7">
+                                <img  src="/images/empty.svg" class="w-32 h-32"/>
+                                <div class="mb-1 pt-6 text-base font-semibold text-heading">No data found</div>
+                                <p class="text-[13px]">Sorry we couldn’t found any data</p>
+                            </div>
+                        </td>
                     </tr>
                     </tbody>
+
                 </table>
             </div>
+                <pagination class="mt-6" :data="borrowers" :links="borrowers.links" @getPage="getChanges"/>
             </div>
 
         </div>
@@ -141,9 +188,11 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import {ArrowLeftIcon, ArrowUpTrayIcon, DocumentArrowDownIcon, FunnelIcon} from "@heroicons/vue/24/outline/index.js";
 import moment from "moment";
 import SearchFilter from "@/Shared/SearchFilter.vue";
+import Pagination from "@/Shared/Pagination.vue";
+import {Inertia} from "@inertiajs/inertia";
 
 const props = defineProps({
-    group:Object
+    group:Object, borrowers:Object
 })
 
 function uppercase(str){
@@ -162,6 +211,17 @@ function getInitials(fullName) {
     return initials;
 }
 
+
+function getChanges(page){
+    Inertia.get(
+        route('group.show', props.group.id),
+        {per_page:page},
+        {
+            preserveState:true,
+            replace:true
+        }
+    )
+}
 
 function formatDate(dateString) {
   const date = moment(dateString);
