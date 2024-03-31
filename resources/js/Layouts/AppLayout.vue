@@ -62,7 +62,7 @@ const logout = () => {
                             </template>
                         </dropdown>
                     </div>
-                    <div class="md:text-md flex items-center justify-between p-4 w-full text-sm bg-white border-b md:px-12 md:py-0">
+                    <div class="md:text-md flex items-center justify-between p-4 w-full text-sm bg-white border-b  md:px-12 md:py-0">
                         <div class="flex">
                             <button @click="emit('toggle-sidebar')"
                                     class="flex items-center justify-center rounded transition-colors w-8 h-8 text-gray-700 hover:bg-black/10 mr-5">

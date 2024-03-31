@@ -132,6 +132,4 @@ import JetDropdown from '@/Components/Dropdown.vue'
 import JetDropdownLink from '@/Components/DropdownLink.vue'
 import {UserIcon,ChevronDownIcon, UsersIcon, Square2StackIcon} from "@heroicons/vue/24/outline"
 
-
-
 </script>

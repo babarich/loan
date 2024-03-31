@@ -95,7 +95,7 @@ const submit = () => {
                 </form>
                 <div class="items-center text-center mt-8">
                     <div class="signinform text-center">
-                        <h4>Don’t have an account? <a href="signup.html" class="hover-a text-blue-800">Sign Up</a></h4>
+                        <h4>Don’t have an account? <a :href="route('register')" class="hover-a text-blue-800">Sign Up</a></h4>
                     </div>
                 </div>
             </div>

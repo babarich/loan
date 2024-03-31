@@ -41,26 +41,26 @@
                                              for="slug">Disbursement Method</label>
                         <select class="px-4 h-12 flex items-center w-full rounded appearance-none transition
                         duration-300 ease-in-out text-heading text-sm focus:outline-none focus:ring-0
-                        border border-border-base focus:border-accent h-12" v-model="form.gender" :class="{'border-red-500' : errors.gender}">
+                        border border-border-base focus:border-accent h-12" v-model="form.payment" :class="{'border-red-500' : errors.payment}">
                             <option value="">select..</option>
                             <option value="cash">Cash</option>
                             <option value="cheque">Cheque</option>
                             <option value="bank">Bank Transfer</option>
                             <option value="mobile">Mobile Money</option>
                         </select>
-                        <p v-if="errors.gender">{{errors.gender}}</p>
+                        <p v-if="errors.payment">{{errors.payment}}</p>
                     </div>
 
                     <div class="mb-5"><label class="flex text-body-dark font-semibold text-sm leading-none mb-3"
                                              for="slug">Loan Principal Amount</label>
                         <InputNumber class="w-full border border-gray-300 placeholder-gray-600 text-gray-900" v-model="form.principle" inputId="integeronly" />
-                        <p v-if="errors.title">{{errors.title}}</p>
+                        <p v-if="errors.principle">{{errors.principle}}</p>
                     </div>
 
                     <div class="mb-5"><label class="flex text-body-dark font-semibold text-sm leading-none mb-3"
                                              for="slug">Loan Release Date</label>
                         <Calendar class="w-full border border-gray-300 placeholder-gray-600 text-gray-900" v-model="form.release_date" showIcon iconDisplay="input" />
-                        <p v-if="errors.mobile">{{errors.mobile}}</p>
+                        <p v-if="errors.release_date">{{errors.release_date}}</p>
                     </div>
 
                 </div>
@@ -76,10 +76,10 @@
                         duration-300 ease-in-out text-heading text-sm focus:outline-none focus:ring-0
                         border border-border-base focus:border-accent h-12" v-model="form.interest" :class="{'border-red-500' : errors.interest}">
                             <option value="">select..</option>
-                            <option value="cash">Flat Rate</option>
-                            <option value="cheque">Reducing Interest</option>
-                            <option value="bank">Interest Only</option>
-                            <option value="mobile">Compound Interest</option>
+                            <option value="flat">Flat Rate</option>
+                            <option value="reducing">Reducing Interest</option>
+                            <option value="interest">Interest Only</option>
+                            <option value="compound">Compound Interest</option>
                         </select>
                         <p v-if="errors.interest">{{errors.interest}}</p>
                     </div>
@@ -111,13 +111,13 @@
                         <div class="flex items-center justify-between flex-col md:flex-row">
                             <div class="w-full mr-5">
                                 <InputNumber class="w-full border border-gray-300 placeholder-gray-600 text-gray-900"
-                                             v-model="form.principle" inputId="integeronly"  v-if="form.interest_type === 'amount'"/>
-                                <CustomInput type="number" v-model="form.address"   :class="{'border-red-500' : errors.address}" v-if="form.interest_type === 'percent'"/>
+                                             v-model="form.interest_amount" inputId="integeronly"  v-if="form.interest_type === 'amount'"/>
+                                <CustomInput type="number" v-model="form.percent"   :class="{'border-red-500' : errors.percent}" v-if="form.interest_type === 'percent'"/>
                             </div>
                             <div class="w-full">
                                 <select class="px-4 h-12 flex items-center w-full rounded appearance-none transition
                         duration-300 ease-in-out text-heading text-sm focus:outline-none focus:ring-0
-                        border border-border-base focus:border-accent h-12" v-model="form.interest_type" :class="{'border-red-500' : errors.interest_type}">
+                        border border-border-base focus:border-accent h-12" v-model="form.interest_method" :class="{'border-red-500' : errors.interest_method}">
                                     <option value="">select..</option>
                                     <option value="day">Per Day</option>
                                     <option value="week">Per Week</option>
@@ -126,7 +126,7 @@
                                 </select>
                             </div>
                         </div>
-                        <p v-if="errors.title">{{errors.title}}</p>
+                        <p v-if="errors.interest_method">{{errors.interest_method}}</p>
                     </div>
 
                     <div class="mb-5">
@@ -134,12 +134,12 @@
                                for="slug">Loan Duration </label>
                         <div class="flex items-center justify-between flex-col md:flex-row">
                             <div class="w-full mr-5">
-                                <CustomInput type="number" />
+                                <CustomInput type="number" v-model="form.loan_duration"/>
                             </div>
                             <div class="w-full">
                                 <select class="px-4 h-12 flex items-center w-full rounded appearance-none transition
                         duration-300 ease-in-out text-heading text-sm focus:outline-none focus:ring-0
-                        border border-border-base focus:border-accent h-12" v-model="form.interest_type" :class="{'border-red-500' : errors.interest_type}">
+                        border border-border-base focus:border-accent h-12" v-model="form.duration_type" :class="{'border-red-500' : errors.duration_type}">
                                     <option value="">select..</option>
                                     <option value="day">Days</option>
                                     <option value="week">Weeks</option>
@@ -148,7 +148,7 @@
                                 </select>
                             </div>
                         </div>
-                        <p v-if="errors.title">{{errors.title}}</p>
+                        <p v-if="errors.duration_type">{{errors.duration_type}}</p>
                     </div>
                 </div>
             </div>
@@ -165,21 +165,19 @@
                             <div class="w-full mr-5">
                                 <select class="px-4 h-12 flex items-center w-full rounded appearance-none transition
                         duration-300 ease-in-out text-heading text-sm focus:outline-none focus:ring-0
-                        border border-border-base focus:border-accent h-12" v-model="form.interest_type" :class="{'border-red-500' : errors.interest_type}">
+                        border border-border-base focus:border-accent h-12" v-model="form.payment_cycle" :class="{'border-red-500' : errors.payment_cycle}">
                                     <option value="">select..</option>
                                     <option value="day">daily</option>
                                     <option value="day">weekly</option>
-                                    <option value="week">monthly</option>
-                                    <option value="month">quarterly</option>
-                                    <option value="year">yearly</option>
+                                    <option value="month">monthly</option>
                                 </select>
                             </div>
                             <div class="w-full">
-                                <CustomInput type="number" />
+                                <CustomInput type="number"  v-model="form.number_payments"/>
                             </div>
 
                         </div>
-                        <p v-if="errors.title">{{errors.title}}</p>
+                        <p v-if="errors.payment_cycle">{{errors.payment_cycle}}</p>
                     </div>
 
                     <div class="mb-5">
@@ -192,13 +190,13 @@
                             v-model="form.guarantor"
 
                         />
-                        <p v-if="errors.groupId">{{errors.groupId}}</p>
+                        <p v-if="errors.guarantor">{{errors.guarantor}}</p>
                     </div>
 
                     <div class="mb-5"><label class="flex text-body-dark font-semibold text-sm leading-none mb-3"
                                              for="slug">Comments</label>
-                        <CustomInput type="textarea" v-model="form.business" :class="{'border-red-500' : errors.business}"/>
-                        <p v-if="errors.business">{{errors.business}}</p>
+                        <CustomInput type="textarea" v-model="form.description" :class="{'border-red-500' : errors.description}"/>
+                        <p v-if="errors.description">{{errors.description}}</p>
                     </div>
                 </div>
             </div>
@@ -273,6 +271,7 @@ const form = useForm({
     interest_type:'amount',
     percent:null,
     interest_amount:null,
+    interest_method:null,
     loan_duration:null,
     description:null,
     duration_type:null,
@@ -280,8 +279,8 @@ const form = useForm({
     number_payments:null,
     guarantor:null,
     total_interest:null,
-    image_url: null,
-    groupId:null,
+    payment: null,
+    borrower:null
 });
 
 
@@ -321,7 +320,7 @@ const onSelect = (event) => {
 
 function onSubmit(){
     loading.value = true
-    form.post(route('borrow.store'),{
+    form.post(route('loan.store'),{
         onSuccess:()=>{
             loading.value = false
         },
@@ -332,17 +331,8 @@ function onSubmit(){
 }
 
 
-function  calculateCompoundInterest() {
 
-    if (form.interest_type === 'percent'){
-        let rate = form.percent / 100;
-        let periodsPerYear = this.period === 'week' ? 52 : (this.period === 'month' ? 12 : 1);
-        let n = periodsPerYear;
-        let A = form.principle * Math.pow(1 + rate / n, n * this.loanTerm);
-        form.total_interest = A - form.principle;
-    }
 
-}
 
 </script>
 
