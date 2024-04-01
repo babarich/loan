@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('borrower_id');
             $table->decimal('principle_amount', 60,2)->nullable();
             $table->string('interest_method')->nullable();
+            $table->string('disbursement')->nullable();
             $table->string('interest_type')->nullable();
             $table->integer('interest_percentage')->nullable();
             $table->string('interest_duration')->nullable();

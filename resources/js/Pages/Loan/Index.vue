@@ -47,13 +47,16 @@
                                       @click="sortTransaction('reference')"> Reference</TableHeaderCell>
 
                      <TableHeaderCell field="reference" :sort-field="sortField" :sort-direction="sortDirection"
-                                      @click="sortTransaction('name')"> Name</TableHeaderCell>
+                                      @click="sortTransaction('name')">Borrower Name</TableHeaderCell>
 
                      <TableHeaderCell field="name" :sort-field="sortField" :sort-direction="sortDirection"
                                       @click="sortTransaction('principal')"> Principal </TableHeaderCell>
 
                      <TableHeaderCell field="principal" :sort-field="sortField" :sort-direction="sortDirection"
-                                      @click="sortTransaction('interest')"> Interest</TableHeaderCell>
+                                      @click="sortTransaction('interest')"> Total Interest</TableHeaderCell>
+
+                     <TableHeaderCell field="principal" :sort-field="sortField" :sort-direction="sortDirection"
+                                      @click="sortTransaction('interest')">  Interest</TableHeaderCell>
 
                      <TableHeaderCell field="interest" :sort-field="sortField" :sort-direction="sortDirection"
                                       @click="sortTransaction('interest_tye')"> Interest Type</TableHeaderCell>
@@ -64,8 +67,7 @@
                      <TableHeaderCell field="due" :sort-field="sortField" :sort-direction="sortDirection"
                                       @click="sortTransaction('total_paid')"> Total Paid</TableHeaderCell>
 
-                     <TableHeaderCell field="due" :sort-field="sortField" :sort-direction="sortDirection"
-                                      @click="sortTransaction('last_payment')"> Balance</TableHeaderCell>
+
 
                      <TableHeaderCell field="due" :sort-field="sortField" :sort-direction="sortDirection"
                                           @click="sortTransaction('last_payment')"> Last Payment </TableHeaderCell>
@@ -79,16 +81,18 @@
                  </tr>
                 </thead>
                 <tbody>
+
                 <tr v-for="(loan,index) in loans.data" :key="index" class="odd:bg-gray-100 focus-within:bg-gray-100">
                     <td class="py-4 px-4 text-sm text-left border">
                         {{index + 1}}
                     </td>
-                    <td class="py-4 px-4 text-sm text-left border">{{loan.name}}</td>
                     <td class="py-4 px-4 text-sm text-left border">{{loan.reference}}</td>
-                    <td class="py-4 px-4 text-sm text-left border">{{loan.email}}</td>
-                    <td class="py-4 px-4 text-sm text-left border">{{loan.mobile}}</td>
-                    <td class="py-4 px-4 text-sm text-left border text-wrap">{{loan.business}}</td>
-                    <td class="py-4 px-4 text-sm text-left border">{{loan.balance}}</td>
+                    <td class="py-4 px-4 text-sm text-left border">{{loan.name}}</td>
+                    <td class="py-4 px-4 text-sm text-left border">{{loan.principal}}</td>
+                    <td class="py-4 px-4 text-sm text-left border">{{loan.total_interest}}</td>
+                    <td class="py-4 px-4 text-sm text-left border text-wrap">{{loan.interest}}</td>
+                    <td class="py-4 px-4 text-sm text-left border text-wrap">{{loan.type}}</td>
+                    <td class="py-4 px-4 text-sm text-left border">{{loan.due}}</td>
                     <td class="py-4 px-4 text-sm text-left border">{{loan.total_paid}}</td>
                     <td class="py-4 px-4 text-sm text-left border">{{loan.last_payment}}</td>
                     <td class="py-4 px-4 text-sm text-left border">

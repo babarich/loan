@@ -2,6 +2,8 @@
 
 namespace App\Models\Borrow;
 
+use App\Models\Loan\Loan;
+use App\Models\Loan\LoanSchedule;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -22,7 +24,13 @@ class Borrower extends Model
         return $this->belongsTo(User::class,'uploaded_by', 'id');
     }
 
-
+    public function loans(){
+        return $this->hasMany(Loan::class, 'borrower_id');
+    }
+    public function schedules()
+    {
+        return  $this->hasMany(LoanSchedule::class, 'borrower_id');
+    }
     public function attachments()
     {
         return $this->hasMany(BorrowerAttachment::class, 'borrower_id', 'id');

@@ -168,7 +168,7 @@
                         border border-border-base focus:border-accent h-12" v-model="form.payment_cycle" :class="{'border-red-500' : errors.payment_cycle}">
                                     <option value="">select..</option>
                                     <option value="day">daily</option>
-                                    <option value="day">weekly</option>
+                                    <option value="week">weekly</option>
                                     <option value="month">monthly</option>
                                 </select>
                             </div>

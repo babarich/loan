@@ -47,7 +47,7 @@
                 </div>
                 <div class="w-full md:w-2/3 space-y-8">
                     <div class="bg-white shadow rounded-lg p-6">
-                        <h2 class="text-xl font-bold mb-4">Borrower Information</h2>
+                        <h2 class="text-xl font-bold mb-4">Guarantors Information</h2>
                         <div class="flex justify-between flex-wrap gap-2 w-full mb-6">
                             <span class="text-primary font-bold">Address</span>
                             <p>

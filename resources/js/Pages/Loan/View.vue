@@ -17,26 +17,26 @@
                     <div class="bg-white shadow rounded-lg p-6">
                         <div class="m-10 max-w-sm">
                                 <div class="relative mx-auto w-52 rounded-full">
-                                    <img :src="customer.filename" class="object-cover h-52 bg-gray-300 rounded-md mb-4 shrink-0" :alt="customer.first_name" />
+                                    <img :src="loan.borrower.filename" class="object-cover h-52 bg-gray-300 rounded-md mb-4 shrink-0" :alt="loan.borrower.first_name" />
                                 </div>
-                                <h1 class="my-1 text-center text-xl font-bold leading-8 text-gray-900">{{uppercase(customer.title)}}. {{uppercase(customer.first_name)}} {{uppercase(customer.last_name)}}</h1>
-                                <h3 class="font-lg text-semibold text-center leading-6 text-gray-600">{{customer.business_name}}, {{customer.working_status}}</h3>
+                                <h1 class="my-1 text-center text-xl font-bold leading-8 text-gray-900">{{uppercase(loan.borrower.first_name)}} {{uppercase(loan.borrower.last_name)}}</h1>
+                                <h3 class="font-lg text-semibold text-center leading-6 text-gray-600">{{loan.borrower.business_name}}, {{loan.borrower.working_status}}</h3>
                                 <ul class="mt-3 divide-y rounded bg-gray-100 py-2 px-3 text-gray-600 shadow-sm hover:text-gray-700 hover:shadow">
                                     <li class="flex flex-col md:flex-row items-center py-3 text-sm">
                                         <span class="text-primary font-semibold">Age</span>
-                                        <span class="ml-auto">{{formatDate(customer.date_birth)}}</span>
+                                        <span class="ml-auto">{{formatDate(loan.borrower.date_birth)}}</span>
                                     </li>
                                     <li class="flex flex-col md:flex-row items-center py-3 text-sm">
                                         <span class="text-primary font-semibold">Gender</span>
-                                        <span class="ml-auto">{{uppercase(customer.gender)}}</span>
+                                        <span class="ml-auto">{{uppercase(loan.borrower.gender)}}</span>
                                     </li>
                                     <li class="flex flex-col md:flex-row items-center py-3 text-sm">
                                         <span class="text-primary font-semibold">Joined On</span>
-                                        <span class="ml-auto">{{formatDate(customer.created_at)}}</span>
+                                        <span class="ml-auto">{{formatDate(loan.borrower.created_at)}}</span>
                                     </li>
                                     <li class="flex flex-col md:flex-row items-center py-3 text-sm">
                                         <span class="text-primary font-semibold">Loan Officer</span>
-                                        <span class="ml-auto">{{customer.user.name}}</span>
+                                        <span class="ml-auto">{{loan.user.name}}</span>
                                     </li>
                                 </ul>
 
@@ -47,35 +47,35 @@
                 </div>
                 <div class="w-full md:w-2/3 space-y-8">
                     <div class="bg-white shadow rounded-lg p-6">
-                        <h2 class="text-xl font-bold mb-4">Borrower Information</h2>
+                        <h2 class="text-xl font-bold mb-4">Loan Information</h2>
                         <div class="flex justify-between flex-wrap gap-2 w-full mb-6">
-                            <span class="text-primary font-bold">Address</span>
+                            <span class="text-primary font-bold">Loan Product</span>
                             <p>
-                                <span class="text-gray-700 mr-2">{{customer.address}}</span>
+                                <span class="text-gray-700 mr-2">{{loan.product.name}}</span>
                             </p>
                         </div>
                         <div class="flex justify-between flex-wrap gap-2 w-full mb-6">
                             <span class="text-primary font-bold">City</span>
                             <p>
-                                <span class="text-gray-700 mr-2">{{customer.city}}</span>
+                                <span class="text-gray-700 mr-2">{{loan.city}}</span>
                             </p>
                         </div>
                         <div class="flex justify-between flex-wrap gap-2 w-full mb-6">
                             <span class="text-primary font-bold">Mobile</span>
                             <p>
-                                <span class="text-gray-700 mr-2">{{customer.mobile}}</span>
+                                <span class="text-gray-700 mr-2">{{loan.mobile}}</span>
                             </p>
                         </div>
                         <div class="flex justify-between flex-wrap gap-2 w-full mb-6">
                             <span class="text-primary font-bold">Email</span>
                             <p>
-                                <span class="text-gray-700 mr-2">{{customer.email}}</span>
+                                <span class="text-gray-700 mr-2">{{loan.email}}</span>
                             </p>
                         </div>
                         <div class="flex justify-between flex-wrap gap-2 w-full mb-6">
                             <span class="text-primary font-bold">Description</span>
                             <p>
-                                <span class="text-gray-700 mr-2">{{customer.description}}</span>
+                                <span class="text-gray-700 mr-2">{{loan.description}}</span>
                             </p>
                         </div>
                         <h2 class="text-xl font-bold mb-4">Borrower Files</h2>
@@ -114,7 +114,7 @@
                                 </thead>
                                 <tbody>
                                 <tr class="odd:bg-gray-100 focus-within:bg-gray-100"
-                                    v-for="(attach, index) in customer.attachments" :key="index">
+                                    v-for="(attach, index) in loan.attachments" :key="index">
                                     <td class="py-4 px-4 text-sm text-left border">
                                         {{index + 1}}
                                     </td>
@@ -126,7 +126,7 @@
                                         {{attach.attachment_size}}
                                     </td>
                                     <td class="py-4 px-4 text-sm text-left border">
-                                        {{customer.user.name}}
+                                        {{loan.user.name}}
                                     </td>
 
 
@@ -300,7 +300,7 @@ import moment from "moment";
 import SearchFilter from "@/Shared/SearchFilter.vue";
 
 const props = defineProps({
-    customer:Object
+    loan:Object
 })
 
 function uppercase(str){

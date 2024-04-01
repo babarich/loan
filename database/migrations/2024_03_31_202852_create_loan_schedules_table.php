@@ -15,6 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('loan_id')->references('id')->on('loans')->onDelete('cascade');
             $table->foreignId('borrower_id')->references('id')->on('borrowers')->onDelete('cascade');
+            $table->decimal('principle', 60,2)->nullable();
+            $table->decimal('interest', 60,2)->nullable();
+            $table->decimal('penalty', 40,2)->nullable();
+            $table->decimal('fees', 40,2)->nullable();
             $table->timestamp('due_date')->nullable();
             $table->decimal('amount', 60,2)->nullable();
             $table->enum('status', ['pending','completed', 'partial','overdue','due'])->default('pending');

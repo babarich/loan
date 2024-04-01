@@ -42,13 +42,14 @@ class LoanController extends Controller
                 ->through(fn ($loan) => [
                     'id' => $loan->id,
                     'reference' => $loan->reference,
-                    'borrower' => $loan->user()->first_name . ' ' . $loan->user()->last_name,
+                    'name' => $loan->borrower->first_name . ' ' . $loan->borrower->last_name,
                     'principal' =>$loan->principle_amount,
-                    'interest' => $loan->total_interest,
-                    'interest_type' => isset($loan->interest_percentage) ? $loan->interest_percentage. ' '. '%'. $loan->interest_duration : $loan->interest_amount. ' '. $loan->interest_duration,
-                    'due'=>$loan->loanpayment()->due_amount,
-                    'total_paid' =>$loan->loanpayment()->paid_amount,
-                    'last_payment' =>$loan->loanpayment()->latest_payment,
+                    'total_interest' => $loan->total_interest,
+                    'interest' => isset($loan->interest_percentage) ? $loan->interest_percentage. ' '. '%' : $loan->interest_amount,
+                    'type' => 'per'.' '.$loan->interest_duration,
+                    'due'=>$loan->loanpayment->due_amount,
+                    'total_paid' =>$loan->loanpayment->paid_amount ?? 0,
+                    'last_payment' =>$loan->loanpayment->latest_payment ?? 0,
                     'status' => $loan->status
                 ])
 
@@ -88,8 +89,9 @@ class LoanController extends Controller
            $amount = $request->input('interest_amount');
            $duration = $request->input('loan_duration');
            $type = $request->input('duration_type');
+           $method = $request->input('interest_method');
            DB::beginTransaction();
-            $totalInterest = $this->calculateLoan($principle,$interest,$interest_type,$percent,$amount,$duration,$type);
+             $totalInterest = $this->calculateLoan($principle,$interest,$interest_type,$percent,$amount,$duration,$type, $method);
              $loan = Loan::create([
               'reference' => 'LRN'.''.rand(1000,9999),
               'loan_product' => $validatedData['product'],
@@ -97,6 +99,7 @@ class LoanController extends Controller
               'principle_amount' => $validatedData['principle'],
               'interest_method' => $validatedData['interest'],
               'interest_type' => $validatedData['interest_type'],
+              'disbursement' => $request->filled('payment') ?  $request->input('payment') : null,
               'interest_percentage' => $request->filled('percent') ? $request->input('percent') : null,
               'interest_duration' => $request->filled('interest_method') ? $request->input('interest_method') : null,
               'loan_duration' => $validatedData['loan_duration'],
@@ -121,20 +124,22 @@ class LoanController extends Controller
              ]);
 
              $loanDate = $request->input('release_date');
-             $payInterest = $this->singleInterest($principle, $interest_type,$percent, $amount);
              $paymentCycle = $request->input('payment_cycle');
              $cycle = $request->input('number_payments');
-             $schedules = $this->calculateRepaymentSchedule($principle,$payInterest,$duration,$paymentCycle,$cycle,$loanDate);
+             $singleInterest = $this->singleInterest($principle,$interest_type,$percent,$amount);
+             $schedules = $this->calculateRepaymentSchedule($principle,$totalInterest,$duration,$paymentCycle,$cycle,$loanDate);
 
                 foreach ($schedules as $schedule){
                     LoanSchedule::create([
-                     'loan_id' => $loan->id,
+                      'loan_id' => $loan->id,
                       'borrower_id' => $validatedData['borrower'],
-                      'due_date' => $schedule->due_date,
-                      'amount' => $schedule->repayment_amount,
+                      'due_date' => $schedule['due_date'],
+                      'principle' => $schedule['repayment_amount'] - $singleInterest,
+                      'interest' => $singleInterest,
+                      'amount' => $schedule['repayment_amount'],
                       'status' => 'pending',
                       'user_id' => Auth::id(),
-                      'paid' => $schedule->paid
+                      'paid' => $schedule['paid']
                     ]);
                 }
 
@@ -149,41 +154,41 @@ class LoanController extends Controller
    }
 
 
-   private function calculateLoan($principle ,$interest, $interest_type, $percent, $amount, $duration, $type){
+   private function calculateLoan($principle ,$interest, $interest_type, $percent, $amount, $duration, $type, $method){
 
         $totalInterest = 0;
         if($interest === 'flat'){
             if ($interest_type === 'amount'){
-                $term = $this->convertTerm($duration, $type);
+                $term = $this->convertTerm($duration, $type,$method);
                 $totalInterest = $amount * $term;
             }else{
-                $term = $this->convertTerm($duration, $type);
+                $term = $this->convertTerm($duration, $type,$method);
                 $totalInterest =  $principle * ($percent/100) * $term;
             }
 
         }elseif ($interest === 'reducing'){
             if ($interest_type === 'amount'){
-                $term = $this->convertTerm($duration, $type);
+                $term = $this->convertTerm($duration, $type,$method);
                 $totalInterest = $amount * $term;
             }else{
-                $term = $this->convertTerm($duration, $type);
+                $term = $this->convertTerm($duration, $type,$method);
                 $totalInterest =  $principle * ($percent/100) * $term;
             }
         }elseif ($interest === 'interest'){
             if ($interest_type === 'amount'){
-                $term = $this->convertTerm($duration, $type);
+                $term = $this->convertTerm($duration, $type,$method);
                 $totalInterest = $amount * $term;
             }else{
-                $term = $this->convertTerm($duration, $type);
+                $term = $this->convertTerm($duration, $type,$method);
                 $totalInterest =  $principle * ($percent/100) * $term;
             }
 
         }else{
             if ($interest_type === 'amount'){
-                $term = $this->convertTerm($duration, $type);
+                $term = $this->convertTerm($duration, $type,$method);
                 $totalInterest = $amount * $term;
             }else{
-                $term = $this->convertTerm($duration, $type);
+                $term = $this->convertTerm($duration, $type,$method);
                 $totalInterest =  $principle * ($percent/100) * $term;
             }
 
@@ -204,18 +209,42 @@ class LoanController extends Controller
         return $interest;
    }
 
-   private function convertTerm($duration, $type)
+   private function convertTerm($duration, $type, $method)
    {
 
        switch ($type) {
            case 'day':
-               return $duration / 30;
+               if ($method === 'day'){
+                   return $duration;
+               }elseif ($method === 'week'){
+                   return $duration/7;
+               }else{
+                   return $duration/30;
+               }
            case 'week':
-               return $duration * 4;
+               if ($method === 'day'){
+                   return $duration * 7;
+               }elseif ($method === 'week'){
+                   return $duration;
+               }else{
+                   return $duration /4;
+               }
            case 'month':
-               return $duration;
+               if ($method === 'day'){
+                   return $duration * 30;
+               }elseif ($method === 'week'){
+                   return $duration * 4;
+               }else{
+                   return $duration;
+               }
            case 'year':
-               return $duration * 12;
+               if ($method === 'day'){
+                   return $duration * 360;
+               }elseif ($method === 'week'){
+                   return $duration * 52;
+               }else{
+                   return $duration * 12;
+               }
            default:
                return $duration;
        }
@@ -229,8 +258,9 @@ class LoanController extends Controller
         $repaymentFrequency = $cycleCount;
         $repaymentAmount = $this->calculateRepaymentAmount($principleAmount, $interest, $term);
 
+
         // Generate repayment schedule
-        for ($i = 1; $i <= $term; $i += $repaymentFrequency) {
+        for ($i = 1; $i <= $repaymentFrequency; $i++) {
             if ($repaymentCycle === 'week'){
                 $dueDate = $date->addWeeks($i)->format('Y-m-d');
             }elseif ($repaymentCycle === 'day'){
@@ -240,6 +270,7 @@ class LoanController extends Controller
             }
 
             $repaymentSchedule[] = [
+                'principle' => $principle,
                 'due_date' => $dueDate,
                 'repayment_amount' => $repaymentAmount,
                 'paid' => false,
@@ -256,6 +287,14 @@ class LoanController extends Controller
         $repaymentAmount = $totalRepayment / $term;
 
         return $repaymentAmount;
+    }
+
+
+
+    public function show(Request $request, $id){
+
+        $loan = Loan::with(['schedules','user', 'borrower','guarantor','product'])->findOrFail($id);
+        return Inertia::render('Loan/View',['loan' =>$loan]);
     }
 
 }
