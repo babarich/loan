@@ -215,6 +215,7 @@ class BorrowerController extends Controller
 
     private function saveImage($image)
     {
+
         // Check if image is valid base64 string
         if (preg_match('/^data:image\/(\w+);base64,/', $image, $type)) {
             // Take out the base64 encoded text without mime type

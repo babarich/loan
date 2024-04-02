@@ -3,6 +3,7 @@ import '../css/app.css';
 
 import { createApp, h } from 'vue';
 import { createInertiaApp } from '@inertiajs/vue3';
+import {InertiaProgress} from "@inertiajs/progress";
 import PrimeVue from "primevue/config";
 import ConfirmationService from "primevue/confirmationservice";
 import ToastService from "primevue/toastservice";
@@ -30,3 +31,6 @@ createInertiaApp({
         color: '#4B5563',
     },
 });
+
+
+InertiaProgress.init({color:'#E11E1E'})

@@ -193,7 +193,8 @@
                         <p v-if="errors.guarantor">{{errors.guarantor}}</p>
                     </div>
 
-                    <div class="mb-5"><label class="flex text-body-dark font-semibold text-sm leading-none mb-3"
+                    <div class="mb-5">
+                        <label class="flex text-body-dark font-semibold text-sm leading-none mb-3"
                                              for="slug">Comments</label>
                         <CustomInput type="textarea" v-model="form.description" :class="{'border-red-500' : errors.description}"/>
                         <p v-if="errors.description">{{errors.description}}</p>

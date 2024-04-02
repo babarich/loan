@@ -11,7 +11,10 @@ class LoanSchedule extends Model
 
     protected $table = 'loan_schedules';
 
-    protected $fillable = ['loan_id', 'borrower_id', 'due_date', 'amount', 'status','user_id', 'paid','principle', 'interest', 'penalty', 'fees'];
+    protected $fillable = ['loan_id', 'borrower_id', 'due_date', 'amount', 'status','user_id', 'paid','principle', 'interest', 'penalty',
+        'fees', 'interest_paid', 'principal_paid'];
+
+
 
 
 }

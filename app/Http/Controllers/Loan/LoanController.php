@@ -7,6 +7,7 @@ use App\Http\Requests\LoanRequest;
 use App\Models\Borrow\Borrower;
 use App\Models\Borrow\Guarantor;
 use App\Models\Loan\Loan;
+use App\Models\Loan\LoanAttachment;
 use App\Models\Loan\LoanPayment;
 use App\Models\Loan\LoanSchedule;
 use App\Models\Loan\Product;
@@ -14,9 +15,11 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request as FacadesRequest;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class LoanController extends Controller
@@ -293,8 +296,78 @@ class LoanController extends Controller
 
     public function show(Request $request, $id){
 
-        $loan = Loan::with(['schedules','user', 'borrower','guarantor','product'])->findOrFail($id);
+        $loan = Loan::with(['schedules','user', 'borrower','guarantor','product', 'loanpayment','agreements'])->findOrFail($id);
         return Inertia::render('Loan/View',['loan' =>$loan]);
     }
 
+
+    public function attachment(Request $request, $loanId)
+    {
+
+     $validatedData= $request->validate([
+            'filename' => 'required',
+            'file' => 'required'
+        ]);
+
+        try {
+           DB::beginTransaction();
+            $attach = $request->file('file');
+            $filename = $attach->getClientOriginalName();
+            $filesize = $attach->getSize();
+            $path = $attach->store('file');
+           LoanAttachment::create([
+               'loan_id' => $loanId,
+               'name' => $validatedData['filename'],
+               'filename' => $request->input('name'),
+               'file' => $filename,
+               'attachment' => $path,
+               'attachment_size' => $filesize,
+               'uploaded_by' => Auth::id(),
+               'type' => 'agreement'
+           ]);
+
+           DB::commit();
+        }catch (\Exception $e){
+            DB::rollBack();
+            Log::info('error', [$e]);
+            return  Redirect::back()->with('error', 'sorry something went wrong cannot create loan try again');
+        }
+        return Redirect::back()->with('success','You have added successfully a new agreement file');
+    }
+
+
+    private function saveImage($image)
+    {
+        // Check if image is valid base64 string
+        if (preg_match('/^data:image\/(\w+);base64,/', $image, $type)) {
+            // Take out the base64 encoded text without mime type
+            $image = substr($image, strpos($image, ',') + 1);
+            // Get file extension
+            $type = strtolower($type[1]); // jpg, png, gif
+
+            // Check if file is an image
+            if (!in_array($type, ['jpg', 'jpeg', 'gif', 'png'])) {
+                throw new \Exception('invalid image type');
+            }
+            $image = str_replace(' ', '+', $image);
+            $image = base64_decode($image);
+
+            if ($image === false) {
+                throw new \Exception('base64_decode failed');
+            }
+        } else {
+            throw new \Exception('did not match data URI with image data');
+        }
+
+        $dir = 'images/';
+        $file = Str::random() . '.' . $type;
+        $absolutePath = public_path($dir);
+        $relativePath = $dir . $file;
+        if (!File::exists($absolutePath)) {
+            File::makeDirectory($absolutePath, 0755, true);
+        }
+        file_put_contents($relativePath, $image);
+
+        return $relativePath;
+    }
 }

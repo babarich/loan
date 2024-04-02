@@ -119,7 +119,31 @@
                   <span class="flex-1 ml-3 text-left whitespace-nowrap">Missed Payment </span>
               </jet-nav-link>
           </div>
-
+          <div class="flex flex-col  pt-6 pb-3">
+              <div class="pb-5 text-xs font-semibold  tracking-[0.05em]  text-gray-500">General Settings
+              </div>
+          <div class="space-y-2">
+              <jet-dropdown>
+                  <template #trigger>
+                      <button type="button" class="flex px-4 items-center cursor-pointer w-full p-2 text-base font-normal
+                     text-gray-500 transition duration-75 rounded-lg group hover:bg-gray-100">
+                          <i class="pi pi-sliders-h flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900"></i>
+                          <span class="flex-1 ml-3 text-left whitespace-nowrap">Settings</span>
+                          <ChevronDownIcon  class="w-4 h-4"/>
+                      </button>
+                  </template>
+                  <template #content>
+                      <jet-nav-link class="group flex w-full items-center gap-2.5 rounded-md px-4
+                  py-2.5 text-md text-gray-300 text-start focus:text-primary hover:bg-gray-100 font-medium
+                          relative  before:absolute before:-left-0.5 before:top-[18px] before:h-px before:w-3
+                          before:border-t before:border-dashed before:border-gray-600" :href="route('collateral.index')"
+                                    :active="route().current('collateral.index')" >
+                          <span class="flex-1 ml-3 text-left whitespace-nowrap">Collateral Types</span>
+                      </jet-nav-link>
+                  </template>
+              </jet-dropdown>
+          </div>
+              </div>
       </div>
   </div>
 </template>

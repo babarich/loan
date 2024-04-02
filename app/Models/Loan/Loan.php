@@ -31,6 +31,9 @@ class Loan extends Model
     }
 
 
+    public function agreements(){
+        return  $this->hasMany(LoanAttachment::class, 'loan_id')->where('type', 'agreement')->with('user');
+    }
 
     public function guarantor()
     {

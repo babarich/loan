@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreignId('borrower_id')->references('id')->on('borrowers')->onDelete('cascade');
             $table->decimal('principle', 60,2)->nullable();
             $table->decimal('interest', 60,2)->nullable();
+            $table->decimal('interest_paid', 40, 2)->default(0);
+            $table->decimal('principal_paid', 40, 2)->default(0);
             $table->decimal('penalty', 40,2)->nullable();
             $table->decimal('fees', 40,2)->nullable();
             $table->timestamp('due_date')->nullable();
