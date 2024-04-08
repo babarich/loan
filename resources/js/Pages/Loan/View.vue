@@ -12,8 +12,8 @@
     </div>
     <div class="bg-gray-100">
         <div class="container mx-auto py-8">
-            <div class="flex flex-col md:flex-row gap-6">
-                <div class="w-full md:w-1/3 space-y-8">
+            <div class="intro-y mt-5 grid grid-cols-12 gap-5">
+                <div class="col-span-12 lg:col-span-4 2xl:col-span-3">
                     <div class="bg-white shadow rounded-lg p-6">
                         <div class="m-10 max-w-sm">
                                 <div class="relative mx-auto w-52 rounded-full">
@@ -45,7 +45,7 @@
 
                     </div>
                 </div>
-                <div class="w-full md:w-2/3 space-y-8">
+                <div class="intro-y col-span-12 lg:col-span-8 2xl:col-span-9">
                     <div class="bg-white shadow rounded-lg p-6 divide-y ">
                         <h2 class="text-xl font-bold mb-4">Loan Information</h2>
                         <div class="flex justify-between flex-wrap gap-2 w-full mb-6">
@@ -652,8 +652,110 @@
                             </div>
 
                         </div>
-                        <Dialog v-model:visible="collateral" modal header="Add Loan Collateral" :position="top">
 
+                        <Dialog v-model:visible="collateral" modal header="Add Loan Collateral" :position="top" style="width:50%">
+                            <form @submit.prevent="submitCollateral">
+                                <div class="mb-5">
+                                    <label class="flex text-body-dark font-semibold text-sm leading-none mb-3"
+                                           for="slug">Collateral Type</label>
+                                    <CustomInput
+                                        required
+                                        type="select"
+                                        :select-options="typeOptions"
+                                        v-model="collateralForm.typeId"
+
+                                    />
+                                    <p v-if="errors.typeId">{{errors.typeId}}</p>
+                                </div>
+                                <div class="mb-5">
+                                    <label class="flex text-body-dark font-semibold text-sm leading-none mb-3"
+                                           for="slug">Product Name</label>
+                                    <CustomInput type="text" v-model="collateralForm.product_name" :class="{'border-red-500' : errors.product_name}" required/>
+                                    <p v-if="errors.product_name">{{errors.product_name}}</p>
+                                </div>
+                                <div class="mb-5"><label class="flex text-body-dark font-semibold text-sm leading-none mb-3"
+                                                         for="slug">Value </label>
+                                    <InputNumber class="w-full border border-gray-300 placeholder-gray-600 text-gray-900" v-model="collateralForm.amount" inputId="integeronly"
+                                    required/>
+                                    <p v-if="errors.amount">{{errors.amount}}</p>
+                                </div>
+                                <div class="mb-5">
+                                    <label class="flex text-body-dark font-semibold text-sm leading-none mb-3"
+                                           for="slug">Registered Date</label>
+                                    <CustomInput type="date" v-model="collateralForm.date" :class="{'border-red-500' : errors.date}" required/>
+                                    <p v-if="errors.date">{{errors.date}}</p>
+                                </div>
+                                <div class="mb-5">
+                                    <label class="flex text-body-dark font-semibold text-sm leading-none mb-3"
+                                           for="slug">Product Condition</label>
+                                    <select class="px-4 h-12 flex items-center w-full rounded appearance-none transition
+                        duration-300 ease-in-out text-heading text-sm focus:outline-none focus:ring-0
+                        border border-border-base focus:border-accent h-12" v-model="collateralForm.condition" :class="{'border-red-500' : errors.condition}">
+                                        <option value="">select..</option>
+                                        <option value="Excellent">Excellent</option>
+                                        <option value="Good">Good</option>
+                                        <option value="Fair">Fair</option>
+                                        <option value="Bad">Bad</option>
+                                        <option value="Worst">Worst</option>
+                                    </select>
+                                    <p v-if="errors.condition">{{errors.condition}}</p>
+                                </div>
+                                <div class="mb-5">
+                                    <label class="flex text-body-dark font-semibold text-sm leading-none mb-3"
+                                           for="slug">Description</label>
+                                    <CustomInput type="textarea" rows="3" v-model="collateralForm.comment" :class="{'border-red-500' : errors.comment}" required/>
+                                    <p v-if="errors.comment">{{errors.comment}}</p>
+                                </div>
+                                <div class="mb-5">
+                                    <span class="text-sm">Collateral File</span>
+                                    <div
+                                        class="flex items-center space-x-6 border rounded-md px-1 py-2"
+                                    >
+                                        <label class="block">
+                                            <div class="custom-file-input">
+                                                <input
+                                                    type="file"
+                                                    id="fileInput"
+                                                    class="hidden"
+                                                    @change="handleCollateralChange"
+                                                />
+                                                <div
+                                                    for="fileInput"
+                                                    class="file-label flex"
+                                                    style="border-radius: 0.375rem"
+                                                >
+                                                    <CloudArrowUpIcon
+                                                        class="w-7 h-7 text-blue-900 cursor-pointer"
+                                                    />
+                                                    <p>Choose File</p>
+                                                </div>
+                                            </div>
+                                        </label>
+                                        <p class="selected-file">{{ collateralForm.name }}</p>
+                                    </div>
+                                    <span class="text-sm text-red-500" v-if="errors.file">{{
+                                            errors.file[0]
+                                        }}</span>
+
+                                </div>
+                                <div class="flex flex-col md:flex-row justify-between mt-8">
+                                    <div>
+
+                                    </div>
+
+                                    <div>
+                                        <button type="button" class="mt-3 w-full inline-flex justify-center
+                                 shadow-sm px-4 py-2 rounded-md text-base bg-gray-200 font-medium text-gray-600
+                                focus:outline-none focus:ring-2 focus:ring-offset-2
+                                focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" label="Cancel" severity="secondary" @click="visible = false">Cancel</button>
+                                        <NButtonLoading type="submit"   :loading="loading" class="mt-3 w-full inline-flex justify-center
+                                 shadow-sm px-4 py-2  text-base font-medium text-gray-700
+                                focus:outline-none focus:ring-2 focus:ring-offset-2
+                                focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Save</NButtonLoading>
+                                    </div>
+
+                                </div>
+                            </form>
                         </Dialog>
                         <div class="bg-white relative overflow-x-auto mt-4">
                             <table class="w-full text-sm whitespace-nowrap">
@@ -685,7 +787,11 @@
                                         Condition
                                     </th>
 
-
+                                    <th
+                                        scope="col"
+                                        class="py-4 px-4 border text-xs text-left whitespace nowrap font-semibold">
+                                        Created By
+                                    </th>
                                     <th
                                         scope="col"
                                         class="py-4 px-4 border text-xs text-left whitespace nowrap font-semibold">
@@ -695,40 +801,40 @@
 
                                 </thead>
                                 <tbody>
-                                <!--                                    <tr class="odd:bg-gray-100 focus-within:bg-gray-100"-->
-                                <!--                                        v-for="(schedule, index) in loan.schedules" :key="index">-->
-                                <!--                                        <td class="py-4 px-4 text-sm text-left border">-->
-                                <!--                                            {{index + 1}}-->
-                                <!--                                        </td>-->
+                            <tr class="odd:bg-gray-100 focus-within:bg-gray-100"
+                                v-for="(col, index) in loan.collaterals" :key="index">
+                                <td class="py-4 px-4 text-sm text-left border">
+                                    {{index + 1}}
+                                </td>
 
-                                <!--                                        <td class="py-4 px-4 text-sm text-left border">-->
-                                <!--                                            {{schedule.due_date}}-->
-                                <!--                                        </td>-->
-                                <!--                                        <td class="py-4 px-4 text-sm text-left border">-->
-                                <!--                                            {{formatCurrency(schedule.principle)}}-->
-                                <!--                                        </td>-->
-                                <!--                                        <td class="py-4 px-4 text-sm text-left border">-->
-                                <!--                                            {{formatCurrency(schedule.interest)}}-->
-                                <!--                                        </td>-->
+                                <td class="py-4 px-4 text-sm text-left border">
+                                    {{col.product_name}}
+                                </td>
+                                <td class="py-4 px-4 text-sm text-left border">
+                                    {{col.date}}
+                                </td>
+                                <td class="py-4 px-4 text-sm text-left border">
+                                    {{formatCurrency(col.amount)}}
+                                </td>
 
-                                <!--                                        <td class="py-4 px-4 text-sm text-left border">-->
+                                <td class="py-4 px-4 text-sm text-left border">
+                                    {{col.condition}}
+                                </td>
+                                <td class="py-4 px-4 text-sm text-left border">
+                                    {{col.user ? col.user.name : 'N/A'}}
+                                </td>
 
-                                <!--                                        </td>-->
 
-                                <!--                                        <td class="py-4 px-4 text-sm text-left border">-->
-
-                                <!--                                        </td>-->
-                                <!--                                        <td class="py-4 px-4 text-sm text-left border">-->
-                                <!--                                            {{formatCurrency(schedule.amount)}}-->
-                                <!--                                        </td>-->
-                                <!--                                        <td class="py-4 px-4 text-sm text-left border">-->
-                                <!--                                            <span class="bg-yellow-400 text-gray-900 p-3 rounded-md" v-if="schedule.status === 'pending'">Pending</span>-->
-                                <!--                                            <span class="bg-red-400 text-gray-800 rounded-md p-3" v-else-if="schedule.status === 'due'">Due</span>-->
-                                <!--                                            <span class="bg-emerald-500 text-gray-900 rounded-md p-3" v-else-if="schedule.status === 'completed'">Completed</span>-->
-                                <!--                                            <span class="bg-red-200 text-gray-900 rounded-md p-3" v-else-if="schedule.status === 'partial'">Partial Paid</span>-->
-                                <!--                                            <span v-else class="bg-red-600 text-gray-100 rounded-md p-3">Overdue</span>-->
-                                <!--                                        </td>-->
-                                <!--                                    </tr>-->
+                                <td class="py-4 px-4 text-sm text-left border">
+                                    <div class="flex justify-between flex-col md:flex-row items-center">
+                                        <div class="flex items-center space-x-2 divide-x" v-if="col.attachment">
+                                            <a :href="route('collateral.download', col.id)" class="text-sm flex text-gray-100 bg-primary p-2 rounded">
+                                                <CloudArrowDownIcon class="w-4 h-4 mr-2"/> Download
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -739,7 +845,142 @@
                                 <span class="font-bold white-space-nowrap text-primary">Loan Files</span>
                             </div>
                         </template>
+                        <div class="flex flex-col md:flex-row justify-between">
+                            <div>
+                                <h2 class="text-xl font-bold mb-4 text-red-600">Loan  Files</h2>
+                            </div>
+                            <div>
+                                <button label="Show" @click="loanFile = true" class="px-4 text-sm flex text-gray-100 bg-primary p-2 rounded">
+                                    <PlusIcon class="w-4 h-4 mr-2"/>  Add  File
+                                </button>
+                            </div>
 
+                        </div>
+                        <Dialog v-model:visible="loanFile" modal header="Add Loan File" style="width:50%">
+                            <form @submit.prevent="submitLoanFile">
+                                <div class="mb-5">
+                                    <label class="flex text-body-dark font-semibold text-sm leading-none mb-3"
+                                           for="slug">File Name</label>
+                                    <CustomInput type="text" v-model="loanForm.filename" :class="{'border-red-500' : errors.filename}" required/>
+                                    <p v-if="errors.filename">{{errors.filename}}</p>
+                                </div>
+                                <div class="mb-5">
+                                    <span class="text-sm">File</span>
+                                    <div
+                                        class="flex items-center space-x-6 border rounded-md px-1 py-2"
+                                    >
+                                        <label class="block">
+                                            <div class="custom-file-input">
+                                                <input
+                                                    type="file"
+                                                    id="fileInput"
+                                                    class="hidden"
+                                                    @change="handleLoanChange"
+                                                />
+                                                <div
+                                                    for="fileInput"
+                                                    class="file-label flex"
+                                                    style="border-radius: 0.375rem"
+                                                >
+                                                    <CloudArrowUpIcon
+                                                        class="w-7 h-7 text-blue-900 cursor-pointer"
+                                                    />
+                                                    <p>Choose File</p>
+                                                </div>
+                                            </div>
+                                        </label>
+                                        <p class="selected-file">{{ loanForm.name }}</p>
+                                    </div>
+                                    <span class="text-sm text-red-500" v-if="errors.file">{{
+                                            errors.file[0]
+                                        }}</span>
+
+                                </div>
+                                <div class="flex flex-col md:flex-row justify-between mt-8">
+                                    <div>
+
+                                    </div>
+
+                                    <div>
+                                        <button type="button" class="mt-3 w-full inline-flex justify-center
+                                 shadow-sm px-4 py-2 rounded-md text-base bg-gray-200 font-medium text-gray-600
+                                focus:outline-none focus:ring-2 focus:ring-offset-2
+                                focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" label="Cancel" severity="secondary" @click="visible = false">Cancel</button>
+                                        <NButtonLoading type="submit"   :loading="loading" class="mt-3 w-full inline-flex justify-center
+                                 shadow-sm px-4 py-2  text-base font-medium text-gray-700
+                                focus:outline-none focus:ring-2 focus:ring-offset-2
+                                focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Save</NButtonLoading>
+                                    </div>
+
+                                </div>
+                            </form>
+                        </Dialog>
+                        <div class="bg-white relative overflow-x-auto mt-4">
+                            <table class="w-full text-sm whitespace-nowrap">
+                                <thead class="sticky top-0">
+                                <tr>
+                                    <th
+                                        scope="col"
+                                        class="py-4 px-4 border text-xs text-left whitespace nowrap font-semibold">
+                                        S/N
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        class="py-4 px-4 border text-xs text-left whitespace nowrap font-semibold">
+                                        File Name
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        class="py-4 px-4 border text-xs text-left whitespace nowrap font-semibold">
+                                        Attachment Size
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        class="py-4 px-4 border text-xs text-left whitespace nowrap font-semibold">
+                                        Uploaded By
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        class="py-4 px-4 border text-xs text-left whitespace nowrap font-semibold">
+                                        Action
+                                    </th>
+
+                                </tr>
+
+                                </thead>
+                                <tbody>
+                                <tr class="odd:bg-gray-100 focus-within:bg-gray-100"
+                                    v-for="(file, index) in loan.files" :key="index">
+                                    <td class="py-4 px-4 text-sm text-left border">
+                                        {{index + 1}}
+                                    </td>
+
+                                    <td class="py-4 px-4 text-sm text-left border">
+                                        {{file.name}}
+                                    </td>
+                                    <td class="py-4 px-4 text-sm text-left border">
+                                        {{file.attachment_size}}
+                                    </td>
+                                    <td class="py-4 px-4 text-sm text-left border">
+                                        {{file.user ? file.user.name : 'N/A'}}
+                                    </td>
+
+
+
+                                    <td class="py-4 px-4 text-sm text-left border">
+                                        <div class="flex justify-between flex-col md:flex-row items-center">
+                                            <div class="flex items-center space-x-2 divide-x">
+                                                <a :href="route('collateral.downloadFile', file.id)" class="text-sm flex text-gray-100 bg-primary p-2 rounded">
+                                                    <CloudArrowDownIcon class="w-4 h-4 mr-2"/> Download
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </TabPanel>
                     <TabPanel>
                         <template #header>
@@ -768,19 +1009,22 @@ import SearchFilter from "@/Shared/SearchFilter.vue";
 import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
 import Dialog from 'primevue/dialog';
-import {ref} from 'vue'
+import {computed, ref} from 'vue'
 import CustomInput from "@/Shared/CustomInput.vue";
 import NButtonLoading from "@/Shared/NButtonLoading.vue";
 import {useForm} from "@inertiajs/vue3";
 import "primevue/resources/primevue.min.css"
+import InputNumber from "primevue/inputnumber";
 
 const props = defineProps({
-    loan:Object,errors:Object
+    loan:Object,errors:Object, types:Object
 })
 
 const visible = ref(false);
 
 const collateral = ref(false);
+
+const loanFile = ref(false);
 
 
 const active = ref(0)
@@ -801,6 +1045,29 @@ const form  = useForm({
    'file':null,
     'name' : null
 });
+
+
+const collateralForm = useForm({
+     'typeId':null,
+     'name':null,
+    'product_name':null,
+    'amount':null,
+    'date':null,
+    'condition':null,
+    'comment':null,
+    'file':null,
+
+
+});
+
+const loanForm  = useForm({
+    'filename': null,
+    'file':null,
+    'name' : null
+});
+
+
+
 function formatCurrency (value, decimals=2, thousandsSeparator= ','){
     let result = parseFloat(value).toFixed(decimals).toString();
     if(thousandsSeparator) result = result.replace(/\B(?=(\d{3})+(?!\d))/g, thousandsSeparator)
@@ -819,6 +1086,19 @@ const handleFileChange = (ev) => {
 
 };
 
+const handleLoanChange = (ev) => {
+    const file = ev.target.files[0];
+    loanForm.name = ev.target.files[0].name;
+    loanForm.file = file
+
+};
+
+const handleCollateralChange = (ev) => {
+    const file = ev.target.files[0];
+    collateralForm.name = ev.target.files[0].name;
+    collateralForm.file = file
+
+};
 function onFileChoose(ev) {
     const file = ev.target.files[0];
     const reader = new FileReader();
@@ -829,12 +1109,51 @@ function onFileChoose(ev) {
     reader.readAsDataURL(file);
 }
 
+
+const typeOptions = computed(() =>
+    props.types.map((c) => ({
+        key: c.id,
+        text: `${c.name}`,
+        value: c.id,
+    }))
+);
+
+
 function submitAgreement(){
     loading.value = true
     form.post(route('loan.attachment', props.loan.id),{
         onSuccess:()=>{
             loading.value = false
             visible.value = false
+        },
+        onError:()=>{
+            loading.value = false
+        }
+    })
+}
+
+
+function submitCollateral(){
+    loading.value = true
+    collateralForm.post(route('collateral.store', props.loan.id),{
+        onSuccess:()=>{
+            loading.value = false
+            collateral.value = false
+            collateralForm.reset()
+        },
+        onError:()=>{
+            loading.value = false
+        }
+    })
+}
+
+function submitLoanFile(){
+    loading.value = true
+    loanForm.post(route('collateral.attach', props.loan.id),{
+        onSuccess:()=>{
+            loading.value = false
+            loanFile.value = false
+            loanForm.reset()
         },
         onError:()=>{
             loading.value = false

@@ -4,6 +4,7 @@ namespace App\Models\Loan;
 
 use App\Models\Borrow\Borrower;
 use App\Models\Borrow\Guarantor;
+use App\Models\Collateral\Collateral;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -35,6 +36,13 @@ class Loan extends Model
         return  $this->hasMany(LoanAttachment::class, 'loan_id')->where('type', 'agreement')->with('user');
     }
 
+
+
+    public function files(){
+        return  $this->hasMany(LoanAttachment::class, 'loan_id')->where('type', 'loan')->with('user');
+    }
+
+
     public function guarantor()
     {
         return $this->belongsTo(Guarantor::class,'guarantor_id', 'id');
@@ -51,9 +59,25 @@ class Loan extends Model
     }
 
 
-    public function schedules()
+        public function schedules()
+        {
+          return  $this->hasMany(LoanSchedule::class, 'loan_id');
+        }
+
+
+    public function cycles()
     {
-      return  $this->hasMany(LoanSchedule::class, 'loan_id');
+        return  $this->hasMany(LoanSchedule::class, 'loan_id')->whereNot('status', 'completed');
+    }
+
+
+    public function comments()
+    {
+        return  $this->hasMany(LoanComment::class, 'loan_id')->with('user');
+    }
+    public function collaterals()
+    {
+        return  $this->hasMany(Collateral::class, 'loan_id')->with('user');
     }
 
     public function scopeFilter($query , array $filters){

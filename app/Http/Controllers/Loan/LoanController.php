@@ -6,10 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LoanRequest;
 use App\Models\Borrow\Borrower;
 use App\Models\Borrow\Guarantor;
+use App\Models\Collateral\CollateralType;
 use App\Models\Loan\Loan;
 use App\Models\Loan\LoanAttachment;
 use App\Models\Loan\LoanPayment;
 use App\Models\Loan\LoanSchedule;
+use App\Models\Loan\PaymentLoan;
 use App\Models\Loan\Product;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -263,13 +265,13 @@ class LoanController extends Controller
 
 
         // Generate repayment schedule
-        for ($i = 1; $i <= $repaymentFrequency; $i++) {
+        for ($i = 0; $i < $repaymentFrequency; $i++) {
             if ($repaymentCycle === 'week'){
-                $dueDate = $date->addWeeks($i)->format('Y-m-d');
+                $dueDate = $date->addDays(7)->format('Y-m-d');
             }elseif ($repaymentCycle === 'day'){
-                $dueDate = $date->addDays($i)->format('Y-m-d');
+                $dueDate = $date->addDays(1)->format('Y-m-d');
             }else{
-                $dueDate = $date->addMonths($i)->format('Y-m-d');
+                $dueDate = $date->addDays(30)->format('Y-m-d');
             }
 
             $repaymentSchedule[] = [
@@ -295,9 +297,10 @@ class LoanController extends Controller
 
 
     public function show(Request $request, $id){
-
-        $loan = Loan::with(['schedules','user', 'borrower','guarantor','product', 'loanpayment','agreements'])->findOrFail($id);
-        return Inertia::render('Loan/View',['loan' =>$loan]);
+        $types = CollateralType::query()->get();
+        $loan = Loan::with(['schedules','user', 'borrower','guarantor','product', 'loanpayment','agreements',
+            'collaterals', 'files','comments','cycles'])->findOrFail($id);
+        return Inertia::render('Loan/View',['loan' =>$loan, 'types' => $types]);
     }
 
 
@@ -370,4 +373,95 @@ class LoanController extends Controller
 
         return $relativePath;
     }
+
+
+
+    public function distributeLoanPayment(Request $request, $loanId) {
+         $validatedData =  $request->validate([
+             'amount' => 'required',
+             'type' => 'required',
+             'date' => 'required',
+             'schedule' => 'required'
+         ]);
+
+
+        $loanSchedules = LoanSchedule::findOrFail($validatedData['schedule']);
+        try {
+            DB::beginTransaction();
+            if ($loanSchedules){
+                $paymentAmount = $validatedData['amount'];
+                $due = 0;
+
+                $payment = LoanPayment::query()->where('loan_id', $loanId)->first();
+
+                $remainingAmountDue = $loanSchedules->interest + $loanSchedules->principle;
+
+                if ($paymentAmount >= $remainingAmountDue && $remainingAmountDue > 0) {
+                    $loanSchedules->paid = true;
+                    $loanSchedules->status = 'completed';
+                    $loanSchedules->amount -= $paymentAmount;
+                    $loanSchedules->save();
+                    $paymentAmount -= $remainingAmountDue;
+
+                    $total = $payment->paid_amount + $validatedData['amount'];
+                    if ($payment->due_Amount > 0 && $payment->due_amount > $validatedData['amount']){
+                        $due = $payment->due_amount - $validatedData['amount'];
+                    }else{
+                        $due = 0;
+                    }
+
+                    $payment->update(['paid_amount' => $total, 'due_amount' => $due]);
+
+                } else if($paymentAmount < $remainingAmountDue && $remainingAmountDue > 0) {
+                    if ($paymentAmount >= $loanSchedules->interest) {
+                        $loanSchedules->interest_paid = $loanSchedules->interest;
+                        $paymentAmount -= $loanSchedules->interest;
+                        $remainingAmountDue -= $loanSchedules->interest;
+                    } else {
+                        $loanSchedules->interest_paid = $paymentAmount;
+                        $remainingAmountDue -= $paymentAmount;
+                        $paymentAmount = 0;
+                    }
+
+                    $loanSchedules->principal_paid = min($paymentAmount, $loanSchedules->principle);
+                    $paymentAmount -= $loanSchedules->principal_paid;
+                    $loanSchedules->principle -= $loanSchedules->principal_paid;
+                    $loanSchedules->paid = false;
+                    $loanSchedules->status = 'partial';
+                    $loanSchedules->amount -= $paymentAmount;
+                    $loanSchedules->save();
+
+                    $total = $payment->paid_amount + $validatedData['amount'];
+                    if ($payment->due_Amount > 0 && $payment->due_amount > $validatedData['amount']){
+                        $due = $payment->due_amount - $validatedData['amount'];
+                    }else{
+                        $due = 0;
+                    }
+
+                    $payment->update(['paid_amount' => $total, 'due_amount' => $due]);
+                }
+
+
+
+                PaymentLoan::create([
+                    'loan_id' => $loanId,
+                    'description' => $request->filled('description') ? $request->input('description') : null,
+                    'payment_date' => $validatedData['date'],
+                    'amount' => $validatedData['amount'],
+                    'type' => $validatedData['type'],
+                    'user_id' => Auth::id()
+                ]);
+            }
+
+
+            DB::commit();
+        }catch (\Exception $e){
+            DB::rollBack();
+            Log::info('error_payment', [$e]);
+            return  Redirect::back()->with('error', 'sorry something went wrong cannot create loan try again');
+        }
+
+        return Redirect::route('loan.show', $loanId)->with('success','You have added successfully a payment');
+    }
+
 }

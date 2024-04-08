@@ -6,6 +6,7 @@ use App\Http\Controllers\Borrower\GuarantorController;
 use App\Http\Controllers\Loan\ProductController;
 use App\Http\Controllers\Loan\LoanController;
 use App\Http\Controllers\Collateral\CollateralTypeController;
+use App\Http\Controllers\Collateral\CollateralController;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 
@@ -95,6 +96,25 @@ Route::group(['middleware' => 'auth:sanctum'], function (){
         });
     });
 
+
+
+
+    Route::group(['prefix' => 'collaterals'], function (){
+
+        Route::name('collateral.')->group(function (){
+            Route::controller(CollateralController::class)->group(function (){
+                Route::get('index', 'index')->name('index');
+                Route::get('create', 'create')->name('create');
+                Route::post('store/{id?}', 'store')->name('store');
+                Route::get('download/{id?}', 'downloadAttachment')->name('download');
+                Route::get('file_download/{id?}', 'downloadFile')->name('downloadFile');
+                Route::get('view/{id?}', 'show')->name('show');
+                Route::post('attachment_file/{id?}', 'attachment')->name('attach');
+                Route::post('update/{id?}', 'update')->name('update');
+                Route::get('edit/{id?}', 'edit')->name('edit');
+            });
+        });
+    });
 
 
     Route::group(['prefix' => 'collateraltypes'], function (){

@@ -136,8 +136,8 @@
                       <jet-nav-link class="group flex w-full items-center gap-2.5 rounded-md px-4
                   py-2.5 text-md text-gray-300 text-start focus:text-primary hover:bg-gray-100 font-medium
                           relative  before:absolute before:-left-0.5 before:top-[18px] before:h-px before:w-3
-                          before:border-t before:border-dashed before:border-gray-600" :href="route('collateral.index')"
-                                    :active="route().current('collateral.index')" >
+                          before:border-t before:border-dashed before:border-gray-600" :href="route('collateraltype.index')"
+                                    :active="route().current('collateraltype.index')" >
                           <span class="flex-1 ml-3 text-left whitespace-nowrap">Collateral Types</span>
                       </jet-nav-link>
                   </template>

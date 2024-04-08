@@ -5,8 +5,8 @@
                 <h3 class="text-xl text-primary text-semibold">Borrowers</h3>
             </div>
             <div>
-                <NButton :href="route('group.create')" class="text-white">
-                    <PlusCircleIcon class="w-4 h-4  text-white mr-2"/>  Add Borrower Group
+                <NButton :href="route('collateraltype.create')" class="text-white">
+                    <PlusCircleIcon class="w-4 h-4  text-white mr-2"/>  Add Collateral Type
                 </NButton>
 
             </div>
@@ -49,8 +49,7 @@
                                       @click="sortTransaction('description')"> Description</TableHeaderCell>
                      <TableHeaderCell field="created_at" :sort-field="sortField" :sort-direction="sortDirection"
                                       @click="sortTransaction('created_at')"> Created At</TableHeaderCell>
-                     <TableHeaderCell field="name" :sort-field="sortField" :sort-direction="sortDirection"
-                                      @click="sortTransaction('name')"> Members</TableHeaderCell>
+
                      <th
                          scope="col"
                          class="py-4 px-4 border text-xs text-left whitespace nowrap font-semibold">
@@ -59,25 +58,25 @@
                  </tr>
                 </thead>
                 <tbody>
-                <tr v-for="(group,index) in groups.data" :key="index" class="odd:bg-gray-100 focus-within:bg-gray-100">
+                <tr v-for="(type,index) in types.data" :key="index" class="odd:bg-gray-100 focus-within:bg-gray-100">
                     <td class="py-4 px-4 text-sm text-left border">
                         {{index + 1}}
                     </td>
-                    <td class="py-4 px-4 text-sm text-left border">{{group.name}}</td>
+                    <td class="py-4 px-4 text-sm text-left border">{{type.name}}</td>
                     <td class="py-4 px-4 text-sm text-left border"> {{
-                            group.description.length > 50
-                                ? splice(group.description) + '...'
-                                : group.description
+                            type.description.length > 50
+                                ? splice(type.description) + '...'
+                                : type.description
                         }}</td>
-                    <td class="py-4 px-4 text-sm text-left border">{{group.date}}</td>
-                    <td class="py-4 px-4 text-sm text-left border">{{group.member}}</td>
+                    <td class="py-4 px-4 text-sm text-left border">{{type.date}}</td>
+
                     <td class="py-4 px-4 text-sm text-left border">
                      <div class="flex justify-between flex-col md:flex-row items-center">
                          <div class="flex items-center space-x-2 divide-x">
-                             <a :href="route('group.show', group.id)" class="px-4 text-sm flex text-gray-100 bg-emerald-600 p-2 rounded">
+                             <a :href="route('collateraltype.show', type.id)" class="px-4 text-sm flex text-gray-100 bg-emerald-600 p-2 rounded">
                                  <i class="pi pi-eye text-white"></i>
                              </a>
-                             <a :href="route('group.edit', group.id)" class="px-4 text-sm flex text-gray-100 bg-primary p-2 rounded">
+                             <a :href="route('collateraltype.edit', type.id)" class="px-4 text-sm flex text-gray-100 bg-primary p-2 rounded">
                                  <i class="pi pi-pencil text-white"></i>
                              </a>
 
@@ -91,7 +90,7 @@
                      </div>
                     </td>
                 </tr>
-                <tr v-if="groups.data.length === 0">
+                <tr v-if="types.data.length === 0">
                     <td colspan="10" class="py-4 px-4 text-sm text-left border">
                             <div class="flex flex-col items-center py-7">
                                 <img  src="/images/empty.svg" class="w-32 h-32"/>
@@ -104,7 +103,7 @@
 
             </table>
         </div>
-            <pagination class="mt-6" :data="groups" :links="groups.links" @getPage="getChanges"/>
+            <pagination class="mt-6" :data="types" :links="types.links" @getPage="getChanges"/>
     </div>
     </AppLayout>
 </template>
@@ -124,7 +123,7 @@ import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
 
 const props = defineProps({
-   groups:Object, errors:Object
+   types:Object, errors:Object
 });
 const confirm = useConfirm();
 const toast = useToast();
@@ -137,7 +136,7 @@ const sortDirection = ref('desc');
 
 function getChanges(page){
     Inertia.get(
-        route('group.index'),
+        route('collateraltype.index'),
         {per_page:page},
         {
             preserveState:true,
@@ -178,7 +177,7 @@ function sortTransactions(field){
     }
 
     Inertia.get(
-        route("group.index"),
+        route("collateraltype.index"),
         {sort_field:sortField.value,sort_direction:sortDirection.value},{
             preserveState:true,
             replace:true

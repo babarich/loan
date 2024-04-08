@@ -5,10 +5,10 @@
         <div class="h-full p-5 md:p-8">
             <div class="flex flex-col md:flex-row items-center justify-between border-b border-dashed border-border-base border-gray-300 pb-5 md:pb-7">
                     <div>
-                        <h1 class="text-lg font-semibold text-heading">Edit  Borrower </h1>
+                        <h1 class="text-lg font-semibold text-heading">Edit  Collaterla Type </h1>
                     </div>
                     <div>
-                        <a :href="route('group.index')" class="px-4 text-sm flex text-gray-100 bg-primary p-2 rounded">
+                        <a :href="route('type.index')" class="px-4 text-sm flex text-gray-100 bg-primary p-2 rounded">
                             <ArrowLeftIcon class="w-4 h-4 mr-2"/>  Back
                         </a>
                     </div>
@@ -18,11 +18,11 @@
                 <div class="flex flex-wrap pb-8 my-5 border-b border-dashed border-border-base sm:my-8">
                     <div class="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5">
                         <h4 class="text-base font-semibold text-body-dark mb-2">Basic Info</h4>
-                        <p class="text-sm text-body">Add some basic info about your borrower</p>
+                        <p class="text-sm text-body">Add some basic info about your collateral type</p>
                     </div>
                     <div class="rounded bg-white p-5 shadow md:p-8 w-full sm:w-8/12 md:w-2/3">
                         <div class="mb-5">
-                            <label class="flex text-body-dark font-semibold text-sm leading-none mb-3" for="name">Group Name<span
+                            <label class="flex text-body-dark font-semibold text-sm leading-none mb-3" for="name">Type Name<span
                                 class="ml-0.5 text-red-500">*</span></label>
                             <CustomInput :class="{'border-red-500' : errors.name}" type="text" v-model="form.name"/>
                             <p v-if="errors.name">{{errors.name}}</p>
@@ -71,19 +71,19 @@ const loading = ref(false);
 
 
 const props = defineProps({
-    errors:Object,group:Object
+    errors:Object,type:Object
 });
 
 const form = useForm({
-    name: props.group.name,
-    description:props.group.description,
+    name: props.type.name,
+    description:props.type.description,
 });
 
 
 
 function onUpdate(){
     loading.value = true
-    form.post(route('group.update', props.customer.id),{
+    form.post(route('collateraltype.update', props.customer.id),{
         onSuccess:()=>{
             loading.value = false
         },

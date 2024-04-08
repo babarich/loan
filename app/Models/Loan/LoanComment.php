@@ -6,21 +6,20 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class LoanPayment extends Model
+class LoanComment extends Model
 {
     use HasFactory;
 
-    protected $table = 'loan_payments';
 
-    protected $fillable = ['loan_id', 'paid_amount', 'due_amount', 'total', 'status', 'user_id'];
+    protected $table = 'loan_comments';
+
+    protected $fillable = ['loan_id', 'description', 'user_id'];
 
 
-
-
-    public function user()
-    {
+    public function user(){
         return $this->belongsTo(User::class, 'user_id');
     }
+
 
 
 }
