@@ -11,6 +11,10 @@ class LoanComment extends Model
     use HasFactory;
 
 
+    protected $casts = [
+        'created_at' => 'datetime:yyyy-m-d'
+    ];
+
     protected $table = 'loan_comments';
 
     protected $fillable = ['loan_id', 'description', 'user_id'];

@@ -63,9 +63,26 @@ Route::group(['middleware' => 'auth:sanctum'], function (){
                 Route::post('attachment/{id?}', 'attachment')->name('attachment');
                 Route::get('export/{id?}', 'downloadAttachment')->name('download');
                 Route::get('edit/{id?}', 'edit')->name('edit');
+                Route::post('repayment/{id?}', 'distributeLoanPayment')->name('payment');
             });
         });
     });
+
+
+
+    Route::group(['prefix' => 'schedules'], function (){
+
+        Route::name('schedule.')->group(function (){
+            Route::controller(\App\Http\Controllers\Loan\LoanScheduleController::class)->group(function (){
+                Route::get('index', 'index')->name('index');
+                Route::get('outstanding', 'outstanding')->name('outstanding');
+                Route::get('maturity', 'maturity')->name('maturity');
+                Route::get('create', 'create')->name('create');
+                Route::get('show', 'show')->name('show');
+            });
+        });
+    });
+
 
     Route::group(['prefix' => 'guarantors'], function (){
 
@@ -108,6 +125,7 @@ Route::group(['middleware' => 'auth:sanctum'], function (){
                 Route::post('store/{id?}', 'store')->name('store');
                 Route::get('download/{id?}', 'downloadAttachment')->name('download');
                 Route::get('file_download/{id?}', 'downloadFile')->name('downloadFile');
+                Route::post('comment/{id?}', 'storeComment')->name('comment');
                 Route::get('view/{id?}', 'show')->name('show');
                 Route::post('attachment_file/{id?}', 'attachment')->name('attach');
                 Route::post('update/{id?}', 'update')->name('update');

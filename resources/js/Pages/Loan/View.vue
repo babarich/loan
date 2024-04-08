@@ -156,7 +156,86 @@
                                 <span class="font-bold white-space-nowrap text-primary">Re-Payments</span>
                             </div>
                         </template>
-                        <h3 class="text-primary text-xl font-semibold">Loan Repayments</h3>
+                        <div class="flex flex-col md:flex-row justify-between">
+                            <div>
+                                <h2 class="text-xl font-bold mb-4 text-red-600">Loan Repayments </h2>
+                            </div>
+                            <div>
+                                <button  @click="payment = true" class="px-4 text-sm flex text-gray-100 bg-primary p-2 rounded">
+                                    <PlusIcon class="w-4 h-4 mr-2"/>  Add Repayment
+                                </button>
+                            </div>
+
+                        </div>
+
+                        <Dialog v-model:visible="payment" modal header="Add Loan Collateral" :position="top" style="width:50%">
+                            <form @submit.prevent="submitPayment">
+                                <div class="mb-5">
+                                    <label class="flex text-body-dark font-semibold text-sm leading-none mb-3"
+                                           for="slug">Payment Cycle</label>
+                                    <CustomInput
+                                        required
+                                        type="select"
+                                        :select-options="cycleOptions"
+                                        v-model="paymentForm.schedule"
+
+                                    />
+                                    <p v-if="errors.schedule">{{errors.schedule}}</p>
+                                </div>
+
+                                <div class="mb-5"><label class="flex text-body-dark font-semibold text-sm leading-none mb-3"
+                                                         for="slug">Amount </label>
+                                    <InputNumber class="w-full border border-gray-300 placeholder-gray-600 text-gray-900" v-model="paymentForm.amount" inputId="integeronly"
+                                                 required/>
+                                    <p v-if="errors.amount">{{errors.amount}}</p>
+                                </div>
+                                <div class="mb-5">
+                                    <label class="flex text-body-dark font-semibold text-sm leading-none mb-3"
+                                           for="slug">Payment Date</label>
+                                    <CustomInput type="date" v-model="paymentForm.date" :class="{'border-red-500' : errors.date}" required/>
+                                    <p v-if="errors.date">{{errors.date}}</p>
+                                </div>
+                                <div class="mb-5">
+                                    <label class="flex text-body-dark font-semibold text-sm leading-none mb-3"
+                                           for="slug">Payment  Method</label>
+                                    <select class="px-4 h-12 flex items-center w-full rounded appearance-none transition
+                        duration-300 ease-in-out text-heading text-sm focus:outline-none focus:ring-0
+                        border border-border-base focus:border-accent h-12" v-model="paymentForm.type" :class="{'border-red-500' : errors.type}">
+                                        <option value="">select..</option>
+                                        <option value="Cash">Cash</option>
+                                        <option value="Bank">Bank</option>
+                                        <option value="Cheque">Cheque</option>
+                                        <option value="Mobile Transfer">mobile Transfer</option>
+                                    </select>
+                                    <p v-if="errors.type">{{errors.type}}</p>
+                                </div>
+                                <div class="mb-5">
+                                    <label class="flex text-body-dark font-semibold text-sm leading-none mb-3"
+                                           for="slug">Description</label>
+                                    <CustomInput type="textarea" rows="3" v-model="paymentForm.description" :class="{'border-red-500' : errors.description}" required/>
+                                    <p v-if="errors.description">{{errors.description}}</p>
+                                </div>
+
+                                <div class="flex flex-col md:flex-row justify-between mt-8">
+                                    <div>
+
+                                    </div>
+
+                                    <div>
+                                        <button type="button" class="mt-3 w-full inline-flex justify-center
+                                 shadow-sm px-4 py-2 rounded-md text-base bg-gray-200 font-medium text-gray-600
+                                focus:outline-none focus:ring-2 focus:ring-offset-2
+                                focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" label="Cancel" severity="secondary" @click="payment = false">Cancel</button>
+                                        <NButtonLoading type="submit"   :loading="loading" class="mt-3 w-full inline-flex justify-center
+                                 shadow-sm px-4 py-2  text-base font-medium text-gray-700
+                                focus:outline-none focus:ring-2 focus:ring-offset-2
+                                focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Save</NButtonLoading>
+                                    </div>
+
+                                </div>
+                            </form>
+                        </Dialog>
+
                         <div class="mt-4 mb-3 flex flex-col md:flex-row items-center justify-between">
                             <div class="flex items-center space-x-2 divide-x">
                                 <button class="px-4 text-sm flex text-gray-100 bg-primary p-2 rounded">
@@ -988,7 +1067,63 @@
                                 <span class="font-bold white-space-nowrap text-primary">Loan Comments</span>
                             </div>
                         </template>
+                        <div class="flex flex-col md:flex-row justify-between">
+                            <div>
+                                <h2 class="text-xl font-bold mb-4 text-red-600">Loan  Comments</h2>
+                            </div>
+                            <div>
+                                <button label="Show" @click="commentLoan = true" class="px-4 text-sm flex text-gray-100 bg-primary p-2 rounded">
+                                    <PlusIcon class="w-4 h-4 mr-2"/>  Add  Comment
+                                </button>
+                            </div>
 
+                        </div>
+                        <Dialog v-model:visible="commentLoan" modal header="Add Loan Comment" style="width:50%">
+                            <form @submit.prevent="submitComment">
+                                <div class="mb-5">
+                                    <label class="flex text-body-dark font-semibold text-sm leading-none mb-3"
+                                           for="slug">Comment </label>
+                                    <CustomInput type="text" v-model="commentForm.comment" :class="{'border-red-500' : errors.comment}" required/>
+                                    <p v-if="errors.comment">{{errors.comment}}</p>
+                                </div>
+
+                                <div class="flex flex-col md:flex-row justify-between mt-8">
+                                    <div>
+
+                                    </div>
+
+                                    <div>
+                                        <button type="button" class="mt-3 w-full inline-flex justify-center
+                                 shadow-sm px-4 py-2 rounded-md text-base bg-gray-200 font-medium text-gray-600
+                                focus:outline-none focus:ring-2 focus:ring-offset-2
+                                focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" label="Cancel" severity="secondary" @click="visible = false">Cancel</button>
+                                        <NButtonLoading type="submit"   :loading="loading" class="mt-3 w-full inline-flex justify-center
+                                 shadow-sm px-4 py-2  text-base font-medium text-gray-700
+                                focus:outline-none focus:ring-2 focus:ring-offset-2
+                                focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Save</NButtonLoading>
+                                    </div>
+
+                                </div>
+                            </form>
+                        </Dialog>
+                        <article class="p-6 text-base bg-white rounded-lg shadow-md mb-3"
+                        v-for="(comment,index) in loan.comments" :key="index">
+                            <footer class="flex justify-between items-center mb-2">
+                                <div class="flex items-center">
+                                    <div class="flex mx-auto mr-4">
+                                        <div
+                                            class="relative inline-flex items-center justify-center w-12 h-12 overflow-hidden bg-primary  mr-4 rounded-full"><span
+                                    class="font-medium text-white text-xl">{{ getInitials(comment.user.name) }}</span>
+                                        </div>
+                                        <h1 class="py-2   text-xl font-bold leading-8 text-gray-900">{{uppercase(comment.user.name)}}</h1>
+                                    </div>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">
+                                        <time>{{comment.created_at}}</time></p>
+                                </div>
+                            </footer>
+                            <p class="text-gray-500 dark:text-gray-400">{{comment.description}}</p>
+
+                        </article>
                     </TabPanel>
                 </TabView>
 
@@ -1026,6 +1161,10 @@ const collateral = ref(false);
 
 const loanFile = ref(false);
 
+const commentLoan = ref(false);
+
+
+const payment = ref(false);
 
 const active = ref(0)
 
@@ -1046,7 +1185,16 @@ const form  = useForm({
     'name' : null
 });
 
-
+function getInitials(fullName) {
+    const allNames = fullName.trim().split(" ");
+    const initials = allNames.reduce((acc, curr, index) => {
+        if (index === 0 || index === allNames.length - 1) {
+            acc = `${acc}${curr.charAt(0).toUpperCase()}`;
+        }
+        return acc;
+    }, "");
+    return initials;
+}
 const collateralForm = useForm({
      'typeId':null,
      'name':null,
@@ -1068,6 +1216,18 @@ const loanForm  = useForm({
 
 
 
+const paymentForm  = useForm({
+    'amount': null,
+    'type':null,
+    'date' : null,
+    'schedule':null,
+    'description':null
+});
+
+
+const commentForm = useForm({
+    'comment':null
+});
 function formatCurrency (value, decimals=2, thousandsSeparator= ','){
     let result = parseFloat(value).toFixed(decimals).toString();
     if(thousandsSeparator) result = result.replace(/\B(?=(\d{3})+(?!\d))/g, thousandsSeparator)
@@ -1119,6 +1279,14 @@ const typeOptions = computed(() =>
 );
 
 
+const cycleOptions = computed(() =>
+    props.loan.cycles.map((c) => ({
+        key: c.id,
+        text: `${c.due_date} - ${c.amount}`,
+        value: c.id,
+    }))
+);
+
 function submitAgreement(){
     loading.value = true
     form.post(route('loan.attachment', props.loan.id),{
@@ -1154,6 +1322,35 @@ function submitLoanFile(){
             loading.value = false
             loanFile.value = false
             loanForm.reset()
+        },
+        onError:()=>{
+            loading.value = false
+        }
+    })
+}
+
+function submitComment(){
+    loading.value = true
+    commentForm.post(route('collateral.comment', props.loan.id),{
+        onSuccess:()=>{
+            loading.value = false
+            loanComment.value = false
+            commentForm.reset()
+        },
+        onError:()=>{
+            loading.value = false
+        }
+    })
+}
+
+
+function submitPayment(){
+    loading.value = true
+    paymentForm.post(route('loan.payment', props.loan.id),{
+        onSuccess:()=>{
+            loading.value = false
+            payment.value = false
+            paymentForm.reset()
         },
         onError:()=>{
             loading.value = false
