@@ -1,8 +1,8 @@
 <template>
-    <AppLaymature>
+    <AppLayout>
         <div class="flex justify-between mb-6 mt-4">
             <div class="mt-2">
-                <h3 class="text-xl text-primary text-semibold">Principal maturestanding</h3>
+                <h3 class="text-xl text-primary text-semibold">Principal Past Maturity</h3>
             </div>
             <div>
 
@@ -104,19 +104,19 @@
             </div>
             <pagination class="mt-6" :data="matures" :links="matures.links" @getPage="getChanges"/>
         </div>
-    </AppLaymature>
+    </AppLayout>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
 import {Inertia} from "@inertiajs/inertia";
 import DataTable from "primevue/datatable";
-import AppLaymature from "@/Laymatures/AppLaymature.vue";
+import AppLayout from "@/Layouts/AppLayout.vue";
 import NButton from "@/Shared/NButton.vue";
 import SearchFilter from "@/Shared/SearchFilter.vue";
 import "primeicons/primeicons.css"
 import TableHeaderCell from "@/Shared/TableHeaderCell.vue";
-import {DocumentArrowDownIcon,ArrowUpTrayIcon,FunnelIcon,PlusCircleIcon} from '@heroicons/vue/24/matureline'
+import {DocumentArrowDownIcon,ArrowUpTrayIcon,FunnelIcon,PlusCircleIcon} from '@heroicons/vue/24/outline'
 import Pagination from "@/Shared/Pagination.vue";
 import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
@@ -135,7 +135,7 @@ const sortDirection = ref('desc');
 
 function getChanges(page){
     Inertia.get(
-        rmaturee('schedule.maturestanding'),
+        route('schedule.maturity'),
         {per_page:page},
         {
             preserveState:true,
@@ -173,7 +173,7 @@ function sortTransactions(field){
     }
 
     Inertia.get(
-        rmaturee("schedule.maturestanding"),
+        route("schedule.maturity"),
         {sort_field:sortField.value,sort_direction:sortDirection.value},{
             preserveState:true,
             replace:true

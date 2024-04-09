@@ -78,12 +78,12 @@ class LoanScheduleController extends Controller
         $sortDirection = request('sort_direction','desc');
         return Inertia::render('Schedule/maturity',[
             'filters' => FacadesRequest::all('search'),
-            'maturities' => Loan::query()
+            'matures' => Loan::query()
                 ->orderBy($sortField, $sortDirection)
                 ->where('status', 'pending')
                 ->where('maturity_date', '>=', Carbon::now())
                 ->filter(FacadesRequest::only('search'))
-                ->paginate($perPage,['*'],'maturities')
+                ->paginate($perPage,['*'],'matures')
                 ->withQueryString()
                 ->through(fn ($mature) => [
                     'id' => $mature->id,
