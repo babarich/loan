@@ -107,8 +107,8 @@ class LoanController extends Controller
               'disbursement' => $request->filled('payment') ?  $request->input('payment') : null,
               'interest_percentage' => $request->filled('percent') ? $request->input('percent') : null,
               'interest_duration' => $request->filled('interest_method') ? $request->input('interest_method') : null,
-              'loan_duration' => $validatedData['loan_duration'],
-              'duration_type' => $request->filled('duration_type') ? $request->input('duration_type') : null,
+               'loan_duration' => $validatedData['loan_duration'],
+               'duration_type' => $request->filled('duration_type') ? $request->input('duration_type') : null,
                'payment_cycle' => $request->filled('payment_cycle') ? $request->input('payment_cycle') : null,
                'payment_number' => $request->filled('number_payments') ? $request->input('number_payments') : null,
                'loan_release_date' => $request->filled('release_date') ? $request->input('release_date') : null,
@@ -399,35 +399,28 @@ class LoanController extends Controller
                 if ($paymentAmount >= $remainingAmountDue && $remainingAmountDue > 0) {
                     $loanSchedules->paid = true;
                     $loanSchedules->status = 'completed';
-                    $loanSchedules->interest_paid = $loanSchedules->interest;
-                    $loanSchedules->interest  -= $paymentAmount;
-                    $loanSchedules->principal_paid = $paymentAmount;
-                    $loanSchedules->principle -= $paymentAmount;
-                    $loanSchedules->amount -= $paymentAmount;
+                    $paidInterest = min($paymentAmount, $loanSchedules->interest);
+                    $loanSchedules->interest_paid = $paidInterest;
+                    $loanSchedules->interest -= $paidInterest;
+                    $paymentAmount -= $paidInterest;
+                    $paidPrincipal = min($paymentAmount, $loanSchedules->principle);
+                    $loanSchedules->principal_paid = $paidPrincipal;
+                    $loanSchedules->principle -= $paidPrincipal;
+                    $paymentAmount -= $paidPrincipal;
+                    $loanSchedules->amount -= $paidPrincipal + $paidInterest;
                     $loanSchedules->save();
-                    $paymentAmount -= $remainingAmountDue;
-
                     $total = $payment->paid_amount + $validatedData['amount'];
                     if ($payment->due_Amount > 0 && $payment->due_amount > $validatedData['amount']){
                         $due = $payment->due_amount - $validatedData['amount'];
                     }else{
                         $due = 0;
                     }
-
                     $payment->update(['paid_amount' => $total, 'due_amount' => $due]);
-
                 } else if ($paymentAmount < $remainingAmountDue && $remainingAmountDue > 0) {
-                    // Paying interest first
-                    if ($paymentAmount >= $loanSchedules->interest) {
-                        $loanSchedules->interest_paid = $loanSchedules->interest;
-                        $paymentAmount -= $loanSchedules->interest;
-                        $remainingAmountDue -= $loanSchedules->interest;
-                    } else {
-                        $loanSchedules->interest_paid = $paymentAmount;
-                        $remainingAmountDue -= $paymentAmount;
-                        $paymentAmount = 0;
-                    }
-
+                    $paidInterest = min($paymentAmount, $loanSchedules->interest);
+                    $loanSchedules->interest_paid = $paidInterest;
+                    $loanSchedules->interest -= $paidInterest;
+                    $paymentAmount -= $paidInterest;
                     // Paying principal
                     $principalToPay = min($paymentAmount, $loanSchedules->principle);
                     $loanSchedules->principal_paid = $principalToPay;

@@ -126,6 +126,7 @@ Route::group(['middleware' => 'auth:sanctum'], function (){
                 Route::get('download/{id?}', 'downloadAttachment')->name('download');
                 Route::get('file_download/{id?}', 'downloadFile')->name('downloadFile');
                 Route::post('comment/{id?}', 'storeComment')->name('comment');
+                Route::get('comment_index', 'showComment')->name('showComment');
                 Route::get('view/{id?}', 'show')->name('show');
                 Route::post('attachment_file/{id?}', 'attachment')->name('attach');
                 Route::post('update/{id?}', 'update')->name('update');
@@ -155,6 +156,21 @@ Route::group(['middleware' => 'auth:sanctum'], function (){
             Route::controller(ProductController::class)->group(function (){
                 Route::get('index', 'index')->name('index');
                 Route::get('create', 'create')->name('create');
+                Route::post('store', 'store')->name('store');
+                Route::get('view/{id?}', 'show')->name('show');
+                Route::post('update/{id?}', 'update')->name('update');
+                Route::get('edit/{id?}', 'edit')->name('edit');
+            });
+        });
+    });
+
+
+    Route::group(['prefix' => 'payments'], function (){
+
+        Route::name('payment.')->group(function (){
+            Route::controller(\App\Http\Controllers\Loan\PaymentController::class)->group(function (){
+                Route::get('index', 'index')->name('index');
+                Route::get('chart', 'chart')->name('chart');
                 Route::post('store', 'store')->name('store');
                 Route::get('view/{id?}', 'show')->name('show');
                 Route::post('update/{id?}', 'update')->name('update');

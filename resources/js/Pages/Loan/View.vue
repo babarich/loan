@@ -549,6 +549,17 @@
                                     <th
                                         scope="col"
                                         class="py-4 px-4 border text-xs text-left whitespace nowrap font-semibold">
+                                        Interest Paid
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        class="py-4 px-4 border text-xs text-left whitespace nowrap font-semibold">
+                                        Principle Paid
+                                    </th>
+
+                                    <th
+                                        scope="col"
+                                        class="py-4 px-4 border text-xs text-left whitespace nowrap font-semibold">
                                         Due Amount
                                     </th>
                                     <th
@@ -582,6 +593,14 @@
 
                                     <td class="py-4 px-4 text-sm text-left border">
 
+                                    </td>
+
+                                    <td class="py-4 px-4 text-sm text-left border">
+                                      {{schedule.interest_paid ? formatCurrency(schedule.interest_paid) : 0.00}}
+                                    </td>
+
+                                    <td class="py-4 px-4 text-sm text-left border">
+                                       {{schedule.principle_paid ? formatCurrency(schedule.principle_paid) : 0.00}}
                                     </td>
                                     <td class="py-4 px-4 text-sm text-left border">
                                         {{formatCurrency(schedule.amount)}}

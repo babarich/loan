@@ -41,7 +41,7 @@
                      </button>
                  </template>
                   <template #content>
-                          <jet-nav-link class="group flex w-full items-center gap-2.5 rounded-md px-4
+                          <jet-nav-link class="group flex  items-center gap-2.5 rounded-md px-4
                   py-2.5 text-md text-gray-300 text-start focus:text-primary hover:bg-gray-100 font-medium
                            relative  before:absolute before:-left-0.5 before:top-[18px] before:h-px before:w-3
                           before:border-t before:border-dashed before:border-gray-600"
@@ -49,28 +49,28 @@
                                              :active="route().current('loan.index')" >
                               <span class="flex-1 ml-3 text-left whitespace-nowrap">Loans</span>
                           </jet-nav-link>
-                      <jet-nav-link class="group flex w-full items-center gap-2.5 rounded-md px-4
+                      <jet-nav-link class="group flex  items-center gap-2.5 rounded-md px-4
                   py-2.5 text-md text-gray-300 text-start focus:text-primary hover:bg-gray-100 font-medium
                           relative  before:absolute before:-left-0.5 before:top-[18px] before:h-px before:w-3
                           before:border-t before:border-dashed before:border-gray-600" :href="route('schedule.index')"
                                     :active="route().current('schedule.index')" >
                           <span class="flex-1 ml-3 text-left whitespace-nowrap">Due Loans</span>
                       </jet-nav-link>
-                      <jet-nav-link class="group flex w-full items-center gap-2.5 rounded-md px-4
+                      <jet-nav-link class="group flex  items-center gap-2.5 rounded-md px-4
                   py-2.5 text-md text-gray-300 text-start focus:text-primary hover:bg-gray-100 font-medium
                           relative  before:absolute before:-left-0.5 before:top-[18px] before:h-px before:w-3
                           before:border-t before:border-dashed before:border-gray-600" :href="route('schedule.outstanding')"
                                     :active="route().current('schedule.outstanding')" >
                           <span class="flex-1 ml-3 text-left whitespace-nowrap">Principal Outstanding</span>
                       </jet-nav-link>
-                      <jet-nav-link class="group flex w-full items-center gap-2.5 rounded-md px-4
+                      <jet-nav-link class="group flex  items-center gap-2.5 rounded-md px-4
                   py-2.5 text-md text-gray-300 text-start focus:text-primary hover:bg-gray-100 font-medium
                           relative  before:absolute before:-left-0.5 before:top-[18px] before:h-px before:w-3
                           before:border-t before:border-dashed before:border-gray-600" :href="route('schedule.maturity')"
                                     :active="route().current('schedule.maturity')" >
                           <span class="flex-1 ml-3 text-left whitespace-nowrap">Past Maturity </span>
                       </jet-nav-link>
-                          <jet-nav-link class="group flex w-full items-center gap-2.5 rounded-md px-4
+                          <jet-nav-link class="group flex  items-center gap-2.5 rounded-md px-4
                   py-2.5 text-md text-gray-300 text-start focus:text-primary hover:bg-gray-100 font-medium
                             relative  before:absolute before:-left-0.5 before:top-[18px] before:h-px before:w-3
                           before:border-t before:border-dashed before:border-gray-600"
@@ -78,7 +78,7 @@
                                              :active="route().current('guarantor.index')" >
                               <span class="flex-1 ml-3 text-left whitespace-nowrap">Guarantors</span>
                           </jet-nav-link>
-                          <jet-nav-link class="group flex w-full items-center gap-2.5 rounded-md px-4
+                          <jet-nav-link class="group flex  items-center gap-2.5 rounded-md px-4
                   py-2.5 text-md text-gray-300 text-start focus:text-primary hover:bg-gray-100 font-medium
                           relative  before:absolute before:-left-0.5 before:top-[18px] before:h-px before:w-3
                           before:border-t before:border-dashed before:border-gray-600" :href="route('product.index')"
@@ -86,23 +86,23 @@
                               <span class="flex-1 ml-3 text-left whitespace-nowrap">Loan Products</span>
                           </jet-nav-link>
 
-                      <jet-nav-link class="group flex w-full items-center gap-2.5 rounded-md px-4
+                      <jet-nav-link class="group flex  items-center gap-2.5 rounded-md px-4
                   py-2.5 text-md text-gray-300 text-start focus:text-primary hover:bg-gray-100 font-medium
                           relative  before:absolute before:-left-0.5 before:top-[18px] before:h-px before:w-3
-                          before:border-t before:border-dashed before:border-gray-600" :href="route('product.index')"
-                                    :active="route().current('product.index')" >
+                          before:border-t before:border-dashed before:border-gray-600" :href="route('collateral.index')"
+                                    :active="route().current('collateral.index')" >
                           <span class="flex-1 ml-3 text-left whitespace-nowrap">Collaterals</span>
                       </jet-nav-link>
-                      <jet-nav-link class="group flex w-full items-center gap-2.5 rounded-md px-4
+                      <jet-nav-link class="group flex  items-center gap-2.5 rounded-md px-4
                   py-2.5 text-md text-gray-300 text-start focus:text-primary hover:bg-gray-100 font-medium
                           relative  before:absolute before:-left-0.5 before:top-[18px] before:h-px before:w-3
-                          before:border-t before:border-dashed before:border-gray-600" :href="route('product.index')"
-                                    :active="route().current('product.index')" >
+                          before:border-t before:border-dashed before:border-gray-600" :href="route('collateral.showComment')"
+                                    :active="route().current('collateral.showComment')" >
                           <span class="flex-1 ml-3 text-left whitespace-nowrap">Loan Comments</span>
                       </jet-nav-link>
 
 
-                      <jet-nav-link class="group flex w-full items-center gap-2.5 rounded-md px-4
+                      <jet-nav-link class="group flex  items-center gap-2.5 rounded-md px-4
                   py-2.5 text-md text-gray-300 text-start focus:text-primary hover:bg-gray-100 font-medium
                           relative  before:absolute before:-left-0.5 before:top-[18px] before:h-px before:w-3
                           before:border-t before:border-dashed before:border-gray-600" :href="route('product.index')"
@@ -120,7 +120,9 @@
           </div>
           <div class="space-y-2 py-1.5">
               <jet-nav-link class="group flex w-full items-center gap-2.5 rounded-md px-4
-                  py-2.5 text-md text-gray-300 text-start focus:text-primary hover:bg-gray-100 font-medium">
+                  py-2.5 text-md text-gray-300 text-start focus:text-primary hover:bg-gray-100 font-medium"
+                            :href="route('payment.index')"
+                            :active="route().current('payment.index')">
                   <i class="pi pi-user flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900"></i>
                   <span class="flex-1 ml-3 text-left whitespace-nowrap">Repayment</span>
               </jet-nav-link>
@@ -128,7 +130,9 @@
 
           <div class="space-y-2 py-1.5">
               <jet-nav-link class="group flex w-full items-center gap-2.5 rounded-md px-4
-                  py-2.5 text-md text-gray-300 text-start focus:text-primary hover:bg-gray-100 font-medium">
+                  py-2.5 text-md text-gray-300 text-start focus:text-primary hover:bg-gray-100 font-medium"
+                            :href="route('payment.chart')"
+                            :active="route().current('payment.chart')">
                   <i class="pi pi-users flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900"></i>
                   <span class="flex-1 ml-3 text-left whitespace-nowrap">Repayment Chart</span>
               </jet-nav-link>

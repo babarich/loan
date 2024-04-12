@@ -34,4 +34,11 @@ class Collateral extends Model
     public function type(){
         return $this->belongsTo(CollateralType::class, 'type_id');
     }
+
+
+    public function scopeFilter($query , array $filters){
+        $query->when($filters['search'] ?? null, function ($query, $search){
+            $query->where('product_name', 'like', '%'.$search.'%');
+        });
+    }
 }

@@ -8,17 +8,46 @@ use App\Models\Borrow\BorrowerAttachment;
 use App\Models\Collateral\Collateral;
 use App\Models\Loan\LoanAttachment;
 use App\Models\Loan\LoanComment;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Request as FacadesRequest;
+use Inertia\Inertia;
 
 class CollateralController extends Controller
 {
 
 
 
+
+    public function index(Request $request){
+
+        $perPage = request('per_page',10);
+        $sortField = request('sort_field','created_at');
+        $sortDirection = request('sort_direction','desc');
+        return Inertia::render('Collateral/Index',[
+            'filters' => FacadesRequest::all('search'),
+            'collaterals' => Collateral::query()
+                ->orderBy($sortField, $sortDirection)
+                ->filter(FacadesRequest::only('search'))
+                ->paginate($perPage,['*'],'collaterals')
+                ->withQueryString()
+                ->through(fn ($collateral) => [
+                    'id' => $collateral->id,
+                    'type' => $collateral->type->name,
+                    'name' => $collateral->product_name,
+                    'borrower' => $collateral->loan->borrower->first_name . ' ' . $collateral->loan->borrower->last_name ?? null,
+                    'amount' =>$collateral->amount,
+                    'date' => Carbon::parse($collateral->date)->format('Y-m-d'),
+                    'condition' => $collateral->condition,
+                    'user' => $collateral->user->name ?? null,
+                ])
+
+        ]);
+    }
 
     public function store(CollateralRequest $request, $loanId){
 
@@ -128,6 +157,33 @@ class CollateralController extends Controller
         }
 
         return Redirect::back()->with('success','You have added successfully a new comment');
+    }
+
+
+
+    public  function showComment(Request $request)
+    {
+
+        $perPage = request('per_page',10);
+        $sortField = request('sort_field','created_at');
+        $sortDirection = request('sort_direction','desc');
+        return Inertia::render('Collateral/Comment',[
+            'filters' => FacadesRequest::all('search'),
+            'comments' => Collateral::query()
+                ->orderBy($sortField, $sortDirection)
+                ->filter(FacadesRequest::only('search'))
+                ->paginate($perPage,['*'],'comments')
+                ->withQueryString()
+                ->through(fn ($comment) => [
+                    'id' => $comment->id,
+                    'description' => $comment->description,
+                    'reference' => $comment->loan->reference,
+                    'borrower' => $comment->loan->borrower->first_name . ' ' . $comment->loan->borrower->last_name ?? null,
+                    'date' => Carbon::parse($comment->created_at)->format('Y-m-d'),
+                    'user' => $comment->user->name ?? null,
+                ])
+
+        ]);
     }
 }
 
