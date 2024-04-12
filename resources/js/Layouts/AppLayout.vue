@@ -45,7 +45,7 @@ const logout = () => {
         <div class="md:flex md:flex-col">
             <div class="md:flex md:flex-col md:h-screen">
                 <div class="md:flex md:flex-shrink-0">
-                    <div class="flex items-center justify-between px-6 py-4 bg-primary border border-r  md:flex-shrink-0 md:justify-center md:w-72">
+                    <div class="flex items-center justify-between px-6 py-4 bg-primary  border-r  md:flex-shrink-0 md:justify-center md:w-72">
                         <div class="shrink-0 flex items-center">
                             <Link :href="route('dashboard')" class="flex">
                                 <span class="text-white font-bold text-xl uppercase">Mikopo Yetu</span>
@@ -118,7 +118,7 @@ const logout = () => {
                 </div>
 
                 <div class="md:flex md:flex-grow md:overflow-hidden">
-                    <main-menu class="hidden flex-shrink-0 p-4 w-72 bg-secondary border border-r overflow-y-auto md:block overflow-x-hidden"/>
+                    <main-menu class="hidden flex-shrink-0 p-4 w-72 bg-secondary  border-r overflow-y-auto md:block overflow-x-hidden"/>
                     <div class="px-4 py-8 md:flex-1 md:p-12 md:overflow-y-auto" scroll-region>
                         <slot />
 

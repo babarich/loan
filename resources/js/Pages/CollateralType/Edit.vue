@@ -5,10 +5,10 @@
         <div class="h-full p-5 md:p-8">
             <div class="flex flex-col md:flex-row items-center justify-between border-b border-dashed border-border-base border-gray-300 pb-5 md:pb-7">
                     <div>
-                        <h1 class="text-lg font-semibold text-heading">Edit  Collaterla Type </h1>
+                        <h1 class="text-lg font-semibold text-heading">Edit  Collaterl Type </h1>
                     </div>
                     <div>
-                        <a :href="route('type.index')" class="px-4 text-sm flex text-gray-100 bg-primary p-2 rounded">
+                        <a :href="route('collateraltype.index')" class="px-4 text-sm flex text-gray-100 bg-primary p-2 rounded">
                             <ArrowLeftIcon class="w-4 h-4 mr-2"/>  Back
                         </a>
                     </div>
