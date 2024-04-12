@@ -79,6 +79,11 @@ const setChartOptions = () => {
     };
 }
 
+function formatCurrency (value, decimals=2, thousandsSeparator= ','){
+    let result = parseFloat(value).toFixed(decimals).toString();
+    if(thousandsSeparator) result = result.replace(/\B(?=(\d{3})+(?!\d))/g, thousandsSeparator)
+    return result;
+}
 
 const chartLineData = ref();
 const chartLineOptions = ref();
@@ -162,51 +167,99 @@ const setChartLineOptions = () => {
                             </div>
                             <div class="grid w-full grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
                                 <div
-                                    class="flex h-full w-full flex-col rounded-lg border border-b-4 border-border-200 bg-light p-5 md:p-6">
+                                    class="flex h-full w-full flex-col rounded-lg border border-b-4 border-border-200 bg-white p-5 md:p-6">
                                     <div class="mb-auto flex w-full items-center justify-between">
                                         <div
-                                            class="flex h-14 w-14 shrink-0 items-center justify-center rounded bg-gray-100/80 me-3">
-                                            <BanknotesIcon className="w-8 h-8"/>
+                                            class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary  me-3">
+                                            <i class="pi pi-clock  text-2xl text-white text-center"></i>
                                         </div>
                                         <div class="flex w-full flex-col text-end"><span
-                                            class="mb-1 text-base font-normal text-body">Total Revenue</span><span
-                                            class="mb-2 text-2xl font-semibold text-heading">$1,818.80</span></div>
+                                            class="mb-1 text-base font-normal text-body">Total Outstanding</span><span
+                                            class="mb-2 text-2xl font-semibold text-heading">0</span></div>
                                     </div>
                                 </div>
                                 <div
-                                    class="flex h-full w-full flex-col rounded-lg border border-b-4 border-border-200 bg-light p-5 md:p-6">
+                                    class="flex h-full w-full flex-col rounded-lg border border-b-4 border-border-200 bg-white p-5 md:p-6">
                                     <div class="mb-auto flex w-full items-center justify-between">
                                         <div
-                                            class="flex h-14 w-14 shrink-0 items-center justify-center rounded bg-gray-100/80 me-3">
-                                            <UsersIcon className="w-8 h-8"/>
+                                            class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-red-500  me-3">
+                                            <i class="pi pi-calendar-minus  text-2xl text-white text-center"></i>
                                         </div>
                                         <div class="flex w-full flex-col text-end"><span
-                                            class="mb-1 text-base font-normal text-body">Total Borrowers</span><span
-                                            class="mb-2 text-2xl font-semibold text-heading">14</span></div>
+                                            class="mb-1 text-base font-normal text-body">Principle  Outstanding </span><span
+                                            class="mb-2 text-2xl font-semibold text-heading">0</span></div>
                                     </div>
                                 </div>
-                                <div class="flex h-full w-full flex-col rounded-lg border border-b-4 border-border-200 bg-light p-5 md:p-6 border-b-color[rgb(215, 78, 255)]">
+                                <div class="flex h-full w-full flex-col rounded-lg border border-b-4 border-border-200 bg-white p-5 md:p-6 border-b-color[rgb(215, 78, 255)]">
                                     <div class="mb-auto flex w-full items-center justify-between">
                                         <div
-                                            class="flex h-14 w-14 shrink-0 items-center justify-center rounded bg-gray-100/80 me-3">
-                                            <GiftTopIcon className="w-8 h-8"/>
+                                            class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-emerald-600  me-3">
+                                            <i class="pi pi-calendar-plus  text-2xl text-white text-center"></i>
                                         </div>
                                         <div class="flex w-full flex-col text-end"><span
-                                            class="mb-1 text-base font-normal text-body">Payment Due</span><span
-                                            class="mb-2 text-2xl font-semibold text-heading">11</span></div>
+                                            class="mb-1 text-base font-normal text-body">Interest Outstanding </span><span
+                                            class="mb-2 text-2xl font-semibold text-heading">0</span></div>
                                     </div>
                                 </div>
                                 <div
-                                    class="flex h-full w-full flex-col rounded-lg border border-b-4 border-border-200 bg-light p-5 md:p-6">
+                                    class="flex h-full w-full flex-col rounded-lg border border-b-4 border-border-200 bg-white p-5 md:p-6">
 
                                     <div class="mb-auto flex w-full items-center justify-between">
                                         <div
-                                            class="flex h-14 w-14 shrink-0 items-center justify-center rounded bg-gray-100/80 me-3">
-                                            <CircleStackIcon className="w-4 h-4 text-blue-900"/>
+                                            class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary  me-3">
+                                            <i class="pi pi-box  text-2xl text-white text-center"></i>
                                         </div>
                                         <div class="flex w-full flex-col text-end"><span
-                                            class="mb-1 text-base font-normal text-body">Payment This Week</span><span
-                                            class="mb-2 text-2xl font-semibold text-heading">14</span></div>
+                                            class="mb-1 text-base font-normal text-body">Fully Paid Loans</span><span
+                                            class="mb-2 text-2xl font-semibold text-heading">0</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="grid w-full grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4 mt-4">
+                                <div
+                                    class="flex h-full w-full flex-col rounded-lg border border-b-4 border-border-200 bg-white p-5 md:p-6">
+                                    <div class="mb-auto flex w-full items-center justify-between">
+                                        <div
+                                            class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary  me-3">
+                                            <i class="pi pi-clock  text-2xl text-white text-center"></i>
+                                        </div>
+                                        <div class="flex w-full flex-col text-end"><span
+                                            class="mb-1 text-base font-normal text-body">Total Borrowers</span><span
+                                            class="mb-2 text-2xl font-semibold text-heading">0</span></div>
+                                    </div>
+                                </div>
+                                <div
+                                    class="flex h-full w-full flex-col rounded-lg border border-b-4 border-border-200 bg-white p-5 md:p-6">
+                                    <div class="mb-auto flex w-full items-center justify-between">
+                                        <div
+                                            class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-red-500  me-3">
+                                            <i class="pi pi-calendar-minus  text-2xl text-white text-center"></i>
+                                        </div>
+                                        <div class="flex w-full flex-col text-end"><span
+                                            class="mb-1 text-base font-normal text-body">Penalty Outstanding </span><span
+                                            class="mb-2 text-2xl font-semibold text-heading">0</span></div>
+                                    </div>
+                                </div>
+                                <div class="flex h-full w-full flex-col rounded-lg border border-b-4 border-border-200 bg-white p-5 md:p-6 border-b-color[rgb(215, 78, 255)]">
+                                    <div class="mb-auto flex w-full items-center justify-between">
+                                        <div
+                                            class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-emerald-600  me-3">
+                                            <i class="pi pi-calendar-plus  text-2xl text-white text-center"></i>
+                                        </div>
+                                        <div class="flex w-full flex-col text-end"><span
+                                            class="mb-1 text-base font-normal text-body">Open Loans </span><span
+                                            class="mb-2 text-2xl font-semibold text-heading">0</span></div>
+                                    </div>
+                                </div>
+                                <div class="flex h-full w-full flex-col rounded-lg border border-b-4 border-border-200 bg-white p-5 md:p-6 border-b-color[rgb(215, 78, 255)]">
+                                    <div class="mb-auto flex w-full items-center justify-between">
+                                        <div
+                                            class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary  me-3">
+                                            <i class="pi pi-user  text-2xl text-white text-center"></i>
+                                        </div>
+                                        <div class="flex w-full flex-col text-end"><span
+                                            class="mb-1 text-base font-normal text-body">Denied Loans </span><span
+                                            class="mb-2 text-2xl font-semibold text-heading">0</span></div>
                                     </div>
                                 </div>
                             </div>

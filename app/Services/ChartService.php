@@ -23,13 +23,9 @@ class ChartService
         });
 
         $chartData = [
-            'series' => [
-                [
-                    'name' => 'Amount',
-                    'data' => $totals->values()->toArray(),
-                ],
-            ],
+            'data' => $totals->values()->toArray(),
             'labels' => $totals->keys()->toArray(),
+
         ];
         return $chartData;
     }
@@ -49,13 +45,9 @@ class ChartService
         });
 
         $chartData = [
-            'series' => [
-                [
-                    'name' => 'Amount',
-                    'data' => $totals->values()->toArray(),
-                ],
-            ],
+            'data' => $totals->values()->toArray(),
             'labels' => $totals->keys()->toArray(),
+
         ];
         return $chartData;
     }
@@ -74,13 +66,9 @@ class ChartService
         });
 
         $chartData = [
-            'series' => [
-                [
-                    'name' => 'Amount',
-                    'data' => $totals->values()->toArray(),
-                ],
-            ],
+            'data' => $totals->values()->toArray(),
             'labels' => $totals->keys()->toArray(),
+
         ];
         return $chartData;
     }
@@ -101,13 +89,9 @@ class ChartService
         });
 
         $chartData = [
-            'series' => [
-                [
-                    'name' => 'Amount',
-                    'data' => $totals->values()->toArray(),
-                ],
-            ],
+            'data' => $totals->values()->toArray(),
             'labels' => $totals->keys()->toArray(),
+
         ];
         return $chartData;
     }
@@ -128,13 +112,9 @@ class ChartService
         });
 
         $chartData = [
-            'series' => [
-                [
-                    'name' => 'Amount',
-                    'data' => $totals->values()->toArray(),
-                ],
-            ],
+            'data' => $totals->values()->toArray(),
             'labels' => $totals->keys()->toArray(),
+
         ];
         return $chartData;
     }
@@ -155,13 +135,9 @@ class ChartService
         });
 
         $chartData = [
-            'series' => [
-                [
-                    'name' => 'Amount',
-                    'data' => $totals->values()->toArray(),
-                ],
-            ],
+            'data' => $totals->values()->toArray(),
             'labels' => $totals->keys()->toArray(),
+
         ];
         return $chartData;
     }
