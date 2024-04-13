@@ -10,6 +10,7 @@ import ToastService from "primevue/toastservice";
 import "primevue/resources/primevue.min.css"
 import "primeicons/primeicons.css"
 import "primevue/resources/themes/lara-light-indigo/theme.css"
+import VueApexCharts from 'vue3-apexcharts'
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 
@@ -25,6 +26,7 @@ createInertiaApp({
             .use(ConfirmationService)
             .use(ToastService)
             .use(ZiggyVue)
+            .use(VueApexCharts)
             .mount(el);
     },
     progress: {

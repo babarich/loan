@@ -375,6 +375,26 @@ class LoanController extends Controller
     }
 
 
+    public function edit(Request $request, $id)
+    {
+
+
+        $loan = Loan::findOrFail($id);
+
+        return Inertia::render('Loan/Edit',[
+            'guarantors' => Guarantor::query()
+                ->orderBy('updated_at', 'desc')
+                ->get(),
+            'borrowers' => Borrower::query()
+                ->orderBy('updated_at', 'desc')
+                ->get(),
+
+            'products' => Product::query()
+                ->orderBy('updated_at', 'desc')
+                ->get(),
+            'loan' => $loan
+        ]);
+    }
 
     public function distributeLoanPayment(Request $request, $loanId) {
          $validatedData =  $request->validate([

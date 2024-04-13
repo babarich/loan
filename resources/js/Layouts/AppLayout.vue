@@ -10,9 +10,13 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import MainMenu from '@/Shared/MainMenu.vue';
 import {BellIcon,Bars3Icon} from '@heroicons/vue/24/outline'
 import FlashMessages from "@/Shared/FlashMessages.vue";
+import DropDownOld from "@/Components/DropDownOld.vue";
 
 
 
+
+const target = ref(null)
+const dropdownOpen = ref(false)
 
 
 
@@ -45,7 +49,7 @@ const logout = () => {
         <div class="md:flex md:flex-col">
             <div class="md:flex md:flex-col md:h-screen">
                 <div class="md:flex md:flex-shrink-0">
-                    <div class="flex items-center justify-between px-6 py-4 bg-primary  border-r  md:flex-shrink-0 md:justify-center md:w-72">
+                    <div class="flex items-center justify-between px-6 py-4 bg-secondary  border-r  md:flex-shrink-0 md:justify-center md:w-72">
                         <div class="shrink-0 flex items-center">
                             <Link :href="route('dashboard')" class="flex">
                                 <span class="text-white font-bold text-xl uppercase">Mikopo Yetu</span>
@@ -76,13 +80,17 @@ const logout = () => {
                             </div>
                         </div>
 
+
+
+
+
                         <div class="hidden sm:flex sm:items-center sm:ml-6">
                             <div class="rounded-full bg-gray-100 p-2">
-                                <BellIcon class="w-5 h-5 text-primary"/>
+                                <BellIcon class="w-5 h-5 text-primary" />
                             </div>
                             <!-- Settings Dropdown -->
                             <div class="ml-3">
-                                <Dropdown align="right" width="48">
+                                <DropDownOld align="right" width="48">
                                     <template #trigger>
                                         <button v-if="$page.props.jetstream.managesProfilePhotos" class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
                                             <img class="h-8 w-8 rounded-full object-cover" :src="$page.props.auth.user.profile_photo_url" :alt="$page.props.auth.user.name">
@@ -102,14 +110,29 @@ const logout = () => {
                                     <template #content>
                                         <div class="border-t border-gray-200" />
                                         <!-- Authentication -->
+                                        <ul class="flex flex-col gap-5 border-b border-stroke px-6 py-7">
+                                            <li>
+                                                <jet-nav-link
+                                                    class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
+
+                                                    <i class="pi pi-user"></i> My Profile
+                                                </jet-nav-link>
+                                            </li>
+
+                                        </ul>
                                         <form @submit.prevent="logout">
-                                            <DropdownLink as="button">
-                                                Log Out
-                                            </DropdownLink>
+                                            <button
+                                                class="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
+
+                                                <i class="pi pi-lock"></i> Log Out
+                                            </button>
                                         </form>
                                     </template>
-                                </Dropdown>
+                                </DropDownOld>
                             </div>
+
+
+
                         </div>
                     </div>
 

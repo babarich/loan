@@ -10,22 +10,22 @@ const props = defineProps({
 });
 
 //
-// watch(props, (value) => {
-//     let dtChart = (props.chartData && props.chartData.data) ? props.chartData.data : [];
-//     // console.log(dtChart)
-//     // dataChart.value = dtChart;
-// });
-
-
-const todayData = {
-    series: [
-        {
-            name: 'Amount',
-            data: props.chartData.data
-        }
-    ],
-    labels: props.chartData.labels
-}
+// watch(props, (value) =>{
+//     let dtChart = props.chartData.data || [];
+//     console.log(dtChart)
+//     // dataChart.value = dtChart
+//
+//
+// })
+// const todayData = {
+//     series: [
+//         {
+//             name: 'Amount',
+//             data: dataChart
+//         }
+//     ],
+//     labels: props.chartData.labels
+// }
 
 
 const apexOptions = {
@@ -633,24 +633,19 @@ const apexPrincipleProjOptions = {
 <template>
     <div
         class="col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5
-        shadow-default  sm:px-7.5 xl:col-span-6">
+        shadow-default  sm:px-7.5 xl:col-span-12">
         <div class="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
             <div class="flex w-full flex-wrap gap-3 sm:gap-5 mt-4">
-                    <div class="w-full">
-                        <p class="font-semibold text-primary">Total Paid -Monthly</p>
-                    </div>
+                <div class="w-full">
+                    <p class="font-semibold text-primary">Loan Released  -Monthly</p>
+                </div>
             </div>
 
         </div>
 
         <div>
             <div id="chartOne" class="-ml-5">
-                <VueApexCharts
-                    type="area"
-                    height="350"
-                    :options="apexOptions"
-                    :series="todayData.series"
-                />
+
             </div>
         </div>
     </div>
@@ -667,13 +662,13 @@ const apexPrincipleProjOptions = {
         </div>
         <div>
             <div id="chartTwo" class="-ml-5">
-                <VueApexCharts
-                    type="area"
-                    height="350"
-                    :options="apexProjectedOptions"
-                    :series="projectedData.series"
+<!--                <VueApexCharts-->
+<!--                    type="area"-->
+<!--                    height="350"-->
+<!--                    :options="apexProjectedOptions"-->
+<!--                    :series="[projectedData.series]"-->
 
-                />
+<!--                />-->
             </div>
         </div>
     </div>
@@ -690,12 +685,12 @@ const apexPrincipleProjOptions = {
         </div>
         <div>
             <div id="chartThree" class="-ml-5">
-                <VueApexCharts
-                    type="area"
-                    height="350"
-                    :options="apexInterestOptions"
-                    :series="interestPaid.series"
-                />
+<!--                <VueApexCharts-->
+<!--                    type="area"-->
+<!--                    height="350"-->
+<!--                    :options="apexInterestOptions"-->
+<!--                    :series="interestPaid.series"-->
+<!--                />-->
             </div>
         </div>
     </div>
@@ -712,13 +707,13 @@ const apexPrincipleProjOptions = {
         </div>
         <div>
             <div id="chartFour" class="-ml-5">
-                <VueApexCharts
-                    type="area"
-                    height="350"
-                    :options="apexInterestProjOptions"
-                    :series="interestProjected.series"
+<!--                <VueApexCharts-->
+<!--                    type="area"-->
+<!--                    height="350"-->
+<!--                    :options="apexInterestProjOptions"-->
+<!--                    :series="interestProjected.series"-->
 
-                />
+<!--                />-->
             </div>
         </div>
     </div>
@@ -735,13 +730,13 @@ const apexPrincipleProjOptions = {
         </div>
         <div>
             <div id="chartFive" class="-ml-5">
-                <VueApexCharts
-                    type="area"
-                    height="350"
-                    :options="apexPrincipleOptions"
-                    :series="principlePaid.series"
+<!--                <VueApexCharts-->
+<!--                    type="area"-->
+<!--                    height="350"-->
+<!--                    :options="apexPrincipleOptions"-->
+<!--                    :series="principlePaid.series"-->
 
-                />
+<!--                />-->
             </div>
         </div>
     </div>
@@ -758,13 +753,13 @@ const apexPrincipleProjOptions = {
         </div>
         <div>
             <div id="chartSix" class="-ml-5">
-                <VueApexCharts
-                    type="line"
-                    height="350"
-                    :options="apexPrincipleOptions"
-                    :series="principleProjected.series"
+<!--                <VueApexCharts-->
+<!--                    type="line"-->
+<!--                    height="350"-->
+<!--                    :options="apexPrincipleOptions"-->
+<!--                    :series="principleProjected.series"-->
 
-                />
+<!--                />-->
             </div>
         </div>
     </div>
