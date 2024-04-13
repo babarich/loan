@@ -24,7 +24,7 @@
                                 <ul class="mt-3 divide-y rounded bg-gray-100 py-2 px-3 text-gray-600 shadow-sm hover:text-gray-700 hover:shadow">
                                     <li class="flex flex-col md:flex-row items-center py-3 text-sm">
                                         <span class="text-primary font-semibold">Age</span>
-                                        <span class="ml-auto">{{formatDate(customer.date_birth)}}</span>
+                                        <span class="ml-auto">{{customer.age}}</span>
                                     </li>
                                     <li class="flex flex-col md:flex-row items-center py-3 text-sm">
                                         <span class="text-primary font-semibold">Gender</span>
@@ -132,9 +132,14 @@
 
 
                                     <td class="py-4 px-4 text-sm text-left border">
-                                        <a :href="route('borrow.download', attach.id)" class="px-4 text-sm flex text-gray-100 bg-primary p-2 rounded">
-                                            <DocumentArrowDownIcon class="w-4 h-4 mr-2"/> Download
-                                        </a>
+                                        <div class="flex justify-between flex-col md:flex-row items-center">
+                                            <div class="flex items-center space-x-2 divide-x">
+                                                <a :href="route('borrow.download', attach.id)" class="text-sm flex text-gray-100 bg-primary p-2 rounded">
+                                                    <CloudArrowDownIcon class="w-4 h-4 mr-2"/> Download
+                                                </a>
+                                            </div>
+                                        </div>
+
                                     </td>
 
                                 </tr>
@@ -295,7 +300,13 @@
 <script setup>
 
 import AppLayout from "@/Layouts/AppLayout.vue";
-import {ArrowLeftIcon, ArrowUpTrayIcon, DocumentArrowDownIcon, FunnelIcon} from "@heroicons/vue/24/outline/index.js";
+import {
+    ArrowLeftIcon,
+    ArrowUpTrayIcon,
+    CloudArrowDownIcon,
+    DocumentArrowDownIcon,
+    FunnelIcon
+} from "@heroicons/vue/24/outline/index.js";
 import moment from "moment";
 import SearchFilter from "@/Shared/SearchFilter.vue";
 

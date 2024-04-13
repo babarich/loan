@@ -462,8 +462,10 @@ class LoanController extends Controller
 
 
 
+
                 PaymentLoan::create([
                     'loan_id' => $loanId,
+                    'borrower_id' => $loanSchedules->borrower_id,
                     'description' => $request->filled('description') ? $request->input('description') : null,
                     'payment_date' => $validatedData['date'],
                     'amount' => $validatedData['amount'],

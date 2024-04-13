@@ -24,7 +24,7 @@
                                 <ul class="mt-3 divide-y rounded bg-gray-100 py-2 px-3 text-gray-600 shadow-sm hover:text-gray-700 hover:shadow">
                                     <li class="flex flex-col md:flex-row items-center py-3 text-sm">
                                         <span class="text-primary font-semibold">Age</span>
-                                        <span class="ml-auto">{{formatDate(loan.borrower.date_birth)}}</span>
+                                        <span class="ml-auto">{{loan.borrower.age}}</span>
                                     </li>
                                     <li class="flex flex-col md:flex-row items-center py-3 text-sm">
                                         <span class="text-primary font-semibold">Gender</span>
@@ -45,7 +45,7 @@
 
                     </div>
                 </div>
-                <div class="intro-y col-span-12 lg:col-span-8 2xl:col-span-9">
+                <div class="col-span-12 lg:col-span-8 2xl:col-span-9">
                     <div class="bg-white shadow rounded-lg p-6 divide-y ">
                         <h2 class="text-xl font-bold mb-4">Loan Information</h2>
                         <div class="flex justify-between flex-wrap gap-2 w-full mb-6">
@@ -145,17 +145,27 @@
 
                     </div>
                 </div>
+
             </div>
 
 
             <div class="rounded bg-white p-5 shadow md:p-8 w-full mt-4">
-                <TabView>
+                <TabView v-model:activeIndex="active"  orientation="right">
                     <TabPanel>
-                        <template #header>
-                            <div class="flex align-items-center gap-2 bg-gray-200 py-2 px-4 rounded-md">
-                                <span class="font-bold white-space-nowrap text-primary">Re-Payments</span>
+
+                        <template #header="{ index }">
+                            <div class="flex align-items-center gap-2 py-2 px-4 rounded-md">
+                                <span  :class="[
+                                'font-bold white-space-nowrap text-lg inline-flex',
+                                {
+                                'bg-primary border-primary text-white p-3 rounded-md':  active === 0,
+                                'bg-gray-200 text-primary p-3 rounded-md': active !== 0
+                                }
+                                ]"><i class="pi pi-database mr-2 mt-2"></i>Re-Payments</span>
                             </div>
                         </template>
+
+
                         <div class="flex flex-col md:flex-row justify-between">
                             <div>
                                 <h2 class="text-xl font-bold mb-4 text-red-600">Loan Repayments </h2>
@@ -168,7 +178,7 @@
 
                         </div>
 
-                        <Dialog v-model:visible="payment" modal header="Add Loan Collateral" :position="top" style="width:50%">
+                        <Dialog v-model:visible="payment" modal header="Add Loan Payment" :position="top" style="width:50%">
                             <form @submit.prevent="submitPayment">
                                 <div class="mb-5">
                                     <label class="flex text-body-dark font-semibold text-sm leading-none mb-3"
@@ -315,11 +325,18 @@
                         </div>
                     </TabPanel>
                     <TabPanel>
-                        <template #header>
-                            <div class="flex align-items-center gap-2 bg-gray-200 py-2 px-4 rounded-md">
-                                <span class="font-bold white-space-nowrap text-primary">Loan Term</span>
+                        <template #header="{ index }">
+                            <div class="flex align-items-center gap-2 py-2 px-4 rounded-md">
+                            <span :class="[
+                                'font-bold white-space-nowrap text-lg flex',
+                                {
+                                'bg-primary border-primary text-white p-3 rounded-md':  active === 1,
+                                'bg-gray-200 text-primary p-3 rounded-md': active !== 1
+                                }
+                                ]"><i class="pi pi-file-pdf mr-2 mt-2"></i>Terms</span>
                             </div>
                         </template>
+
                         <h3 class="text-primary text-xl font-semibold">Loan Term</h3>
                         <div class="p-6 divide-y ">
                             <div class="flex justify-between flex-wrap gap-2 w-full mb-6">
@@ -349,11 +366,11 @@
                         </div>
                         <div class="flex flex-col md:flex-row justify-between">
                             <div>
-                                <h2 class="text-xl font-bold mb-4 text-red-600">Loan Agreament Files</h2>
+                                <h2 class="text-xl font-bold mb-4 text-red-600">Loan Agreement Files</h2>
                             </div>
                             <div>
                                 <button label="Show" @click="visible = true" class="px-4 text-sm flex text-gray-100 bg-primary p-2 rounded">
-                                    <PlusIcon class="w-4 h-4 mr-2"/>  Add Agreament File
+                                    <PlusIcon class="w-4 h-4 mr-2"/>  Add Agreement File
                                 </button>
                             </div>
 
@@ -488,9 +505,15 @@
                         </div>
                     </TabPanel>
                     <TabPanel>
-                        <template #header>
-                            <div class="flex align-items-center gap-2 bg-gray-200 py-2 px-4 rounded-md">
-                                <span class="font-bold white-space-nowrap text-primary">Loan Schedules</span>
+                        <template #header="{ index }">
+                            <div class="flex align-items-center gap-2 py-2 px-4 rounded-md">
+                            <span :class="[
+                                'font-bold white-space-nowrap text-lg inline-flex',
+                                {
+                                'bg-primary border-primary text-white p-3 rounded-md':  active === 2,
+                                'bg-gray-200 text-primary p-3 rounded-md': active !== 2
+                                }
+                                ]"><i class="pi pi-clock mr-2 mt-2"></i>Schedules</span>
                             </div>
                         </template>
                         <div class="mt-4 mb-3 flex flex-col md:flex-row items-center justify-between">
@@ -600,7 +623,7 @@
                                     </td>
 
                                     <td class="py-4 px-4 text-sm text-left border">
-                                       {{schedule.principle_paid ? formatCurrency(schedule.principle_paid) : 0.00}}
+                                       {{schedule.principal_paid ? formatCurrency(schedule.principal_paid) : 0.00}}
                                     </td>
                                     <td class="py-4 px-4 text-sm text-left border">
                                         {{formatCurrency(schedule.amount)}}
@@ -618,9 +641,15 @@
                         </div>
                     </TabPanel>
                     <TabPanel>
-                        <template #header>
-                            <div class="flex align-items-center gap-2 bg-gray-200 py-2 px-4 rounded-md">
-                                <span class="font-bold white-space-nowrap text-primary">Pending Dues</span>
+                        <template #header="{ index }">
+                            <div class="flex align-items-center gap-2 py-2 px-4 rounded-md">
+                            <span :class="[
+                                'font-bold white-space-nowrap text-lg inline-flex',
+                                {
+                                'bg-primary border-primary text-white p-3 rounded-md':  active === 3,
+                                'bg-gray-200 text-primary p-3 rounded-md': active !== 3
+                                }
+                                ]"><i class="pi pi-list mr-2 mt-2"></i> Pending Dues</span>
                             </div>
                         </template>
                         <div class="bg-white relative overflow-x-auto mt-4">
@@ -733,11 +762,16 @@
                         </div>
                     </TabPanel>
                     <TabPanel>
-                        <template #header>
-                            <div class="flex align-items-center gap-2 bg-gray-200 py-2 px-4 rounded-md">
-                                <span class="font-bold white-space-nowrap text-primary">Loan Collaterals</span>
+                        <template #header="{ index }">
+                            <div class="flex align-items-center gap-2 py-2 px-4 rounded-md">
+                            <span :class="[
+                                'font-bold white-space-nowrap text-lg inline-flex',
+                                {
+                                'bg-primary border-primary text-white p-3 rounded-md':  active === 4,
+                                'bg-gray-200 text-primary p-3 rounded-md': active !== 4
+                                }
+                                ]"><i class="pi pi-box mr-2 mt-2"></i> Collaterals</span>
                             </div>
-
                         </template>
                         <div class="flex flex-col md:flex-row justify-between">
                             <div>
@@ -938,9 +972,15 @@
                         </div>
                     </TabPanel>
                     <TabPanel>
-                        <template #header>
-                            <div class="flex align-items-center gap-2 bg-gray-200 py-2 px-4 rounded-md">
-                                <span class="font-bold white-space-nowrap text-primary">Loan Files</span>
+                        <template #header="{ index }">
+                            <div class="flex align-items-center gap-2 py-2 px-4 rounded-md">
+                            <span :class="[
+                                'font-bold white-space-nowrap text-lg inline-flex',
+                                {
+                                'bg-primary border-primary text-white p-3 rounded-md':  active === 5,
+                                'bg-gray-200 text-primary p-3 rounded-md': active !== 5
+                                }
+                                ]"><i class="pi pi-file-excel mr-2 mt-2"></i> Files</span>
                             </div>
                         </template>
                         <div class="flex flex-col md:flex-row justify-between">
@@ -1081,9 +1121,15 @@
                         </div>
                     </TabPanel>
                     <TabPanel>
-                        <template #header>
-                            <div class="flex align-items-center gap-2 bg-gray-200 py-2 px-4 rounded-md">
-                                <span class="font-bold white-space-nowrap text-primary">Loan Comments</span>
+                        <template #header="{ index }">
+                            <div class="flex align-items-center gap-2 py-2 px-4 rounded-md">
+                            <span :class="[
+                                'font-bold white-space-nowrap text-lg inline-flex',
+                                {
+                                'bg-primary border-primary text-white p-3 rounded-md':  active === 6,
+                                'bg-gray-200 text-primary p-3 rounded-md': active !== 6
+                                }
+                                ]"><i class="pi pi-comments mr-2 mt-2"></i> Comments</span>
                             </div>
                         </template>
                         <div class="flex flex-col md:flex-row justify-between">
@@ -1174,6 +1220,8 @@ const props = defineProps({
     loan:Object,errors:Object, types:Object
 })
 
+
+
 const visible = ref(false);
 
 const collateral = ref(false);
@@ -1186,6 +1234,8 @@ const commentLoan = ref(false);
 const payment = ref(false);
 
 const active = ref(0)
+
+
 
 const loading = ref(false);
 function uppercase(str){

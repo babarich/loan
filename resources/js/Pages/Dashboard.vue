@@ -110,10 +110,101 @@
 
 
                 <div class="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
-                    <DashboardChard :chart-data="chartData"  :projected-data="projectedMonth" :interest-paid="interestPaid"
-                           :interest-projected="interestProjected" :principle-paid="principlePaid" :principle-projected="principleProjected"/>
+
+                    <div
+                        class="col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5
+                         shadow-default  sm:px-7.5 xl:col-span-12">
+                        <div class="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
+                            <div class="flex w-full flex-wrap gap-3 sm:gap-5 mt-4">
+                                <div class="w-full">
+                                    <p class="font-semibold text-red-500">Loan Collection -Monthly</p>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div>
+                            <div id="chartSix" class="-ml-5">
+                                <apexchart :width="monthlyPaid.width" :height="monthlyPaid.height" :type="monthlyPaid.type"
+                                           :options="monthlyPaid.options" :series="monthlyPaid.series"></apexchart>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        class="col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5
+                        shadow-default  sm:px-7.5 xl:col-span-12">
+                        <div class="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
+                            <div class="flex w-full flex-wrap gap-3 sm:gap-5 mt-4">
+                                <div class="w-full">
+                                    <p class="font-semibold text-red-500">Loan Released -Monthly</p>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div>
+                            <div id="chartSix" class="-ml-5">
+                                <apexchart :width="chartData.width" :height="chartData.height" :type="chartData.type"
+                                           :options="chartData.options" :series="chartData.series"></apexchart>
+                            </div>
+                        </div>
+                    </div>
 
 
+                    <div
+                        class="col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5
+                        shadow-default  sm:px-7.5 xl:col-span-12">
+                        <div class="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
+                            <div class="flex w-full flex-wrap gap-3 sm:gap-5 mt-4">
+                                <div class="w-full">
+                                    <p class="font-semibold text-red-500">Loan Collection Vs Due Loans -Monthly</p>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div>
+                            <div id="chartSix" class="-ml-5">
+                                <apexchart :width="dueChart.width" :height="dueChart.height" :type="dueChart.type"
+                                           :options="dueChart.options" :series="dueChart.series"></apexchart>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        class="col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5
+                        shadow-default  sm:px-7.5 xl:col-span-6">
+                        <div class="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
+                            <div class="flex w-full flex-wrap gap-3 sm:gap-5 mt-4">
+                                <div class="w-full">
+                                    <p class="font-semibold text-red-500">Principle Due Vs Principle Collection -Monthly</p>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div>
+                            <div id="chartSix" class="-ml-5">
+                                <apexchart :width="principle.width" :height="principle.height" :type="principle.type"
+                                           :options="principle.options" :series="principle.series"></apexchart>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5
+                        shadow-default  sm:px-7.5 xl:col-span-6">
+                        <div class="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
+                            <div class="flex w-full flex-wrap gap-3 sm:gap-5 mt-4">
+                                <div class="w-full">
+                                    <p class="font-semibold text-red-500">Interest Due  Vs Interest Collected -Monthly</p>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div>
+                            <div id="chartSix" class="-ml-5">
+                                <apexchart :width="interest.width" :height="interest.height" :type="interest.type"
+                                           :options="interest.options" :series="interest.series"></apexchart>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -135,8 +226,8 @@ import DashboardChard from "@/Pages/Charts/DashboardChard.vue";
 const props = defineProps({
     totalOutstanding:Object,principleOutstanding:Object,
     interestOut:Object,fully:Object,open:Object,borrowers:Object,
-    denied:Object,chartData:Object,projectedMonth:Object,interestPaid:Object,
-    interestProjected:Object,principlePaid:Object, principleProjected:Object
+    denied:Object,chartData:Object,interest:Object,principle:Object,
+    monthlyPaid:Object, dueChart:Object
 })
 
 

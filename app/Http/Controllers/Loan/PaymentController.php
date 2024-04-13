@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers\Loan;
 
+
 use App\Http\Controllers\Controller;
+use App\Models\Borrow\BorrowerGroup;
 use App\Models\Loan\Loan;
 use App\Models\Loan\LoanSchedule;
 use App\Models\Loan\PaymentLoan;
+use App\Models\User;
 use App\Services\ChartService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request as FacadesRequest;
+use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
 class PaymentController extends Controller
@@ -76,6 +81,60 @@ class PaymentController extends Controller
             'interestProjected' => $interestProjected,
             'principlePaid' => $principlePaid,
             'principleProjected' => $principleProjected
+        ]);
+    }
+
+
+
+
+    public function collection(Request $request)
+    {
+
+        $filterUser = $request->input('filterCollection');
+        $query = PaymentLoan::today()
+            ->select(
+                DB::raw('COUNT(id) as total_id'),
+                DB::raw('SUM(amount) as total_amount'),
+                DB::raw('COUNT(DISTINCT user_id) as total_users')
+            );
+
+        if ($filterUser) {
+            $startDate = $filterUser['startDate'];
+            $endDate = $filterUser['endDate'];
+            $userId = $filterUser['staffId'];
+            $borrowerGroup = $filterUser['groupId'];
+
+            $query->with(['loan', 'loan.borrower']);
+
+            if ($startDate && $endDate) {
+                $query->whereBetween('payment_date', [$startDate, $endDate]);
+            }
+
+            if ($userId) {
+                $query->where('user_id', $userId);
+            }
+
+            if ($borrowerGroup) {
+                $query->whereHas('loan.borrower', function ($query) use ($borrowerGroup) {
+                    $query->where('group_id', $borrowerGroup);
+                });
+            }
+        }
+
+        $results = $query->first();
+
+
+
+
+
+        $staff = User::query()->get();
+        $groups = BorrowerGroup::query()->get();
+
+        return Inertia::render('Collection/Index',
+        [
+            'staffs' => $staff,
+            'groups' => $groups,
+            'collections' => $results
         ]);
     }
 }

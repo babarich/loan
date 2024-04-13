@@ -4,7 +4,9 @@ namespace App\Models\Borrow;
 
 use App\Models\Loan\Loan;
 use App\Models\Loan\LoanSchedule;
+use App\Models\Loan\PaymentLoan;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,6 +14,10 @@ class Borrower extends Model
 {
     use HasFactory;
 
+
+    protected $dates = [
+        'date_birth'
+    ];
     protected $table = 'borrowers';
     protected $fillable = ['reference', 'first_name', 'last_name', 'gender', 'title', 'mobile', 'email', 'date_birth', 'address', 'city',
         'working_status','business_name','filename', 'attachment_size', 'attachment', 'uploaded_by', 'status','description','balance', 'total_paid',
@@ -27,6 +33,11 @@ class Borrower extends Model
     public function loans(){
         return $this->hasMany(Loan::class, 'borrower_id');
     }
+
+    public function payments(){
+        return $this->hasMany(PaymentLoan::class, 'borrower_id');
+    }
+
     public function schedules()
     {
         return  $this->hasMany(LoanSchedule::class, 'borrower_id');
@@ -37,6 +48,11 @@ class Borrower extends Model
     }
 
 
+
+    public function getAgeAttribute()
+    {
+        return Carbon::parse($this->date_birth)->diffInYears(Carbon::now());
+    }
     public function scopeFilter($query , array $filters){
         $query->when($filters['search'] ?? null, function ($query, $search){
             $query->where('first_name', 'like', '%'.$search.'%')

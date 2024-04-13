@@ -173,6 +173,7 @@ Route::group(['middleware' => 'auth:sanctum'], function (){
                 Route::get('chart', 'chart')->name('chart');
                 Route::post('store', 'store')->name('store');
                 Route::get('view/{id?}', 'show')->name('show');
+                Route::get('collection', 'collection')->name('collection');
                 Route::post('update/{id?}', 'update')->name('update');
                 Route::get('edit/{id?}', 'edit')->name('edit');
             });

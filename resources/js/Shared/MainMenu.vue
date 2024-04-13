@@ -152,7 +152,9 @@
           </div>
           <div class="space-y-2 py-1.5">
               <jet-nav-link class="group flex w-full items-center gap-2.5 rounded-md px-4
-                  py-2.5 text-md text-gray-300 text-start focus:text-primary hover:bg-gray-100 font-medium">
+                  py-2.5 text-md text-gray-300 text-start focus:text-primary hover:bg-gray-100 font-medium"
+                            :href="route('payment.collection')"
+                            :active="route().current('payment.collection')">
                   <i class="pi pi-user flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900"></i>
                   <span class="flex-1 ml-3 text-left whitespace-nowrap">Collection Sheet</span>
               </jet-nav-link>

@@ -21,7 +21,36 @@ export default {
                 primary:"#045194",
                 secondary:"#1C2434",
                 tertiary:"#EAEAEA",
-                ternary:"#F0F1F1"
+                ternary:"#F0F1F1",
+                whiten: '#F1F5F9',
+                whiter: '#F5F7FD',
+                boxdark: '#24303F',
+                'boxdark-2': '#1A222C',
+                strokedark: '#2E3A47',
+                'form-strokedark': '#3d4d60',
+                'form-input': '#1d2a39',
+                'meta-1': '#DC3545',
+                'meta-2': '#EFF2F7',
+                'meta-3': '#10B981',
+                'meta-4': '#313D4A',
+                'meta-5': '#259AE6',
+                'meta-6': '#FFBA00',
+                'meta-7': '#FF6766',
+                'meta-8': '#F0950C',
+                'meta-9': '#E5E7EB',
+                'meta-10': '#0FADCF',
+                success: '#219653',
+                danger: '#D34053',
+                warning: '#FFA70B'
+            },
+            zIndex: {
+                999999: '999999',
+                99999: '99999',
+                9999: '9999',
+                999: '999',
+                99: '99',
+                9: '9',
+                1: '1'
             },
             keyframes: {
                 linspin: {

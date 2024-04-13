@@ -42,10 +42,10 @@ class BorrowerController extends Controller
                          'gender'=> $customer->gender,
                          'email'=> $customer->email,
                          'mobile'=> $customer->mobile,
-                           'address'=> $customer->address,
+                          'address'=> $customer->address,
                           'status' => $customer->status,
-                           'balance' => $customer->balance,
-                           'total_paid' => $customer->total_paid
+                         'balance' => $customer->schedules ? $customer->schedules->sum('principle') +  $customer->schedules->sum('interest') : 0,
+                         'total_paid' => $customer->schedules ? $customer->schedules->sum('principal_paid') +  $customer->schedules->sum('interest_paid') : 0,
                        ])
 
        ]);
