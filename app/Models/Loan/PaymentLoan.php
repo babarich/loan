@@ -22,7 +22,6 @@ class PaymentLoan extends Model
 
     public function loan()
     {
-
         return $this->belongsTo(Loan::class, 'loan_id');
     }
 
