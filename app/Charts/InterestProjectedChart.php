@@ -2,7 +2,9 @@
 
 namespace App\Charts;
 
+use App\Models\Loan\LoanSchedule;
 use ArielMejiaDev\LarapexCharts\LarapexChart;
+use Carbon\Carbon;
 
 class InterestProjectedChart
 {
@@ -15,12 +17,21 @@ class InterestProjectedChart
 
     public function build(): array
     {
-        return $this->chart->areaChart()
-            ->setTitle('Sales during 2021.')
-            ->setSubtitle('Physical sales vs Digital sales.')
-            ->addData('Physical sales', [40, 93, 35, 42, 18, 82])
-            ->addData('Digital sales', [70, 29, 77, 28, 55, 45])
-            ->setXAxis(['January', 'February', 'March', 'April', 'May', 'June'])
+
+
+        $dataDue = LoanSchedule::query()->get();
+        $groupedDataDue = $dataDue->groupBy(function($item) {
+
+            return Carbon::parse($item->due_date)->format('M');
+        });
+
+        $totalDue = $groupedDataDue->map(function($group) {
+            return $group->sum('interest');
+        });
+        return $this->chart->barChart()
+            ->addData('Interest Due',  $totalDue->values()->toArray())
+            ->setXAxis($totalDue->keys()->toArray())
+            ->setColors( ['#DC3545'])
             ->toVue();
     }
 }

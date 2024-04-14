@@ -73,6 +73,13 @@
                                           @click="sortTransaction('last_payment')"> Last Payment </TableHeaderCell>
                      <TableHeaderCell field="status" :sort-field="sortField" :sort-direction="sortDirection"
                                       @click="sortTransaction('status')"> Status</TableHeaderCell>
+
+                     <th
+                         scope="col"
+                         class="py-4 px-4 border text-xs text-left whitespace nowrap font-semibold">
+                         Stage
+                     </th>
+
                      <th
                          scope="col"
                          class="py-4 px-4 border text-xs text-left whitespace nowrap font-semibold">
@@ -96,11 +103,28 @@
                     <td class="py-4 px-4 text-sm text-left border">{{loan.total_paid}}</td>
                     <td class="py-4 px-4 text-sm text-left border">{{loan.last_payment}}</td>
                     <td class="py-4 px-4 text-sm text-left border">
-                        <span class="bg-yellow-500 text-white p-2 rounded-md text-xs" v-if="loan.status === 'pending'">
+                        <span class="bg-yellow-500 text-white p-2 rounded-md text-xs" v-if="loan.release_status === 'pending'">
                             Pending
                         </span>
                         <span class="bg-emerald-500 text-white p-2 rounded-md text-xs" v-else>
                             Approved
+                        </span>
+                    </td>
+                    <td class="py-4 px-4 text-sm text-left border">
+                        <span class="bg-primary text-white p-2 rounded-md text-xs" v-if="loan.stage === 0">
+                            First Approver
+                        </span>
+                        <span class="bg-primary text-white p-2 rounded-md text-xs" v-else-if="loan.stage === 1">
+                            Second Approver
+                        </span>
+                        <span class="bg-primary text-white p-2 rounded-md text-xs" v-else-if="loan.stage === 2">
+                            First Disburser
+                        </span>
+                        <span class="bg-primary text-white p-2 rounded-md text-xs" v-else-if="loan.stage === 3">
+                            Second Disburser
+                        </span>
+                        <span class="bg-emerald-500 text-white p-2 rounded-md text-xs" v-else>
+                            Disbursed
                         </span>
                     </td>
                     <td class="py-4 px-4 text-sm text-left border">

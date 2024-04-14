@@ -102,9 +102,120 @@
         </div>
 
         <div class="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
-            <Chart :chart-data="chartData"  :projected-data="projectedMonth" :interest-paid="interestPaid"
-            :interest-projected="interestProjected" :principle-paid="principlePaid" :principle-projected="principleProjected"/>
+            <div
+                class="col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5
+                        shadow-default  sm:px-7.5 xl:col-span-6">
+                <div class="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
+                    <div class="flex w-full flex-wrap gap-3 sm:gap-5 mt-4">
+                        <div class="w-full">
+                            <p class="font-semibold text-red-500">Total Monthly  Collection</p>
+                        </div>
+                    </div>
 
+                </div>
+                <div>
+                    <div id="chartSix" class="-ml-5">
+                        <apexchart :width="chartData.width" :height="chartData.height" :type="chartData.type"
+                                   :options="chartData.options" :series="chartData.series"></apexchart>
+                    </div>
+                </div>
+            </div>
+            <div
+                class="col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5
+                        shadow-default  sm:px-7.5 xl:col-span-6">
+                <div class="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
+                    <div class="flex w-full flex-wrap gap-3 sm:gap-5 mt-4">
+                        <div class="w-full">
+                            <p class="font-semibold text-red-500">Total Monthly  Projection</p>
+                        </div>
+                    </div>
+
+                </div>
+                <div>
+                    <div id="chartSix" class="-ml-5">
+                        <apexchart :width="projectedMonth.width" :height="projectedMonth.height" :type="projectedMonth.type"
+                                   :options="projectedMonth.options" :series="projectedMonth.series"></apexchart>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5
+                        shadow-default  sm:px-7.5 xl:col-span-6">
+                <div class="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
+                    <div class="flex w-full flex-wrap gap-3 sm:gap-5 mt-4">
+                        <div class="w-full">
+                            <p class="font-semibold text-red-500">Total Principle  Paid</p>
+                        </div>
+                    </div>
+
+                </div>
+                <div>
+                    <div id="chartSix" class="-ml-5">
+                        <apexchart :width="principlePaid.width" :height="principlePaid.height" :type="principlePaid.type"
+                                   :options="principlePaid.options" :series="principlePaid.series"></apexchart>
+                    </div>
+                </div>
+            </div>
+
+
+            <div
+                class="col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5
+                        shadow-default  sm:px-7.5 xl:col-span-6">
+                <div class="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
+                    <div class="flex w-full flex-wrap gap-3 sm:gap-5 mt-4">
+                        <div class="w-full">
+                            <p class="font-semibold text-red-500">Total Principle  Projection</p>
+                        </div>
+                    </div>
+
+                </div>
+                <div>
+                    <div id="chartSix" class="-ml-5">
+                        <apexchart :width="principleProjected.width" :height="principleProjected.height" :type="principleProjected.type"
+                                   :options="principleProjected.options" :series="principleProjected.series"></apexchart>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5
+                        shadow-default  sm:px-7.5 xl:col-span-6">
+                <div class="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
+                    <div class="flex w-full flex-wrap gap-3 sm:gap-5 mt-4">
+                        <div class="w-full">
+                            <p class="font-semibold text-red-500">Total Interest  Paid</p>
+                        </div>
+                    </div>
+
+                </div>
+                <div>
+                    <div id="chartSix" class="-ml-5">
+                        <apexchart :width="interestPaid.width" :height="interestPaid.height" :type="interestPaid.type"
+                                   :options="interestPaid.options" :series="interestPaid.series"></apexchart>
+                    </div>
+                </div>
+            </div>
+
+
+            <div
+                class="col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5
+                        shadow-default  sm:px-7.5 xl:col-span-6">
+                <div class="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
+                    <div class="flex w-full flex-wrap gap-3 sm:gap-5 mt-4">
+                        <div class="w-full">
+                            <p class="font-semibold text-red-500">Total Interest  Projection</p>
+                        </div>
+                    </div>
+
+                </div>
+                <div>
+                    <div id="chartSix" class="-ml-5">
+                        <apexchart :width="interestProjected.width" :height="interestProjected.height" :type="interestProjected.type"
+                                   :options="interestProjected.options" :series="interestProjected.series"></apexchart>
+                    </div>
+                </div>
+            </div>
 
         </div>
     </AppLayout>
@@ -113,7 +224,7 @@
 <script setup>
 
 import AppLayout from "@/Layouts/AppLayout.vue";
-import Chart from '../Charts/Chart.vue'
+
 import {BanknotesIcon, CircleStackIcon, GiftTopIcon, UsersIcon} from "@heroicons/vue/24/outline";
 
 

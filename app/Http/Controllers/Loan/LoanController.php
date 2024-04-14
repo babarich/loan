@@ -56,7 +56,9 @@ class LoanController extends Controller
                     'due'=>$loan->loanpayment->due_amount,
                     'total_paid' =>$loan->loanpayment->paid_amount ?? 0,
                     'last_payment' =>$loan->loanpayment->latest_payment ?? 0,
-                    'status' => $loan->status
+                    'status' => $loan->status,
+                    'release_status' => $loan->release_status,
+                    'stage' => $loan->stage,
                 ])
 
         ]);

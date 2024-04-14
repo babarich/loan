@@ -3,10 +3,11 @@
 namespace App\Charts;
 
 use App\Models\Loan\LoanSchedule;
+use App\Models\Loan\PaymentLoan;
 use ArielMejiaDev\LarapexCharts\LarapexChart;
 use Carbon\Carbon;
 
-class PrincipleChart
+class LoanProjected
 {
     protected $chart;
 
@@ -19,19 +20,20 @@ class PrincipleChart
     {
         $data = LoanSchedule::query()->get();
         $groupedData = $data->groupBy(function($item) {
-
             return Carbon::parse($item->due_date)->format('M');
         });
 
         $totals = $groupedData->map(function($group) {
-            return $group->sum('principal_paid');
+            return $group->sum('amount');
         });
 
 
-        return $this->chart->areaChart()
-            ->addData('Principle Paid', $totals->values()->toArray())
+
+        return $this->chart->barChart()
+            ->addData('Amount', $totals->values()->toArray())
             ->setXAxis($totals->keys()->toArray())
-            ->setColors(['#259AE6', '#DC3545'])
+            ->setHeight(350)
+            ->setColors([ '#DC3545'])
             ->toVue();
     }
 }

@@ -3,6 +3,13 @@
 namespace App\Http\Controllers\Loan;
 
 
+use App\Charts\InterestChart;
+use App\Charts\InterestProjectedChart;
+use App\Charts\LoanMonthly;
+use App\Charts\LoanProjected;
+use App\Charts\MonthlyPayment;
+use App\Charts\PrincipleChart;
+use App\Charts\PrincipleProjectedChart;
 use App\Http\Controllers\Controller;
 use App\Models\Borrow\BorrowerGroup;
 use App\Models\Loan\Loan;
@@ -49,7 +56,8 @@ class PaymentController extends Controller
 
 
 
-    public function chart(Request $request, ChartService $chartService)
+    public function chart(Request $request, InterestChart $interestChart, InterestProjectedChart $projectedChart,
+    PrincipleChart $principleChart, PrincipleProjectedChart $principleProjectedChart, LoanProjected $loanProjected, MonthlyPayment $monthlyPayment)
     {
 
         $today = PaymentLoan::today()->sum('amount');
@@ -60,12 +68,7 @@ class PaymentController extends Controller
         $loans = Loan::count();
         $interest = LoanSchedule::sum('interest_paid');
         $principle = LoanSchedule::sum('principal_paid');
-        $monthlyPaid = $chartService->getDataMonth();
-        $projectedMonth = $chartService->getMonthProjected();
-        $interestPaid = $chartService->getInterest();
-        $interestProjected = $chartService->getProjectedInterest();
-        $principlePaid = $chartService->getPrinciple();
-        $principleProjected = $chartService->getProjectedPrinciple();
+
 
         return Inertia::render('Payment/Chart',[
             'today' => $today,
@@ -75,12 +78,12 @@ class PaymentController extends Controller
             'loan' => $loans,
             'interest' => $interest,
             'principle' => $principle,
-            'chartData' => $monthlyPaid,
-            'projectedMonth' => $projectedMonth,
-            'interestPaid' => $interestPaid,
-            'interestProjected' => $interestProjected,
-            'principlePaid' => $principlePaid,
-            'principleProjected' => $principleProjected
+            'chartData' => $monthlyPayment->build(),
+            'projectedMonth' => $loanProjected->build(),
+            'interestPaid' => $interestChart->build(),
+            'interestProjected' => $projectedChart->build(),
+            'principlePaid' => $principleChart->build(),
+            'principleProjected' => $principleProjectedChart->build()
         ]);
     }
 
