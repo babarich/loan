@@ -17,7 +17,7 @@ class Loan extends Model
 
     protected $fillable = ['reference', 'loan_product', 'borrower_id', 'principle_amount', 'interest_method', 'interest_type', 'interest_percentage',
         'interest_duration', 'loan_duration', 'duration_type', 'payment_cycle', 'payment_number', 'interest_amount','total_interest', 'loan_release_date',
-        'maturity_date', 'disbursed_by', 'description', 'status', 'release_status','guarantor_id', 'user_id','disbursement'];
+        'maturity_date', 'disbursed_by', 'description', 'status', 'release_status','guarantor_id', 'user_id','disbursement', 'stage'];
 
 
     public function user()

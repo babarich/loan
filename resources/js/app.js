@@ -7,6 +7,7 @@ import {InertiaProgress} from "@inertiajs/progress";
 import PrimeVue from "primevue/config";
 import ConfirmationService from "primevue/confirmationservice";
 import ToastService from "primevue/toastservice";
+import Tooltip from "primevue/tooltip"
 import "primevue/resources/primevue.min.css"
 import "primeicons/primeicons.css"
 import "primevue/resources/themes/lara-light-indigo/theme.css"
@@ -27,6 +28,15 @@ createInertiaApp({
             .use(ToastService)
             .use(ZiggyVue)
             .use(VueApexCharts)
+            .directive('tooltip', Tooltip)
+            .mixin({
+                methods:{
+                    route,
+                    can:function (){
+                        return this.$page.props.can
+                    }
+                }
+            })
             .mount(el);
     },
     progress: {

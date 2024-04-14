@@ -122,8 +122,8 @@ Route::group(['middleware' => 'auth:sanctum'], function (){
         Route::name('approve.')->group(function (){
             Route::controller(\App\Http\Controllers\Loan\LoanApprovalController::class)->group(function (){
                 Route::get('index', 'index')->name('index');
-                Route::post('approve/{id?}', 'approve')->name('approveFirst');
-                Route::post('reject/{id?}', 'reject')->name('rejectFirst');
+                Route::get('approve/{id?}', 'approve')->name('approveFirst');
+                Route::get('reject/{id?}', 'reject')->name('rejectFirst');
                 Route::post('comment/{id?}', 'return')->name('comment');
                 Route::get('view/{id?}', 'show')->name('show');
                 Route::post('update/{id?}', 'update')->name('update');
