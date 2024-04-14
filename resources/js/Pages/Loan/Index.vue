@@ -88,9 +88,9 @@
                     </td>
                     <td class="py-4 px-4 text-sm text-left border">{{loan.reference}}</td>
                     <td class="py-4 px-4 text-sm text-left border">{{loan.name}}</td>
-                    <td class="py-4 px-4 text-sm text-left border">{{loan.principal}}</td>
-                    <td class="py-4 px-4 text-sm text-left border">{{loan.total_interest}}</td>
-                    <td class="py-4 px-4 text-sm text-left border text-wrap">{{loan.interest}}</td>
+                    <td class="py-4 px-4 text-sm text-left border">{{formatCurrency(loan.principal)}}</td>
+                    <td class="py-4 px-4 text-sm text-left border">{{formatCurrency(loan.total_interest)}}</td>
+                    <td class="py-4 px-4 text-sm text-left border text-wrap">{{loan.interest}} {{loan.type}}</td>
                     <td class="py-4 px-4 text-sm text-left border text-wrap">{{loan.interest_type}}</td>
                     <td class="py-4 px-4 text-sm text-left border">{{loan.due}}</td>
                     <td class="py-4 px-4 text-sm text-left border">{{loan.total_paid}}</td>
@@ -165,7 +165,11 @@ const sortField = ref('updated_at');
 const sortDirection = ref('desc');
 
 
-
+function formatCurrency (value, decimals=2, thousandsSeparator= ','){
+    let result = parseFloat(value).toFixed(decimals).toString();
+    if(thousandsSeparator) result = result.replace(/\B(?=(\d{3})+(?!\d))/g, thousandsSeparator)
+    return result;
+}
 
 function getChanges(page){
     Inertia.get(

@@ -13,6 +13,7 @@ use App\Models\Loan\LoanPayment;
 use App\Models\Loan\LoanSchedule;
 use App\Models\Loan\PaymentLoan;
 use App\Models\Loan\Product;
+use App\Services\PayOffService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -82,7 +83,7 @@ class LoanController extends Controller
 
    public function checkLoan(Request $request, $id)
    {
-       
+
 
        $pendingLoans = LoanSchedule::where('borrower_id', $id)
            ->where('paid', false)
@@ -104,11 +105,14 @@ class LoanController extends Controller
 
    public function store(LoanRequest $request){
 
+
+
         $validatedData = $request->validated();
 
        try {
 
-           $principle = $validatedData['principle'];
+           $pendingAmount = $request->input('payoff') === 'yes' ? $request->input('pending') : 0 ;
+           $principle = $validatedData['principle'] - $pendingAmount;
            $interest = $validatedData['interest'];
            $interest_type = $validatedData['interest_type'];
            $percent = $request->input('percent');
@@ -117,19 +121,14 @@ class LoanController extends Controller
            $type = $request->input('duration_type');
            $method = $request->input('interest_method');
 
-           $pendingLoans = LoanSchedule::where('borrower_id', $validatedData['borrower'])
-               ->where('paid', false)
-               ->get();
-           if ($pendingLoans->isNotEmpty()) {
-               return Inertia::render('Loan/LoanConfirmationModal', ['pendingLoans' => $pendingLoans]);
-           } else{
+
                DB::beginTransaction();
                $totalInterest = $this->calculateLoan($principle,$interest,$interest_type,$percent,$amount,$duration,$type, $method);
                $loan = Loan::create([
                    'reference' => 'LRN'.''.rand(1000,9999),
                    'loan_product' => $validatedData['product'],
                    'borrower_id' => $validatedData['borrower'],
-                   'principle_amount' => $validatedData['principle'],
+                   'principle_amount' => $principle,
                    'interest_method' => $validatedData['interest'],
                    'interest_type' => $validatedData['interest_type'],
                    'disbursement' => $request->filled('payment') ?  $request->input('payment') : null,
@@ -144,15 +143,24 @@ class LoanController extends Controller
                    'guarantor_id' => $validatedData['guarantor'],
                    'user_id' => Auth::id(),
                    'status' => 'pending',
+                   'stage' => 0,
                    'release_status' => 'pending',
                    'description' => $request->filled('description') ?  $request->input('description') : null,
                    'total_interest' => $totalInterest
                ]);
 
+
+                   if ($request->input('payoff') === 'yes'){
+                       $payment = new PayOffService();
+                       $amount = $request->input('pending');
+                       $borrowerId = $request->input('borrower_id');
+                       $debt = $payment->makePayment($amount, $borrowerId);
+                   }
+
                LoanPayment::create([
                    'loan_id' => $loan->id,
-                   'due_amount' => $totalInterest + $validatedData['principle'],
-                   'total' => $totalInterest + $validatedData['principle'],
+                   'due_amount' => $totalInterest + $principle,
+                   'total' => $totalInterest + $principle,
                    'status' => 'pending'
                ]);
 
@@ -178,7 +186,7 @@ class LoanController extends Controller
 
 
                DB::commit();
-           }
+
 
        }catch (\Exception $e){
            DB::rollBack();
@@ -190,6 +198,7 @@ class LoanController extends Controller
 
 
    private function calculateLoan($principle ,$interest, $interest_type, $percent, $amount, $duration, $type, $method){
+
 
         $totalInterest = 0;
         if($interest === 'flat'){
@@ -204,27 +213,33 @@ class LoanController extends Controller
         }elseif ($interest === 'reducing'){
             if ($interest_type === 'amount'){
                 $term = $this->convertTerm($duration, $type,$method);
-                $totalInterest = $amount * $term;
+                $totalInterest = $amount;
             }else{
                 $term = $this->convertTerm($duration, $type,$method);
-                $totalInterest =  $principle * ($percent/100) * $term;
+                $totalInterest =  $principle * ($percent/100);
             }
         }elseif ($interest === 'interest'){
             if ($interest_type === 'amount'){
                 $term = $this->convertTerm($duration, $type,$method);
-                $totalInterest = $amount * $term;
+                $totalInterest = $amount;
             }else{
                 $term = $this->convertTerm($duration, $type,$method);
-                $totalInterest =  $principle * ($percent/100) * $term;
+                $totalInterest =  $principle * ($percent/100);
             }
 
         }else{
+
+
             if ($interest_type === 'amount'){
                 $term = $this->convertTerm($duration, $type,$method);
                 $totalInterest = $amount * $term;
             }else{
                 $term = $this->convertTerm($duration, $type,$method);
-                $totalInterest =  $principle * ($percent/100) * $term;
+                $frequency = $this->compoundFrequency($type);
+                $ratePerPeriod = ($percent/100) / $frequency;
+                $numberOfPeriods = $frequency * $term;
+                $totalInterest = $principle * (1 + $ratePerPeriod) ** $numberOfPeriods;
+
             }
 
         }
@@ -242,6 +257,23 @@ class LoanController extends Controller
         }
 
         return $interest;
+   }
+
+   private function compoundFrequency($type){
+        $frequency = 1;
+           switch ($type) {
+           case 'day':
+            return $frequency = 365;
+           case 'week':
+             return $frequency = 56;
+           case 'month':
+              return $frequency = 12;
+           case 'year':
+              return $frequency = 1;
+           default:
+               return $frequency;
+       }
+
    }
 
    private function convertTerm($duration, $type, $method)

@@ -105,8 +105,8 @@
                       <jet-nav-link class="group flex  items-center gap-2.5 rounded-md px-4
                   py-2.5 text-md text-gray-300 text-start focus:text-primary hover:bg-gray-100 font-medium
                           relative  before:absolute before:-left-0.5 before:top-[18px] before:h-px before:w-3
-                          before:border-t before:border-dashed before:border-gray-600" :href="route('product.index')"
-                                    :active="route().current('product.index')" >
+                          before:border-t before:border-dashed before:border-gray-600" :href="route('approve.index')"
+                                    :active="route().current('approve.index')" >
                           <span class="flex-1 ml-3 text-left whitespace-nowrap">Approve Loans</span>
                       </jet-nav-link>
                   </template>

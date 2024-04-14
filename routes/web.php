@@ -117,6 +117,22 @@ Route::group(['middleware' => 'auth:sanctum'], function (){
 
 
 
+    Route::group(['prefix' => 'approvals'], function (){
+
+        Route::name('approve.')->group(function (){
+            Route::controller(\App\Http\Controllers\Loan\LoanApprovalController::class)->group(function (){
+                Route::get('index', 'index')->name('index');
+                Route::post('approve/{id?}', 'approve')->name('approveFirst');
+                Route::post('reject/{id?}', 'reject')->name('rejectFirst');
+                Route::post('comment/{id?}', 'return')->name('comment');
+                Route::get('view/{id?}', 'show')->name('show');
+                Route::post('update/{id?}', 'update')->name('update');
+                Route::get('edit/{id?}', 'edit')->name('edit');
+                Route::post('assign_user/{id?}', 'assignRelation')->name('relation');
+            });
+        });
+    });
+
 
     Route::group(['prefix' => 'collaterals'], function (){
 

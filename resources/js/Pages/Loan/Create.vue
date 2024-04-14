@@ -4,10 +4,12 @@
 
 
     <div class="h-full p-5 md:p-8 mb-6">
-        <div class="flex border-b border-dashed border-border-base pb-5 md:pb-7">
+        <div class="flex  pb-5 md:pb-7">
             <h1 class="text-lg font-semibold text-heading">Create Loan </h1>
         </div>
+
             <Stepper v-model:activeStep="active">
+
 
 
                 <StepperPanel>
@@ -68,11 +70,28 @@
 
                                 <div class="mb-5"><label class="flex text-body-dark font-semibold text-sm leading-none mb-3"
                                                          for="slug">Loan Principal Amount</label>
-                                    <InputNumber class="w-full order border-gray-300 placeholder-gray-500 h-12 text-gray-900 focus:outline-none focus:ring-primary-500
+                                    <InputNumber class="w-full border border-gray-300 placeholder-gray-500 h-12 text-gray-900 focus:outline-none focus:ring-primary-500
                                       focus:border-primary-500" v-model="form.principle" inputId="integeronly" />
                                     <p v-if="errors.principle">{{errors.principle}}</p>
                                 </div>
-
+                                <div class="mb-5" v-show="dueStatus"><label class="flex text-body-dark font-semibold text-sm leading-none mb-3"
+                                                         for="slug">Previous Pending Loan</label>
+                                    <InputNumber class="w-full border border-gray-300 placeholder-gray-500 h-12 text-gray-900 focus:outline-none focus:ring-primary-500
+                                      focus:border-primary-500" v-model="form.pending" inputId="integeronly" />
+                                    <p v-if="errors.pending">{{errors.pending}}</p>
+                                </div>
+                                <div class="mb-5" v-show="dueStatus">
+                                    <label class="flex text-body-dark font-semibold text-sm leading-none mb-3"
+                                                         for="slug">Do you want to pay off previous  Loan</label>
+                                    <select class="px-4 h-12 flex items-center w-full rounded appearance-none transition
+                        duration-300 ease-in-out text-heading text-sm focus:outline-none focus:ring-0
+                        border border-gray-300 focus:border-accent h-12" v-model="form.payoff" :class="{'border-red-500' : errors.payoff}">
+                                        <option value="">select..</option>
+                                        <option value="yes">Yes</option>
+                                        <option value="no">No</option>
+                                    </select>
+                                    <p v-if="errors.payoff">{{errors.payoff}}</p>
+                                </div>
                                 <div class="mb-5"><label class="flex text-body-dark font-semibold text-sm leading-none mb-3"
                                                          for="slug">Loan Release Date</label>
                                     <Calendar class="w-full border border-gray-300 placeholder-gray-300 text-gray-900" v-model="form.release_date" showIcon iconDisplay="input" />
@@ -309,20 +328,27 @@
 
 import AppLayout from "@/Layouts/AppLayout.vue";
 import FileUpload from "primevue/fileupload";
-import {ref,computed} from 'vue';
+import {ref, computed, onMounted} from 'vue';
 import {useForm} from "@inertiajs/vue3";
 import CustomInput from "@/Shared/CustomInput.vue";
 import NButtonLoading from "@/Shared/NButtonLoading.vue";
 import InputNumber from 'primevue/inputnumber';
 import Calendar from 'primevue/calendar';
 import RadioButton from 'primevue/radiobutton';
-
+import ConfirmationModal from "@/Components/ConfirmationModal.vue";
+import SecondaryButton from "@/Components/SecondaryButton.vue";
+import DangerButton from "@/Components/DangerButton.vue";
 import Stepper from 'primevue/stepper';
 import StepperPanel from 'primevue/stepperpanel';
 import {Inertia} from "@inertiajs/inertia";
+import Dialog from "primevue/dialog";
 const active = ref(0)
 
 const loading = ref(false);
+
+const dueAmount = ref('')
+const dueStatus = ref(false)
+
 
 function onImageChoose(ev) {
     const file = ev.target.files[0];
@@ -375,7 +401,9 @@ const form = useForm({
     guarantor:null,
     total_interest:null,
     payment: null,
-    borrower:null
+    borrower:null,
+    pending:dueAmount.value,
+    payoff:null
 });
 
 
@@ -428,11 +456,14 @@ function onSubmit(){
 
 
 
+
 function checkBorrower(id) {
     fetch(route('loan.check',id))
         .then(res => res.json())
         .then(data =>{
-            console.log(data)
+          let item = data.status
+          form.pending = item.amount
+          dueStatus.value = item.found
         })
 
 }
@@ -444,4 +475,5 @@ function checkBorrower(id) {
 .custom-file-upload .p-fileupload-buttons {
     display: none;
 }
+
 </style>
