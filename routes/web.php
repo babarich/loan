@@ -7,6 +7,9 @@ use App\Http\Controllers\Loan\ProductController;
 use App\Http\Controllers\Loan\LoanController;
 use App\Http\Controllers\Collateral\CollateralTypeController;
 use App\Http\Controllers\Collateral\CollateralController;
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 
@@ -197,4 +200,17 @@ Route::group(['middleware' => 'auth:sanctum'], function (){
             });
         });
     });
+
+    Route::group(['prefix' => 'users'], function (){
+        Route::name('user.')->group(function (){
+           Route::controller(UserController::class)->group(function (){
+               Route::get('index', 'index')->name('index');
+               Route::post('assign/{id?}', 'assignRole')->name('assign');
+               Route::post('un_assign/{id?}', 'unassignRole')->name('unassign');
+           });
+        });
+    });
+
+    Route::resource('roles', RoleController::class);
+    Route::resource('permissions', PermissionController::class);
 });

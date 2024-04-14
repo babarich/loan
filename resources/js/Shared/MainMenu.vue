@@ -123,7 +123,7 @@
                   py-2.5 text-md text-gray-300 text-start focus:text-primary hover:bg-gray-100 font-medium"
                             :href="route('payment.index')"
                             :active="route().current('payment.index')">
-                  <i class="pi pi-user flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900"></i>
+                  <i class="pi pi-database flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900"></i>
                   <span class="flex-1 ml-3 text-left whitespace-nowrap">Repayment</span>
               </jet-nav-link>
           </div>
@@ -133,14 +133,14 @@
                   py-2.5 text-md text-gray-300 text-start focus:text-primary hover:bg-gray-100 font-medium"
                             :href="route('payment.chart')"
                             :active="route().current('payment.chart')">
-                  <i class="pi pi-users flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900"></i>
+                  <i class="pi pi-chart-pie flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900"></i>
                   <span class="flex-1 ml-3 text-left whitespace-nowrap">Repayment Chart</span>
               </jet-nav-link>
           </div>
           <div class="space-y-2 py-1.5">
               <jet-nav-link class="group flex w-full items-center gap-2.5 rounded-md px-4
                   py-2.5 text-md text-gray-300 text-start focus:text-primary hover:bg-gray-100 font-medium">
-                  <i class="pi pi-users flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900"></i>
+                  <i class="pi pi-check-circle flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900"></i>
                   <span class="flex-1 ml-3 text-left whitespace-nowrap">Approve Repayment</span>
               </jet-nav-link>
           </div>
@@ -155,7 +155,7 @@
                   py-2.5 text-md text-gray-300 text-start focus:text-primary hover:bg-gray-100 font-medium"
                             :href="route('payment.collection')"
                             :active="route().current('payment.collection')">
-                  <i class="pi pi-user flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900"></i>
+                  <i class="pi pi-file-excel flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900"></i>
                   <span class="flex-1 ml-3 text-left whitespace-nowrap">Collection Sheet</span>
               </jet-nav-link>
           </div>
@@ -163,7 +163,7 @@
           <div class="space-y-2 py-1.5">
               <jet-nav-link class="group flex w-full items-center gap-2.5 rounded-md px-4
                   py-2.5 text-md text-gray-300 text-start focus:text-primary hover:bg-gray-100 font-medium">
-                  <i class="pi pi-users flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900"></i>
+                  <i class="pi pi-bell flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900"></i>
                   <span class="flex-1 ml-3 text-left whitespace-nowrap">Missed Payment </span>
               </jet-nav-link>
           </div>
@@ -181,12 +181,26 @@
                       </button>
                   </template>
                   <template #content>
-                      <jet-nav-link class="group flex w-full items-center gap-2.5 rounded-md px-4
+                      <jet-nav-link class="group flex  items-center gap-2.5 rounded-md px-4
                   py-2.5 text-md text-gray-300 text-start focus:text-primary hover:bg-gray-100 font-medium
                           relative  before:absolute before:-left-0.5 before:top-[18px] before:h-px before:w-3
                           before:border-t before:border-dashed before:border-gray-600" :href="route('collateraltype.index')"
                                     :active="route().current('collateraltype.index')" >
                           <span class="flex-1 ml-3 text-left whitespace-nowrap">Collateral Types</span>
+                      </jet-nav-link>
+                      <jet-nav-link class="group flex  items-center gap-2.5 rounded-md px-4
+                  py-2.5 text-md text-gray-300 text-start focus:text-primary hover:bg-gray-100 font-medium
+                          relative  before:absolute before:-left-0.5 before:top-[18px] before:h-px before:w-3
+                          before:border-t before:border-dashed before:border-gray-600" :href="route('user.index')"
+                                    :active="route().current('user.index')" >
+                          <span class="flex-1 ml-3 text-left whitespace-nowrap">User Management</span>
+                      </jet-nav-link>
+                      <jet-nav-link class="group flex  items-center gap-2.5 rounded-md px-4
+                  py-2.5 text-md text-gray-300 text-start focus:text-primary hover:bg-gray-100 font-medium
+                          relative  before:absolute before:-left-0.5 before:top-[18px] before:h-px before:w-3
+                          before:border-t before:border-dashed before:border-gray-600" :href="route('roles.index')"
+                                    :active="route().current('roles.index')" >
+                          <span class="flex-1 ml-3 text-left whitespace-nowrap">User Roles</span>
                       </jet-nav-link>
                   </template>
               </jet-dropdown>
