@@ -80,6 +80,27 @@ class LoanController extends Controller
    }
 
 
+   public function checkLoan(Request $request, $id)
+   {
+       
+
+       $pendingLoans = LoanSchedule::where('borrower_id', $id)
+           ->where('paid', false)
+           ->get();
+       $found = false;
+       if ($pendingLoans->isNotEmpty()){
+           $found = true;
+        }
+       $status = [
+          'status' => 'pending',
+          'amount' => $pendingLoans->sum('amount'),
+          'found' => $found
+       ];
+
+
+       return response()->json(['status' => $status],200);
+
+   }
 
    public function store(LoanRequest $request){
 
@@ -95,61 +116,70 @@ class LoanController extends Controller
            $duration = $request->input('loan_duration');
            $type = $request->input('duration_type');
            $method = $request->input('interest_method');
-           DB::beginTransaction();
-             $totalInterest = $this->calculateLoan($principle,$interest,$interest_type,$percent,$amount,$duration,$type, $method);
-             $loan = Loan::create([
-              'reference' => 'LRN'.''.rand(1000,9999),
-              'loan_product' => $validatedData['product'],
-              'borrower_id' => $validatedData['borrower'],
-              'principle_amount' => $validatedData['principle'],
-              'interest_method' => $validatedData['interest'],
-              'interest_type' => $validatedData['interest_type'],
-              'disbursement' => $request->filled('payment') ?  $request->input('payment') : null,
-              'interest_percentage' => $request->filled('percent') ? $request->input('percent') : null,
-              'interest_duration' => $request->filled('interest_method') ? $request->input('interest_method') : null,
-               'loan_duration' => $validatedData['loan_duration'],
-               'duration_type' => $request->filled('duration_type') ? $request->input('duration_type') : null,
-               'payment_cycle' => $request->filled('payment_cycle') ? $request->input('payment_cycle') : null,
-               'payment_number' => $request->filled('number_payments') ? $request->input('number_payments') : null,
-               'loan_release_date' => $request->filled('release_date') ? $request->input('release_date') : null,
-               'interest_amount' => $request->filled('interest_amount') ? $request->input('interest_amount') : null,
-               'guarantor_id' => $validatedData['guarantor'],
-               'user_id' => Auth::id(),
-               'status' => 'pending',
-               'release_status' => 'pending',
-               'description' => $request->filled('description') ?  $request->input('description') : null,
-               'total_interest' => $totalInterest
-           ]);
 
-             LoanPayment::create([
-               'loan_id' => $loan->id,
-               'due_amount' => $totalInterest + $validatedData['principle'],
-               'total' => $totalInterest + $validatedData['principle'],
-               'status' => 'pending'
-             ]);
+           $pendingLoans = LoanSchedule::where('borrower_id', $validatedData['borrower'])
+               ->where('paid', false)
+               ->get();
+           if ($pendingLoans->isNotEmpty()) {
+               return Inertia::render('Loan/LoanConfirmationModal', ['pendingLoans' => $pendingLoans]);
+           } else{
+               DB::beginTransaction();
+               $totalInterest = $this->calculateLoan($principle,$interest,$interest_type,$percent,$amount,$duration,$type, $method);
+               $loan = Loan::create([
+                   'reference' => 'LRN'.''.rand(1000,9999),
+                   'loan_product' => $validatedData['product'],
+                   'borrower_id' => $validatedData['borrower'],
+                   'principle_amount' => $validatedData['principle'],
+                   'interest_method' => $validatedData['interest'],
+                   'interest_type' => $validatedData['interest_type'],
+                   'disbursement' => $request->filled('payment') ?  $request->input('payment') : null,
+                   'interest_percentage' => $request->filled('percent') ? $request->input('percent') : null,
+                   'interest_duration' => $request->filled('interest_method') ? $request->input('interest_method') : null,
+                   'loan_duration' => $validatedData['loan_duration'],
+                   'duration_type' => $request->filled('duration_type') ? $request->input('duration_type') : null,
+                   'payment_cycle' => $request->filled('payment_cycle') ? $request->input('payment_cycle') : null,
+                   'payment_number' => $request->filled('number_payments') ? $request->input('number_payments') : null,
+                   'loan_release_date' => $request->filled('release_date') ? $request->input('release_date') : null,
+                   'interest_amount' => $request->filled('interest_amount') ? $request->input('interest_amount') : null,
+                   'guarantor_id' => $validatedData['guarantor'],
+                   'user_id' => Auth::id(),
+                   'status' => 'pending',
+                   'release_status' => 'pending',
+                   'description' => $request->filled('description') ?  $request->input('description') : null,
+                   'total_interest' => $totalInterest
+               ]);
 
-             $loanDate = $request->input('release_date');
-             $paymentCycle = $request->input('payment_cycle');
-             $cycle = $request->input('number_payments');
-             $singleInterest = $this->singleInterest($principle,$interest_type,$percent,$amount);
-             $schedules = $this->calculateRepaymentSchedule($principle,$totalInterest,$duration,$paymentCycle,$cycle,$loanDate);
+               LoanPayment::create([
+                   'loan_id' => $loan->id,
+                   'due_amount' => $totalInterest + $validatedData['principle'],
+                   'total' => $totalInterest + $validatedData['principle'],
+                   'status' => 'pending'
+               ]);
 
-                foreach ($schedules as $schedule){
-                    LoanSchedule::create([
-                      'loan_id' => $loan->id,
-                      'borrower_id' => $validatedData['borrower'],
-                      'due_date' => $schedule['due_date'],
-                      'principle' => $schedule['repayment_amount'] - $singleInterest,
-                      'interest' => $singleInterest,
-                      'amount' => $schedule['repayment_amount'],
-                      'status' => 'pending',
-                      'user_id' => Auth::id(),
-                      'paid' => $schedule['paid']
-                    ]);
-                }
+               $loanDate = $request->input('release_date');
+               $paymentCycle = $request->input('payment_cycle');
+               $cycle = $request->input('number_payments');
+               $singleInterest = $this->singleInterest($principle,$interest_type,$percent,$amount);
+               $schedules = $this->calculateRepaymentSchedule($principle,$totalInterest,$duration,$paymentCycle,$cycle,$loanDate);
+
+               foreach ($schedules as $schedule){
+                   LoanSchedule::create([
+                       'loan_id' => $loan->id,
+                       'borrower_id' => $validatedData['borrower'],
+                       'due_date' => $schedule['due_date'],
+                       'principle' => $schedule['repayment_amount'] - $singleInterest,
+                       'interest' => $singleInterest,
+                       'amount' => $schedule['repayment_amount'],
+                       'status' => 'pending',
+                       'user_id' => Auth::id(),
+                       'paid' => $schedule['paid']
+                   ]);
+               }
 
 
-           DB::commit();
+               DB::commit();
+           }
+
        }catch (\Exception $e){
            DB::rollBack();
            Log::info('error', [$e]);
@@ -299,7 +329,7 @@ class LoanController extends Controller
     public function show(Request $request, $id){
         $types = CollateralType::query()->get();
         $loan = Loan::with(['schedules','user', 'borrower','guarantor','product', 'loanpayment','agreements',
-            'collaterals', 'files','comments','cycles'])->findOrFail($id);
+            'collaterals', 'files','comments','cycles', 'payments'])->findOrFail($id);
         return Inertia::render('Loan/View',['loan' =>$loan, 'types' => $types]);
     }
 

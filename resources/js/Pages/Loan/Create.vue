@@ -47,6 +47,7 @@
                                         type="select"
                                         :select-options="borrowOptions"
                                         v-model="form.borrower"
+                                        @change="checkBorrower(form.borrower)"
 
                                     />
                                     <p v-if="errors.borrower">{{errors.borrower}}</p>
@@ -318,6 +319,7 @@ import RadioButton from 'primevue/radiobutton';
 
 import Stepper from 'primevue/stepper';
 import StepperPanel from 'primevue/stepperpanel';
+import {Inertia} from "@inertiajs/inertia";
 const active = ref(0)
 
 const loading = ref(false);
@@ -425,6 +427,15 @@ function onSubmit(){
 
 
 
+
+function checkBorrower(id) {
+    fetch(route('loan.check',id))
+        .then(res => res.json())
+        .then(data =>{
+            console.log(data)
+        })
+
+}
 
 
 </script>

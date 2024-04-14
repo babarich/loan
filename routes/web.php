@@ -58,6 +58,7 @@ Route::group(['middleware' => 'auth:sanctum'], function (){
                 Route::get('index', 'index')->name('index');
                 Route::get('create', 'create')->name('create');
                 Route::post('store', 'store')->name('store');
+                Route::get('check/{id?}', 'checkLoan')->name('check');
                 Route::get('view/{id?}', 'show')->name('show');
                 Route::post('update/{id?}', 'update')->name('update');
                 Route::post('attachment/{id?}', 'attachment')->name('attachment');
@@ -109,6 +110,7 @@ Route::group(['middleware' => 'auth:sanctum'], function (){
                 Route::get('view/{id?}', 'show')->name('show');
                 Route::post('update/{id?}', 'update')->name('update');
                 Route::get('edit/{id?}', 'edit')->name('edit');
+                Route::post('assign_user/{id?}', 'assignRelation')->name('relation');
             });
         });
     });

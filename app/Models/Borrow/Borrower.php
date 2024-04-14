@@ -31,11 +31,11 @@ class Borrower extends Model
     }
 
     public function loans(){
-        return $this->hasMany(Loan::class, 'borrower_id');
+        return $this->hasMany(Loan::class, 'borrower_id')->with('loanpayment');
     }
 
     public function payments(){
-        return $this->hasMany(PaymentLoan::class, 'borrower_id');
+        return $this->hasMany(PaymentLoan::class, 'borrower_id')->with(['loan', 'user']);
     }
 
     public function schedules()

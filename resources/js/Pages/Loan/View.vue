@@ -4,14 +4,18 @@
         <div>
 
         </div>
-        <div>
+        <div class="flex justify-between">
+            <a   class="px-4 text-sm flex text-gray-100 bg-boxdark p-2 rounded mr-4">
+                <i class="pi pi-cloud-download w-4 h-4 mr-2"></i>  Download
+            </a>
+
             <a :href="route('borrow.index')" class="px-4 text-sm flex text-gray-100 bg-primary p-2 rounded">
                 <ArrowLeftIcon class="w-4 h-4 mr-2"/>  Back
             </a>
         </div>
     </div>
     <div class="bg-gray-100">
-        <div class="container mx-auto py-8">
+        <div class="p-2 mx-auto py-8">
             <div class="intro-y mt-5 grid grid-cols-12 gap-5">
                 <div class="col-span-12 lg:col-span-4 2xl:col-span-3">
                     <div class="bg-white shadow rounded-lg p-6">
@@ -295,11 +299,7 @@
                                         class="py-4 px-4 border text-xs text-left whitespace nowrap font-semibold">
                                         Amount
                                     </th>
-                                    <th
-                                        scope="col"
-                                        class="py-4 px-4 border text-xs text-left whitespace nowrap font-semibold">
-                                        Action
-                                    </th>
+
                                     <th
                                         scope="col"
                                         class="py-4 px-4 border text-xs text-left whitespace nowrap font-semibold">
@@ -310,15 +310,31 @@
 
                                 </thead>
                                 <tbody>
-                                <tr class="odd:bg-gray-100 focus-within:bg-gray-100">
+                                <tr v-for="(payment,index) in loan.payments" :key="index" class="odd:bg-gray-100 focus-within:bg-gray-100">
+                                    <td class="py-4 px-4 text-sm text-left border">
+                                        {{index + 1}}
+                                    </td>
+                                    <td class="py-4 px-4 text-sm text-left border">{{payment.payment_date}}</td>
+                                    <td class="py-4 px-4 text-sm text-left border">{{payment.user.name}}</td>
+
+                                    <td class="py-4 px-4 text-sm text-left border"> {{
+                                            payment.type
+                                        }}</td>
+                                    <td class="py-4 px-4 text-sm text-left border"> {{
+                                            formatCurrency(payment.amount)
+                                        }}</td>
+
+                                    <td class="py-4 px-4 text-sm text-left border"></td>
+
+                                </tr>
+                                <tr v-if="loan.payments.length === 0">
                                     <td colspan="10" class="py-4 px-4 text-sm text-left border">
                                         <div class="flex flex-col items-center py-7">
-                                            <img src="/images/empty.svg" class="w-32 h-32"/>
+                                            <img  src="/images/empty.svg" class="w-32 h-32"/>
                                             <div class="mb-1 pt-6 text-base font-semibold text-heading">No data found</div>
                                             <p class="text-[13px]">Sorry we couldn’t found any data</p>
                                         </div>
                                     </td>
-
                                 </tr>
                                 </tbody>
                             </table>

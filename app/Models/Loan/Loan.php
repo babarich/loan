@@ -43,6 +43,10 @@ class Loan extends Model
     }
 
 
+    public function payments(){
+        return $this->hasMany(PaymentLoan::class, 'loan_id')->with( 'user');
+    }
+
     public function guarantor()
     {
         return $this->belongsTo(Guarantor::class,'guarantor_id', 'id');

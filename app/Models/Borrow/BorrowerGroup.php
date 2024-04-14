@@ -23,10 +23,13 @@ class BorrowerGroup extends Model
 
     public function borrowers()
     {
-        return $this->hasMany(Borrower::class, 'group_id');
+        return $this->hasMany(Borrower::class, 'group_id')->with('schedules');
     }
 
 
+    public function officers(){
+        return $this->hasMany(RelationOfficer::class, 'group_id')->with('user');
+    }
     public function scopeFilter($query , array $filters){
         $query->when($filters['search'] ?? null, function ($query, $search){
             $query->where('name', 'like', '%'.$search.'%');

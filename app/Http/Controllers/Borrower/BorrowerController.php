@@ -191,7 +191,7 @@ class BorrowerController extends Controller
 
     public function show(Request $request, $id)
     {
-        $borrow = Borrower::with(['attachments','user'])->findOrFail($id);
+        $borrow = Borrower::with(['attachments','user','payments', 'loans'])->findOrFail($id);
         return Inertia::render('Borrow/View',['customer' =>$borrow]);
     }
 

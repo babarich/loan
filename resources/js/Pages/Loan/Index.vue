@@ -91,7 +91,7 @@
                     <td class="py-4 px-4 text-sm text-left border">{{loan.principal}}</td>
                     <td class="py-4 px-4 text-sm text-left border">{{loan.total_interest}}</td>
                     <td class="py-4 px-4 text-sm text-left border text-wrap">{{loan.interest}}</td>
-                    <td class="py-4 px-4 text-sm text-left border text-wrap">{{loan.type}}</td>
+                    <td class="py-4 px-4 text-sm text-left border text-wrap">{{loan.interest_type}}</td>
                     <td class="py-4 px-4 text-sm text-left border">{{loan.due}}</td>
                     <td class="py-4 px-4 text-sm text-left border">{{loan.total_paid}}</td>
                     <td class="py-4 px-4 text-sm text-left border">{{loan.last_payment}}</td>

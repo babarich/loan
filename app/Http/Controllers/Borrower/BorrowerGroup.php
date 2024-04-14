@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Borrower;
 
 use App\Http\Controllers\Controller;
 use App\Models\Borrow\BorrowerAttachment;
+use App\Models\Borrow\RelationOfficer;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -107,7 +109,9 @@ class BorrowerGroup extends Controller
 
     public function show(Request $request, $id)
     {
-        $group = \App\Models\Borrow\BorrowerGroup::with(['borrowers','user'])->findOrFail($id);
+        $group = \App\Models\Borrow\BorrowerGroup::with(['borrowers','user', 'officers'])->findOrFail($id);
+
+        $users = User::query()->get();
         $borrowers = $group->borrowers()
             ->filter(FacadesRequest::only('search'))
             ->paginate(10,['*'],'borrowers')
@@ -122,10 +126,11 @@ class BorrowerGroup extends Controller
                 'mobile'=> $customer->mobile,
                 'address'=> $customer->address,
                 'status' => $customer->status,
-                'balance' => $customer->balance,
-                'total_paid' => $customer->total_paid
+                'balance' => $customer->schedules ? $customer->schedules->sum('principle') +  $customer->schedules->sum('interest') : 0,
+                'total_paid' => $customer->schedules ? $customer->schedules->sum('principal_paid') +  $customer->schedules->sum('interest_paid') : 0,
             ]);
-        return Inertia::render('BorrowGroup/View',['group' =>$group, 'borrowers' => $borrowers]);
+
+        return Inertia::render('BorrowGroup/View',['group' =>$group, 'borrowers' => $borrowers, 'users' => $users]);
     }
 
 
@@ -136,6 +141,30 @@ class BorrowerGroup extends Controller
     {
         $group = \App\Models\Borrow\BorrowerGroup::with('user')->findOrFail($id);
         return Inertia::render('BorrowGroup/Edit',['group' => $group]);
+    }
+
+
+    public function assignRelation(Request $request, $groupId)
+    {
+
+
+
+        try {
+            DB::beginTransaction();
+            RelationOfficer::create([
+               'group_id' => $groupId,
+               'user_id' => $request->input('user_id'),
+               'status' => 'pending',
+               'created_by' => Auth::id(),
+            ]);
+            DB::commit();
+        }catch (\Exception $e){
+            DB::rollBack();
+            Log::info('error_assign_relation', [$e]);
+            return  Redirect::back()->with('error', 'sorry something went wrong cannot create borrower try again');
+        }
+
+        return Redirect::back()->with('success','You have assigned successfully your relation officer to group');
     }
 
 }
