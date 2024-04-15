@@ -52,7 +52,7 @@ const logout = () => {
                     <div class="flex items-center justify-between px-6 py-4 bg-secondary  border-r  md:flex-shrink-0 md:justify-center md:w-72">
                         <div class="shrink-0 flex items-center">
                             <Link :href="route('dashboard')" class="flex">
-                                <span class="text-white font-bold text-xl uppercase">Mikopo Yetu</span>
+                                <span class="text-white font-bold text-xl uppercase">MINAJO LTD</span>
                             </Link>
                         </div>
                         <dropdown class="md:hidden" placement="bottom-end">
