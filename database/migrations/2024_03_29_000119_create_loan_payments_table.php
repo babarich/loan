@@ -19,6 +19,7 @@ return new class extends Migration
             $table->decimal('latest_payment', 40,2)->nullable();
             $table->decimal('total', 40,2)->nullable();
             $table->string('status')->nullable();
+            $table->foreignId('com_id')->references('id')->on('companies')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -92,7 +92,7 @@
                         <td class="py-4 px-4 text-sm text-left border">
                             <div class="flex justify-between flex-col md:flex-row items-center">
                                 <div class="flex items-center space-x-2 divide-x">
-                                    <a :href="route('schedule.show', schedule.id)" class="px-4 text-sm flex text-gray-100 bg-emerald-600 p-2 rounded">
+                                    <a :href="route('loan.show', schedule.loan_id)" class="px-4 text-sm flex text-gray-100 bg-emerald-600 p-2 rounded">
                                         <i class="pi pi-eye text-white"></i>
                                     </a>
 
@@ -148,6 +148,7 @@ const sortDirection = ref('desc');
 
 
 function getChanges(page){
+
     Inertia.get(
         route('schedule.index'),
         {per_page:page},

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->integer('created_by')->nullable();
             $table->string('status')->nullable();
+            $table->foreignId('com_id')->references('id')->on('companies')->onDelete('cascade');
             $table->timestamps();
         });
     }

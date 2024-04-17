@@ -174,7 +174,7 @@
                             <div>
                                 <h2 class="text-xl font-bold mb-4 text-red-600">Loan Repayments </h2>
                             </div>
-                            <div>
+                            <div v-if="loan.stage > 3">
                                 <button  @click="payment = true" class="px-4 text-sm flex text-gray-100 bg-primary p-2 rounded">
                                     <PlusIcon class="w-4 h-4 mr-2"/>  Add Repayment
                                 </button>

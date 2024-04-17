@@ -18,6 +18,7 @@ return new class extends Migration
             $table->bigInteger('loan_id');
             $table->text('description')->nullable();
             $table->integer('user_id')->nullable();
+            $table->foreignId('com_id')->references('id')->on('companies')->onDelete('cascade');
             $table->timestamps();
         });
     }

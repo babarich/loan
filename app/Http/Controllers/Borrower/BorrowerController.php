@@ -191,8 +191,13 @@ class BorrowerController extends Controller
 
     public function show(Request $request, $id)
     {
-        $borrow = Borrower::with(['attachments','user','payments', 'loans'])->findOrFail($id);
-        return Inertia::render('Borrow/View',['customer' =>$borrow]);
+        $borrow = Borrower::with(['attachments','user','payments', 'loans','group'])->findOrFail($id);
+        return Inertia::render('Borrow/View',['customer' =>$borrow,
+            'group' => \App\Models\Borrow\BorrowerGroup::query()
+                ->select('id', 'name')
+                ->orderBy('updated_at', 'desc')
+                ->get()
+            ]);
     }
 
 
@@ -247,5 +252,22 @@ class BorrowerController extends Controller
         file_put_contents($relativePath, $image);
 
         return $relativePath;
+    }
+
+
+    public function reassign(Request $request, $id)
+    {
+        $validatedData = $request->validate([
+            'groupId' => 'required',
+        ]);
+        $borrow = Borrower::findOrFail($id);
+        try {
+            $borrow->update(['group_id' => $request->input('groupId')]);
+        }catch (\Exception $e){
+            Log::info('error_borrow', [$e]);
+            return  Redirect::back()->with('error', 'sorry something went wrong cannot create borrower try again');
+        }
+
+        return Redirect::route('borrow.show', $id)->with('success','You have updated successfully reassign group to your borrower');
     }
 }

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->integer('user_id');
             $table->text('description')->nullable();
             $table->string('type')->nullable();
+            $table->foreignId('com_id')->references('id')->on('companies')->onDelete('cascade');
             $table->timestamps();
         });
     }

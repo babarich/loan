@@ -33,6 +33,7 @@ class LoanScheduleController extends Controller
                     'id' => $schedule->id,
                     'name' => isset($schedule->borrower) ? $schedule->borrower->first_name . ' ' . $schedule->borrower->last_name : null,
                     'product' => isset($schedule->loan->product) ? $schedule->loan->product->name : null,
+                    'loan_id' => isset($schedule->loan) ? $schedule->loan->id : null,
                     'principal' =>$schedule->principle,
                     'interest' => $schedule->interest,
                     'due' => $schedule->amount,

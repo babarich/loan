@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
+            $table->foreignId('com_id')->references('id')->on('companies')->onDelete('cascade');
+            $table->boolean('is_verified')->default(false);
             $table->string('password');
             $table->rememberToken();
             $table->foreignId('current_team_id')->nullable();

@@ -11,17 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('settings', function (Blueprint $table) {
+        Schema::create('companies', function (Blueprint $table) {
             $table->id();
+            $table->string('reference')->unique();
             $table->string('name')->nullable();
-            $table->string('phone')->nullable();
             $table->string('address')->nullable();
+            $table->string('phone_number')->nullable();
             $table->string('email')->nullable();
-            $table->string('photo')->nullable();
+            $table->string('employees')->nullable();
+            $table->longText('photo')->nullable();
             $table->string('website')->nullable();
             $table->string('slogan')->nullable();
-            $table->foreignId('com_id')->references('id')->on('companies')->onDelete('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -30,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('settings');
+        Schema::dropIfExists('companies');
     }
 };

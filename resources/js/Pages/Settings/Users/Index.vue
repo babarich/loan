@@ -5,8 +5,9 @@
                 <h3 class="text-xl text-primary text-semibold">Users Management</h3>
             </div>
             <div>
-
-
+                <NButton :href="route('user.create')" class="text-white">
+                    <PlusCircleIcon class="w-4 h-4  text-white mr-2"/>  Add User
+                </NButton>
             </div>
         </div>
 
@@ -68,7 +69,7 @@
                         <td class="py-4 px-4 text-sm text-left border"> {{
                                 user.email
                             }}</td>
-                        <td class="py-4 px-4 text-sm text-left border">{{user.updated_at}}</td>
+                        <td class="py-4 px-4 text-sm text-left border">{{user.last_login}}</td>
                         <td>
                             <span  class="inline-flex items-center rounded-md bg-red-50
                                      px-2 py-1 text-xs font-medium text-red-700 space-y-2 ring-1 ring-inset ring-red-700/10"
@@ -271,6 +272,7 @@ import {useForm} from "@inertiajs/vue3";
 import NButtonLoading from "@/Shared/NButtonLoading.vue";
 import CustomInput from "@/Shared/CustomInput.vue";
 import Checkbox from 'primevue/checkbox';
+import {PlusCircleIcon} from "@heroicons/vue/24/outline/index.js";
 const user_id = ref('')
 const isOpen = ref(false)
 

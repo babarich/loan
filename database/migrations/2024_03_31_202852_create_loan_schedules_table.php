@@ -26,6 +26,7 @@ return new class extends Migration
             $table->enum('status', ['pending','completed', 'partial','overdue','due'])->default('pending');
             $table->integer('user_id')->nullable();
             $table->boolean('paid')->default(false);
+            $table->foreignId('com_id')->references('id')->on('companies')->onDelete('cascade');
             $table->timestamps();
         });
     }

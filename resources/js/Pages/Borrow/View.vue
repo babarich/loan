@@ -5,8 +5,15 @@
 
         </div>
         <div class="flex justify-between">
-
-            <a   class="px-4 text-sm flex text-gray-100 bg-boxdark p-2 rounded mr-4">
+            <a   class="px-4 text-sm flex text-gray-100 bg-red-600 p-2 rounded mr-4
+cursor-pointer"
+            @click="visible = true">
+                <i class="pi pi-box w-4 h-4 mr-2"></i>  Assign to group
+            </a>
+            <a   class="px-4 text-sm flex text-gray-100 bg-primary p-2 rounded mr-4 cursor-pointer">
+                <i class="pi pi-user w-4 h-4 mr-2"></i>  Assign as Guarantor
+            </a>
+            <a   class="px-4 text-sm flex text-gray-100 bg-boxdark p-2 rounded mr-4 cursor-pointer">
                 <i class="pi pi-cloud-download w-4 h-4 mr-2"></i>  Download Profile
             </a>
 
@@ -15,6 +22,40 @@
             </a>
         </div>
     </div>
+    <Dialog v-model:visible="visible" modal header="Add borrower to group" style="width:30%">
+        <form @submit.prevent="submitGroup">
+            <div class="mb-5">
+                <label class="flex text-body-dark font-semibold text-sm leading-none mb-3"
+                       for="slug">Select Group </label>
+                <CustomInput
+                    required
+                    type="select"
+                    :select-options="groupOptions"
+                    v-model="form.groupId"
+
+                />
+                <p v-if="errors.groupId">{{errors.groupId}}</p>
+            </div>
+
+            <div class="flex flex-col md:flex-row justify-between mt-8">
+                <div>
+
+                </div>
+
+                <div>
+                    <button type="button" class="mt-3 w-full inline-flex justify-center
+                                 shadow-sm px-4 py-2 rounded-md text-base bg-gray-200 font-medium text-gray-600
+                                focus:outline-none focus:ring-2 focus:ring-offset-2
+                                focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" label="Cancel" severity="secondary" @click="visible = false">Cancel</button>
+                    <NButtonLoading type="submit"   :loading="loading" class="mt-3 w-full inline-flex justify-center
+                                 shadow-sm px-4 py-2  text-base font-medium text-gray-700
+                                focus:outline-none focus:ring-2 focus:ring-offset-2
+                                focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Save</NButtonLoading>
+                </div>
+
+            </div>
+        </form>
+    </Dialog>
     <div class="bg-gray-100">
         <div class="p-4 mx-auto py-8">
             <div class="flex flex-col md:flex-row gap-6">
@@ -57,6 +98,12 @@
                             <span class="text-primary font-bold">Address</span>
                             <p>
                                 <span class="text-gray-700 mr-2">{{customer.address}}</span>
+                            </p>
+                        </div>
+                        <div class="flex justify-between flex-wrap gap-2 w-full mb-6">
+                            <span class="text-primary font-bold">Borrower Group</span>
+                            <p>
+                                <span class="text-gray-700 mr-2">{{customer.group ? customer.group.name : ''}}</span>
                             </p>
                         </div>
                         <div class="flex justify-between flex-wrap gap-2 w-full mb-6">
@@ -358,12 +405,12 @@
 
 
 <script setup>
-
+import {computed, ref} from 'vue';
 import AppLayout from "@/Layouts/AppLayout.vue";
 import {
     ArrowLeftIcon,
     ArrowUpTrayIcon,
-    CloudArrowDownIcon,
+    CloudArrowDownIcon, CloudArrowUpIcon,
     DocumentArrowDownIcon,
     FunnelIcon, PlusIcon
 } from "@heroicons/vue/24/outline/index.js";
@@ -371,11 +418,20 @@ import moment from "moment";
 import SearchFilter from "@/Shared/SearchFilter.vue";
 import Pagination from "@/Shared/Pagination.vue";
 import TableHeaderCell from "@/Shared/TableHeaderCell.vue";
+import CustomInput from "@/Shared/CustomInput.vue";
+import NButtonLoading from "@/Shared/NButtonLoading.vue";
+import Dialog from "primevue/dialog";
+import {useForm} from "@inertiajs/vue3";
 
 const props = defineProps({
-    customer:Object
+    customer:Object, group:Object,errors:Object
 })
 
+
+const visible = ref(false)
+
+
+const loading = ref(false)
 function uppercase(str){
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
@@ -386,9 +442,36 @@ function formatCurrency (value, decimals=2, thousandsSeparator= ','){
     return result;
 }
 
+
+const form = useForm({
+    groupId : null
+})
+
+const groupOptions = computed(() =>
+    props.group.map((c) => ({
+        key: c.id,
+        text: `${c.name}`,
+        value: c.id,
+    }))
+);
+
 function formatDate(dateString) {
   const date = moment(dateString);
   return date.format("DD-MM-YYYY");
+}
+
+function submitGroup(){
+    loading.value = true
+    form.post(route('borrow.reassign', props.customer.id),{
+        onSuccess:()=>{
+            loading.value = false
+            visible.value = false
+            form.reset()
+        },
+        onError:()=>{
+            loading.value = false
+        }
+    })
 }
 </script>
 

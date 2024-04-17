@@ -30,6 +30,11 @@ class Borrower extends Model
         return $this->belongsTo(User::class,'uploaded_by', 'id');
     }
 
+    public function group()
+    {
+        return $this->belongsTo(BorrowerGroup::class,'group_id', 'id');
+    }
+
     public function loans(){
         return $this->hasMany(Loan::class, 'borrower_id')->with('loanpayment');
     }

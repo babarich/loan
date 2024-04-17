@@ -36,6 +36,7 @@ return new class extends Migration
             $table->string('release_status')->nullable();
             $table->integer('guarantor_id')->nullable();
             $table->integer('user_id')->nullable();
+            $table->foreignId('com_id')->references('id')->on('companies')->onDelete('cascade');
             $table->timestamps();
         });
     }

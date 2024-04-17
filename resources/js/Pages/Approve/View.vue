@@ -3,17 +3,17 @@
         <div class="mt-4 mb-3 flex flex-col md:flex-row items-center justify-between">
             <div class="flex justify-between">
 
-                <a   class="px-4 text-sm flex text-gray-100 bg-emerald-600 p-2 rounded mr-4"
+                <a   class="px-4 text-sm flex text-gray-100 bg-emerald-600 p-2 rounded mr-4 cursor-pointer"
                      :href="route('approve.approveFirst', loan.id)" v-if="can().loan_approve">
                     <i class="pi pi-check w-4 h-4 mr-2"></i>  Approve
                 </a>
 
-                <a @click="returnFirst = true" class="px-4 text-sm flex text-gray-100 bg-yellow-500 p-2 rounded mr-4"
+                <a @click="returnFirst = true" class="px-4 text-sm flex text-gray-100 bg-yellow-500 p-2 rounded mr-4 cursor-pointer"
                 v-if="can().loan_return">
                     <i class="pi pi-spinner w-4 h-4 mr-2"></i>  Return
                 </a>
 
-                <a :href="route('approve.rejectFirst', loan.id)" class="px-4 text-sm flex text-gray-100 bg-red-500 p-2 rounded"
+                <a :href="route('approve.rejectFirst', loan.id)" class="px-4 text-sm flex text-gray-100 bg-red-500 p-2 rounded cursor-pointer"
                 v-if="can().loan_reject">
                     <i class="pi pi-times w-4 h-4 mr-2"></i>  Reject
                 </a>

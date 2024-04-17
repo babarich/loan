@@ -133,13 +133,13 @@
                              <a :href="route('loan.show', loan.id)" class="px-4 text-sm flex text-gray-100 bg-emerald-600 p-2 rounded">
                                  <i class="pi pi-eye text-white"></i>
                              </a>
-                             <a :href="route('loan.edit', loan.id)" class="px-4 text-sm flex text-gray-100 bg-primary p-2 rounded">
+
+                             <a :href="route('loan.edit', loan.id)" class="px-4 text-sm flex text-gray-100 bg-primary p-2 rounded"
+                             v-if="loan.stage < 4">
                                  <i class="pi pi-pencil text-white"></i>
                              </a>
 
-                             <button @click.prevent="confirmDelete(loan.id)"  class="px-4 text-sm flex text-gray-100 bg-red-500 p-2 rounded">
-                                 <i class="pi pi-trash text-white"></i>
-                             </button>
+
                          </div>
 
 

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('attachment_size')->nullable();
             $table->text('attachment')->nullable();
             $table->integer('uploaded_by')->nullable();
+            $table->foreignId('com_id')->references('id')->on('companies')->onDelete('cascade');
             $table->timestamps();
         });
     }

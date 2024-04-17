@@ -35,6 +35,7 @@ return new class extends Migration
             $table->integer('approver_id')->nullable();
             $table->integer('group_id')->nullable();
             $table->integer('approver_second_id')->nullable();
+            $table->foreignId('com_id')->references('id')->on('companies')->onDelete('cascade');
             $table->timestamp('approved_date')->nullable();
             $table->timestamps();
         });

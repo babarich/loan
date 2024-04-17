@@ -18,6 +18,7 @@ return new class extends Migration
             $table->decimal('amount', 40,2)->nullable();
             $table->string('method')->nullable();
             $table->integer('user_id')->nullable();
+            $table->foreignId('com_id')->references('id')->on('companies')->onDelete('cascade');
             $table->timestamps();
         });
     }
